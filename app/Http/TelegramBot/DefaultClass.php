@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Http\TelegramBot;
+
+use App\Http\TelegramBot\Services\ArgumentsService;
+use App\Models\Tab;
+use App\Models\User;
+use Illuminate\Support\Collection;
+use Telegram\Bot\FileUpload\InputFile;
+use Telegram\Bot\Keyboard\Keyboard;
+use Telegram\Bot\Laravel\Facades\Telegram;
+use Telegram\Bot\Objects\Update;
+
+abstract class DefaultClass implements DefaultInterface
+{
+    protected bool $administrator;
+    public Update $update;
+    public ArgumentsService $argumentsService;
+
+    public function __construct(readonly User|null $user, Update $update, ArgumentsService $argumentsService)
+    {
+        $this->administrator = $this->user?->is_administrator ?? null;
+        $this->update = $update;
+        $this->argumentsService = $argumentsService;
+    }
+
+    public function replyMarkup(Collection $buttons):array
+    {
+        $buttons = $buttons->values()->toArray();
+        $buttons = Keyboard::inlineButton($buttons);
+        return $reply_markup = [
+            'inline_keyboard' => $buttons,
+            'one_time_keyboard' => true
+        ];
+    }
+
+    public function caption(string $caption):string
+    {
+        return $caption;
+    }
+
+    public function photo(?string $idOrUsl):InputFile
+    {
+        $photoPath = $idOrUsl ?? config('telegram.base_url_image');
+        return InputFile::create($photoPath, 'defaultImage');
+    }
+
+    public function sendMessage(): void
+    {
+        /**
+         * @var $photo InputFile
+         */
+        [$text] = $this->main();
+
+        Telegram::sendMessage([
+            'chat_id' => $this->update->getChat()->get('id'),
+            'text' => $text,
+        ]);
+    }
+
+    public function sendCreate(): void
+    {
+        /**
+         * @var $photo InputFile
+         */
+        [$photo, $caption, $reply_markup] = $this->main();
+
+        Telegram::sendPhoto([
+            'chat_id' => $this->update->getChat()->get('id'),
+            'photo' => str_starts_with($photo->getFile(), 'http') ? $photo : $photo->getFile(),
+            'caption' => $caption,
+            'reply_markup' => json_encode($reply_markup, JSON_UNESCAPED_UNICODE),
+        ]);
+    }
+
+    public function callbackUpdate(): void
+    {
+        /**
+         * @var $photo InputFile
+         */
+        [$photo, $caption, $reply_markup] = $this->main();
+
+        Telegram::editMessageMedia([
+            'chat_id' => $this->update->getChat()->get('id'),
+            'message_id' => $this->update->getMessage()->get('message_id'),
+            'media' => json_encode(["type" => "photo", "media" => $photo->getFile(), "caption" => $caption, "parse_mode" => "Markdown"], JSON_UNESCAPED_UNICODE),
+            'reply_markup' => json_encode($reply_markup, JSON_UNESCAPED_UNICODE)
+        ]);
+    }
+}
