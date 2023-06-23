@@ -22,10 +22,12 @@ class ChangeSorted extends DefaultClass
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'ChangeSorted' . $this->argumentsService->m);
                 $buttons = ChangeSortedButtons::defaultButtons($buttons, $this->argumentsService);
                 $caption = $this->caption('');
-                $photo = $this->photo(null);
-                $reply_markup = $this->replyMarkup($buttons);
                 break;
         }
+
+        $caption = $caption ?? $this->caption('');
+        $photo = $photo ?? $this->photo(null);
+        $reply_markup = $reply_markup ?? $this->replyMarkup($buttons);
 
         return [$photo, $caption, $reply_markup];
     }

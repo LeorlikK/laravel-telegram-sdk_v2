@@ -2,23 +2,31 @@
 
 namespace App\Http\TelegramBot\States;
 
+use App\Http\TelegramBot\Exceptions\BlockedFolderPayException;
 use App\Http\TelegramBot\Exceptions\UserInputException;
 use App\Http\TelegramBot\Services\ArgumentsService;
+use App\Http\TelegramBot\States\Make\MakeAddPayBasket;
 use App\Http\TelegramBot\States\Make\MakeChangeCaptionFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeEmojiFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeImageFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeNameFolder;
+use App\Http\TelegramBot\States\Make\MakeChangePricePay;
 use App\Http\TelegramBot\States\Make\MakeChangeSecrecyFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeSortedFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeVisibilityFolder;
 use App\Http\TelegramBot\States\Make\MakeCreateFolder;
 use App\Http\TelegramBot\States\Make\MakeCreateSpecialClass;
 use App\Http\TelegramBot\States\Make\MakeDeleteFolder;
+use App\Http\TelegramBot\States\Make\MakeDeletePayBasket;
+use App\Http\TelegramBot\States\Make\MakeDeletePayProduct;
+use App\Http\TelegramBot\States\Make\MakePayProductClass;
 use App\Models\Button;
 use App\Models\Folder;
+use App\Models\Pay;
 use App\Models\State;
 use App\Models\Tab;
 use App\Models\User;
+use Doctrine\DBAL\Exception;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Telegram\Bot\Objects\Chat;
 use Telegram\Bot\Objects\Message;
@@ -171,7 +179,61 @@ class StateMake
                 $this->argumentsService->fp = $this->parentId;
                 break;
 
+            // PAY
+            case $this->state->action === 'PayProductC':
+                $makeClass = new MakePayProductClass($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
 
+            case str_starts_with($this->state->action, 'ChangePricePayF'):
+                $makeClass = new MakeChangePricePay($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'AddPayF':
+                $makeClass = new MakeAddPayBasket($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'DeletePayF':
+                $makeClass = new MakeDeletePayBasket($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'DeletePayM':
+                $makeClass = new MakeDeletePayProduct($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
 
             default:
                 $error = 'Action not found';
@@ -188,7 +250,7 @@ class StateMake
         }
     }
 
-    function deleteFolderChildren($folderId): void
+    function deleteFolderChildren($folderId, &$link): void
     {
         $folder = Folder::find($folderId);
 
@@ -199,10 +261,22 @@ class StateMake
         $children = Folder::where('parentId', $folderId)->get();
 
         foreach ($children as $child) {
-            $this->deleteFolderChildren($child->id);
+            $this->deleteFolderChildren($child->id,$link);
         }
 
-        $folder->delete();
+        if ($folder->products->isNotEmpty()) {
+            $link = 2;
+            return;
+        }
+
+        if (!$link){
+            $folder->product?->folders()->detach();
+            $productId = $folder->product?->id;
+            if ($productId) Pay::where('product_id', $productId)->delete();
+            $folder->product?->delete();
+
+            $folder->delete();
+        }
     }
 
     public function deleteMessage(string $chatId, string $messageId): void

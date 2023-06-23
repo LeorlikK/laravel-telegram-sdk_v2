@@ -20,10 +20,12 @@ class ChangeSecrecy extends DefaultClass
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'ChangeSecrecy' . $this->argumentsService->m);
                 $buttons = ChangeSecrecyButtons::defaultButtons($buttons, $this->argumentsService);
                 $caption = $this->caption('Выберите время до которого необходимо скрыть или укажите его в формате Y-m-d H:i:s');
-                $photo = $this->photo(null);
-                $reply_markup = $this->replyMarkup($buttons);
                 break;
         }
+
+        $caption = $caption ?? $this->caption('');
+        $photo = $photo ?? $this->photo(null);
+        $reply_markup = $reply_markup ?? $this->replyMarkup($buttons);
 
         return [$photo, $caption, $reply_markup];
     }

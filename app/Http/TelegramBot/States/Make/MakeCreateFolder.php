@@ -36,6 +36,7 @@ class MakeCreateFolder
             'parentId' => $this->stateMake->parentId,
             'name' => '📚 ' . $this->stateMake->text,
             'sorted_id' => $this->stateMake->sortedId,
+            'action' => class_basename($this->stateMake->state->TabClass)
         ]);
 
         return null;

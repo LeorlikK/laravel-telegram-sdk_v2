@@ -3,6 +3,13 @@
 namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Http\TelegramBot\States\StateMake;
+use App\Models\Folder;
+use App\Models\Pay;
+use App\Models\Product;
+use App\Models\User;
+use Doctrine\DBAL\Exception;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 use function PHPUnit\Framework\isEmpty;
 
@@ -13,12 +20,17 @@ class ExampleTest extends TestCase
      */
     public function test_the_application_returns_a_successful_response(): void
     {
-        $error = 1;
-        $error = $error ?? 'lala';
-        dump($error);
-//        if (empty($error)){
-//            dump('YES');
-//        }
+        $int = '0.53T';
+        $res = is_numeric($int);
+        dump($res);
+
+
+
+
+
+
+
+
 
         $this->assertTrue(true);
     }

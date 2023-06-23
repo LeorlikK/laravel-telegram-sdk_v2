@@ -5,7 +5,7 @@ namespace App\Http\TelegramBot\Buttons\Action;
 use App\Http\TelegramBot\Services\ArgumentsService;
 use Illuminate\Support\Collection;
 
-class MenuActionButtons
+class MenuMonetizationButtons
 {
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService):Collection
     {
@@ -87,7 +87,7 @@ class MenuActionButtons
             $buttons->add([
                 ['text' => '❌ Delete Folder', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
-                    "sw:DeleteF".'_'.
+                    "sw:DeleteM".'_'.
                     "bk:$argumentsService->bk".'_'.
                     "ac:N".'_'.
                     "fp:$argumentsService->fp"]
@@ -107,6 +107,30 @@ class MenuActionButtons
             ['text' => '🔹 Create Special Class', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:CreateC".'_'.
+                "bk:$argumentsService->bk".'_'.
+                "ac:N".'_'.
+                "fp:$argumentsService->fp"]
+        ]);
+        $buttons->add([
+            ['text' => 'Purchase Period', 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:CreateF".'_'.
+                "bk:$argumentsService->bk".'_'.
+                "ac:N".'_'.
+                "fp:$argumentsService->fp"]
+        ]);
+        $buttons->add([
+            ['text' => 'Price', 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:PriceF".'_'.
+                "bk:$argumentsService->bk".'_'.
+                "ac:N".'_'.
+                "fp:$argumentsService->fp"]
+        ]);
+        $buttons->add([
+            ['text' => '🗑 Basket', 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:BasketF".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"]

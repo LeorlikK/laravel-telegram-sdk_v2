@@ -18,10 +18,12 @@ return new class extends Migration
             $table->string('name');
             $table->text('caption')->nullable();
             $table->string('media')->nullable();
+            $table->string('action')->nullable();
             $table->unsignedInteger('sorted_id');
             $table->timestamp('display')->nullable();
             $table->unsignedInteger('visibility')->default(0);
             $table->boolean('blocked')->default(false);
+            $table->boolean('blockedPay')->default(false);
             $table->timestamps();
         });
     }

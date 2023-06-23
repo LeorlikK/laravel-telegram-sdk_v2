@@ -18,10 +18,12 @@ class Create extends DefaultClass
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'Create' . $this->argumentsService->m);
                 $buttons = CreateButtons::defaultButtons($buttons, $this->argumentsService);
                 $caption = $this->caption('Введите название');
-                $photo = $this->photo(null);
-                $reply_markup = $this->replyMarkup($buttons);
                 break;
         }
+
+        $caption = $caption ?? $this->caption('');
+        $photo = $photo ?? $this->photo(null);
+        $reply_markup = $reply_markup ?? $this->replyMarkup($buttons);
 
         return [$photo, $caption, $reply_markup];
     }

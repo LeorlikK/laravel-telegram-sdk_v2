@@ -19,7 +19,7 @@ class TabFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'MenuRecursion'
+            'name' => 'MenuR'
         ];
     }
 }

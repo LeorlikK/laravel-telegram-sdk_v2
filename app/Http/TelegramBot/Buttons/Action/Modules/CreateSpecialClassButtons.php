@@ -10,7 +10,7 @@ class CreateSpecialClassButtons
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService):Collection
     {
         $buttons->add([
-            ['text' => 'Class One', 'callback_data' =>
+            ['text' => 'Monetization', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:SClass1".'_'.
                 "bk:$argumentsService->bk".'_'.

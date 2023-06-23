@@ -20,10 +20,12 @@ class ChangeCaption extends DefaultClass
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'ChangeCaption' . $this->argumentsService->m);
                 $buttons = ChangeCaptionButtons::defaultButtons($buttons, $this->argumentsService);
                 $caption = $this->caption('Введите новый caption("null" - delete)');
-                $photo = $this->photo(null);
-                $reply_markup = $this->replyMarkup($buttons);
                 break;
         }
+
+        $caption = $caption ?? $this->caption('');
+        $photo = $photo ?? $this->photo(null);
+        $reply_markup = $reply_markup ?? $this->replyMarkup($buttons);
 
         return [$photo, $caption, $reply_markup];
     }

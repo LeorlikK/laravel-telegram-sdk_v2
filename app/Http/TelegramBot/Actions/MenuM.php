@@ -6,7 +6,9 @@ use App\Http\TelegramBot\Actions\Modules\ChangeCaption;
 use App\Http\TelegramBot\Actions\Modules\ChangeEmoji;
 use App\Http\TelegramBot\Actions\Modules\ChangeImage;
 use App\Http\TelegramBot\Actions\Modules\ChangeName;
+use App\Http\TelegramBot\Actions\Modules\ChangeBasketPay;
 use App\Http\TelegramBot\Actions\Modules\ChangePaywall;
+use App\Http\TelegramBot\Actions\Modules\ChangePricePay;
 use App\Http\TelegramBot\Actions\Modules\ChangeSecrecy;
 use App\Http\TelegramBot\Actions\Modules\ChangeSorted;
 use App\Http\TelegramBot\Actions\Modules\ChangeVisibility;
@@ -14,10 +16,11 @@ use App\Http\TelegramBot\Actions\Modules\CreateSpecialClass;
 use App\Http\TelegramBot\Actions\Modules\Create;
 use App\Http\TelegramBot\Actions\Modules\Delete;
 use App\Http\TelegramBot\Buttons\Action\MenuActionButtons;
+use App\Http\TelegramBot\Buttons\Action\MenuMonetizationButtons;
 use App\Http\TelegramBot\Buttons\Action\Modules\CreateButtons;
 use App\Http\TelegramBot\DefaultClass;
 
-class MenuA extends DefaultClass
+class MenuM extends DefaultClass
 {
     public function main(): array
     {
@@ -27,7 +30,7 @@ class MenuA extends DefaultClass
             default:
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 $this->argumentsService->setArgument('bk' , 'MenuR');
-                $buttons = MenuActionButtons::defaultButtons($buttons, $this->argumentsService);
+                $buttons = MenuMonetizationButtons::defaultButtons($buttons, $this->argumentsService);
                 $caption = $this->caption('Выберите опцию');
                 $photo = $this->photo(null);
                 $reply_markup = $this->replyMarkup($buttons);
@@ -96,11 +99,11 @@ class MenuA extends DefaultClass
                 $this->argumentsService->setArgument('m' , 'F');
                 (new ChangeSorted($this->user, $this->update, $this->argumentsService))->handleCallbackQuery();
                 break;
-            case 'DeleteF':
+            case 'DeleteM':
                 $this->argumentsService->setArgument('bk' , class_basename($this));
                 $this->argumentsService->setArgument('bkS' , 'MenuR');
-                $this->argumentsService->setArgument('sw' , null);
-                $this->argumentsService->setArgument('m' , 'F');
+                $this->argumentsService->setArgument('sw' , 'M');
+                $this->argumentsService->setArgument('m' , 'M');
                 (new Delete($this->user, $this->update, $this->argumentsService))->handleCallbackQuery();
                 break;
             case 'PaywallF':
@@ -116,6 +119,20 @@ class MenuA extends DefaultClass
                 $this->argumentsService->setArgument('sw' , null);
                 $this->argumentsService->setArgument('m' , 'C');
                 (new CreateSpecialClass($this->user, $this->update, $this->argumentsService))->handleCallbackQuery();
+                break;
+            case 'PriceF':
+                $this->argumentsService->setArgument('bk' , class_basename($this));
+                $this->argumentsService->setArgument('bkS' , 'MenuR');
+                $this->argumentsService->setArgument('sw' , null);
+                $this->argumentsService->setArgument('m' , 'F');
+                (new ChangePricePay($this->user, $this->update, $this->argumentsService))->handleCallbackQuery();
+                break;
+            case 'BasketF':
+                $this->argumentsService->setArgument('bk' , class_basename($this));
+                $this->argumentsService->setArgument('bkS' , 'MenuR');
+                $this->argumentsService->setArgument('sw' , null);
+                $this->argumentsService->setArgument('m' , 'F');
+                (new ChangeBasketPay($this->user, $this->update, $this->argumentsService))->handleCallbackQuery();
                 break;
             default:
                 $this->callbackUpdate();

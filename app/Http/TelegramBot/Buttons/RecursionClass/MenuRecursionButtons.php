@@ -37,7 +37,8 @@ class MenuRecursionButtons
     public static function backPage(Collection $buttons, ArgumentsService $argumentsService):Collection
     {
         return $buttons->add([
-//            ['text' => '◀️ Назад ◀️', 'callback_data' => $className . '_' . $action],
+            ['text' => '◀️ Назад ◀️', 'callback_data' =>
+                "cl:$argumentsService->cl".'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp"],
         ]);
     }
 }

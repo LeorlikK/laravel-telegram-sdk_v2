@@ -27,7 +27,6 @@ class UserFactory extends Factory
             'role_id' => Role::all()->random()->id,
             'mail' => 'random_mail@ya.ru',
             'number' => $this->faker->phoneNumber(),
-            'is_administrator' => false,
             'is_premium' => false,
             'is_blocked' => false,
         ];

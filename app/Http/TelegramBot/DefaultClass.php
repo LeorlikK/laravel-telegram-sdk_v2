@@ -19,7 +19,7 @@ abstract class DefaultClass implements DefaultInterface
 
     public function __construct(readonly User|null $user, Update $update, ArgumentsService $argumentsService)
     {
-        $this->administrator = $this->user?->is_administrator ?? null;
+        $this->administrator = $this->user?->role_id === 1;
         $this->update = $update;
         $this->argumentsService = $argumentsService;
     }

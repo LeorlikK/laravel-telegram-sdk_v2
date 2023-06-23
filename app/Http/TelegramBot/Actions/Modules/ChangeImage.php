@@ -21,10 +21,12 @@ class ChangeImage extends DefaultClass
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'ChangeImage' . $this->argumentsService->m);
                 $buttons = ChangeImageButtons::defaultButtons($buttons, $this->argumentsService);
                 $caption = $this->caption('Загрузите новое изображение image("null" - default)');
-                $photo = $this->photo(null);
-                $reply_markup = $this->replyMarkup($buttons);
                 break;
         }
+
+        $caption = $caption ?? $this->caption('');
+        $photo = $photo ?? $this->photo(null);
+        $reply_markup = $reply_markup ?? $this->replyMarkup($buttons);
 
         return [$photo, $caption, $reply_markup];
     }

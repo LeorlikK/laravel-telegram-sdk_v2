@@ -13,7 +13,9 @@ class ArgumentsService
     public ?string $ac=null; // action
     public ?string $fp=null; // folderParent
     public ?string $m=null; // module
+    public ?string $p=null; // page
     public ?string $v=null; // some value
+    public ?string $er=null; // error
 
     public function __construct(string $arguments)
     {

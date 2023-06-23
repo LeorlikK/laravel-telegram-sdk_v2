@@ -18,10 +18,12 @@ class ChangeName extends DefaultClass
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'ChangeName' . $this->argumentsService->m);
                 $buttons = ChangeNameButtons::defaultButtons($buttons, $this->argumentsService);
                 $caption = $this->caption('Введите новое имя');
-                $photo = $this->photo(null);
-                $reply_markup = $this->replyMarkup($buttons);
                 break;
         }
+
+        $caption = $caption ?? $this->caption('');
+        $photo = $photo ?? $this->photo(null);
+        $reply_markup = $reply_markup ?? $this->replyMarkup($buttons);
 
         return [$photo, $caption, $reply_markup];
     }
