@@ -10,7 +10,7 @@ class ChangeEmojiButtons
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"],

@@ -13,10 +13,10 @@ class ChangePricePayButtons extends PaginateButtons
 {
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
-        $folder = Folder::find($argumentsService->fp);
+        $product = Product::where('folder_id', $argumentsService->fp)->first();
 
         $buttons->add([
-            ['text' => "Рубли", 'callback_data' =>
+            ['text' => ($product->currency === 'rub' ? "✅ " : "") . "Рубли", 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "sw:Val".'_'.
@@ -27,7 +27,7 @@ class ChangePricePayButtons extends PaginateButtons
             ],
         ]);
         $buttons->add([
-            ['text' => "Доллары", 'callback_data' =>
+            ['text' => ($product->currency === 'usd' ? "✅ " : "") . "Доллары", 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "sw:Val".'_'.
@@ -38,7 +38,7 @@ class ChangePricePayButtons extends PaginateButtons
             ],
         ]);
         $buttons->add([
-            ['text' => "Евро", 'callback_data' =>
+            ['text' => ($product->currency === 'eur' ? "✅ " : "") . "Евро", 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "sw:Val".'_'.
@@ -50,7 +50,7 @@ class ChangePricePayButtons extends PaginateButtons
         ]);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"
@@ -63,7 +63,7 @@ class ChangePricePayButtons extends PaginateButtons
     public static function indicatePrice(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"

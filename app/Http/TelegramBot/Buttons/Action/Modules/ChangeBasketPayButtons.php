@@ -13,8 +13,6 @@ class ChangeBasketPayButtons extends PaginateButtons
 {
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
-        $folder = Folder::find($argumentsService->fp);
-
         $buttons->add([
             ['text' => "➕ Добавить в корзину", 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
@@ -43,7 +41,9 @@ class ChangeBasketPayButtons extends PaginateButtons
         $buttonMinus = ((int)$argumentsService->p) - 1;
         $perPage = 10;
         $product = Product::where('folder_id', $argumentsService->fp)->first();
-        $folders = Folder::has('products')->orderBy('created_at', 'DESC')->paginate($perPage, ['*'], null, $argumentsService->p);
+        $folders = Folder::whereHas('products', function($item)use($product){
+            $item->where('product_id', $product->id);
+        })->orderBy('created_at', 'DESC')->paginate($perPage, ['*'], null, $argumentsService->p);
         $totalFolder = $folders->total();
 
         foreach ($folders->items() as $folder) {
@@ -53,7 +53,8 @@ class ChangeBasketPayButtons extends PaginateButtons
             $buttons->add([
                 ['text' => $folder->name,
                     'callback_data' =>
-                        "cl:basketF".'_'
+                        "cl:IA".'_'.
+                        "er:7"
                 ],
             ]);
         }
@@ -61,7 +62,7 @@ class ChangeBasketPayButtons extends PaginateButtons
         $buttons = self::paginateNavigation($buttons, $totalFolder, $perPage, $argumentsService, $buttonMinus, $buttonPlus);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"
@@ -99,7 +100,7 @@ class ChangeBasketPayButtons extends PaginateButtons
         $buttons = self::paginateNavigation($buttons, $totalFolder, $perPage, $argumentsService, $buttonMinus, $buttonPlus);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "bkS:$argumentsService->bkS".'_'.
@@ -118,7 +119,10 @@ class ChangeBasketPayButtons extends PaginateButtons
         $buttonPlus = ((int)$argumentsService->p) + 1;
         $buttonMinus = ((int)$argumentsService->p) - 1;
         $perPage = 10;
-        $folders = Folder::has('products')->orderBy('created_at', 'DESC')->paginate($perPage, ['*'], null, $argumentsService->p);
+        $product = Product::where('folder_id', $argumentsService->fp)->first();
+        $folders = Folder::whereHas('products', function($item)use($product){
+            $item->where('product_id', $product->id);
+        })->orderBy('created_at', 'DESC')->paginate($perPage, ['*'], null, $argumentsService->p);
         $totalFolder = $folders->total();
 
         foreach ($folders->items() as $folder) {
@@ -140,7 +144,7 @@ class ChangeBasketPayButtons extends PaginateButtons
         $buttons = self::paginateNavigation($buttons, $totalFolder, $perPage, $argumentsService, $buttonMinus, $buttonPlus);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "bkS:$argumentsService->bkS".'_'.
@@ -152,6 +156,4 @@ class ChangeBasketPayButtons extends PaginateButtons
 
         return $buttons;
     }
-
-
 }

@@ -21,7 +21,7 @@ class PayS extends DefaultClass
                 $this->argumentsService->setArgument('bkS' , 'MenuR');
                 $this->argumentsService->setArgument('m' , 'C');
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'PayProduct' . $this->argumentsService->m);
-                $buttons = PayProductSpecialButtons::defaultButtons($buttons, $this->argumentsService);
+                $buttons = PayProductSpecialButtons::defaultButtons($buttons, $this->argumentsService, $this->user);
                 $caption = $this->caption('Подтвердите покупку');
                 break;
         }

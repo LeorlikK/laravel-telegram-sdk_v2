@@ -10,7 +10,7 @@ class DeleteButtons
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService):Collection
     {
         $buttons->add([
-            ['text' => 'Confirm Delete', 'callback_data' =>
+            ['text' => '✔️ Confirm Delete', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "sw:Confirm".'_'.
@@ -23,7 +23,7 @@ class DeleteButtons
         ]);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"],

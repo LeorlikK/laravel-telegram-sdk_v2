@@ -40,10 +40,10 @@ class MakeChangePricePay
                 return null;
             }
 
-            return 'Указано некорректное значение';
+            return '14';
 
         }else{
-            return 'Неправильный ID валюты';
+            return '15';
         }
     }
 }

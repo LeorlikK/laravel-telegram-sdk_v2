@@ -55,7 +55,7 @@ class MenuActionButtons
         ]);
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '👁 Change Secrecy Folder', 'callback_data' =>
+                ['text' => '⏳ Change Secrecy Folder', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeSecrecyF".'_'.
                     "bk:$argumentsService->bk".'_'.
@@ -75,7 +75,7 @@ class MenuActionButtons
         }
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '⬇️ Change Sorted Folder', 'callback_data' =>
+                ['text' => '↕️ Change Sorted Folder', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeSortedF".'_'.
                     "bk:$argumentsService->bk".'_'.
@@ -113,7 +113,7 @@ class MenuActionButtons
         ]);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>  "cl:$argumentsService->bk".
+            ['text' => '◀️ Back', 'callback_data' =>  "cl:$argumentsService->bk".
                 '_'."ac:N".'_'."fp:$argumentsService->fp"],
         ]);
 

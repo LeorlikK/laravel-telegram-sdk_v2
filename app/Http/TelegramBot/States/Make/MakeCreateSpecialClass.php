@@ -19,26 +19,6 @@ class MakeCreateSpecialClass
 
     public function make(): null|string
     {
-//        /**
-//         * @var $tab Tab|null
-//         */
-//        preg_match('/\d+/', $this->stateMake->state->action, $matches);
-//        Tab::with(['folders' => function($query){
-//            $query->where('parentId', $this->stateMake->parentId);
-//        }])->where('name', class_basename($this->stateMake->state->TabClass))->first();
-//        $parentFolder = Folder::with('buttons')->find($this->stateMake->parentId);
-//
-//        if ($parentFolder && count($parentFolder->buttons) > 0){
-//            $this->stateMake->sortedId = $parentFolder->buttons->max('sorted_id') + 1;
-//        }
-//
-//        Button::create([
-//            'folder_id' => $this->stateMake->parentId,
-//            'text' => $this->stateMake->text,
-//            'callback' => 'SClass' . $matches[0],
-//            'sorted_id' => $this->stateMake->sortedId,
-//        ]);
-
         /**
          * @var $tab Tab|null
          */
@@ -59,14 +39,14 @@ class MakeCreateSpecialClass
             'action' => 'MenuM'
         ]);
 
-        $button = Button::create([
+        Button::create([
             'folder_id' => $folder->id,
             'text' => '💎 Pay',
             'callback' => 'PayS',
             'sorted_id' => 1,
         ]);
 
-        $product = Product::create([
+        Product::create([
             'folder_id' => $folder->id,
         ]);
 

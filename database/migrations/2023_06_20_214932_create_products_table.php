@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('folder_id')->constrained('folders', 'id');
+            $table->unsignedInteger('subscription')->nullable();
             $table->float('price')->nullable()->default(100000);
             $table->string('currency')->nullable()->default('rub');
             $table->timestamps();

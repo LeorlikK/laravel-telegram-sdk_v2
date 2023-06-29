@@ -12,7 +12,10 @@ class Pay extends Model
 
     protected $table = 'pays';
     protected $guarded = [];
-    public $timestamps = false;
+
+    protected $casts = [
+        'subscription' => 'datetime',
+    ];
 
     public function user():BelongsTo
     {

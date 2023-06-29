@@ -94,14 +94,14 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 
-    public function reports():HasMany
-    {
-        return $this->hasMany(Feedback::class, 'user_id', 'id');
-    }
-
     public function pays():HasMany
     {
         return $this->hasMany(Pay::class, 'user_id', 'id');
+    }
+
+    public function reports():HasMany
+    {
+        return $this->hasMany(Report::class, 'user_id', 'id');
     }
 
     public function updateCache(User $newUserValue): void
@@ -117,7 +117,7 @@ class User extends Authenticatable
             $purchasedProducts->each(function ($user) use ($collect) {
                 if ($user->pays) {
                     $user->pays->each(function ($item) use ($collect) {
-                        if ($item->product && $item->product->folders) {
+                        if ($item->product && $item->product->folders && ($item->subscription > now() || $item->subscription === null)) {
                             $collect->add($item->product->folders->pluck('id'));
                         }
                     });
@@ -127,5 +127,37 @@ class User extends Authenticatable
 
         $purchasedProducts = $collect->flatten()->unique();
         $this->purchasedProducts = $purchasedProducts;
+    }
+
+    public function countAnswerReportState(string $type): string
+    {
+        $numberArray = [
+            '1' => "1️⃣",
+            '2' => "2️⃣",
+            '3' => "3️⃣",
+            '4' => "4️⃣",
+            '5' => "5️⃣",
+            '6' => "6️⃣",
+            '7' => "7️⃣",
+            '8' => "8️⃣",
+            '9' => "9️⃣",
+        ];
+
+        if ($type === 'answer'){
+            $reports = Report::where('user_id', $this->id)
+                ->where('type', $type)
+                ->where('state', false)
+                ->get();
+        }elseif ($type === 'report'){
+            $reports = Report::where('type', $type)
+                ->where('state', false)
+                ->get();
+        }else return "";
+
+
+        $count = $reports->count();
+        if ($count == 0) return "";
+        elseif ($count > 0 && $count < 10) return $numberArray[$count];
+        else return $numberArray[9];
     }
 }

@@ -2,13 +2,9 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
-use App\Http\TelegramBot\Exceptions\BlockedFolderPayException;
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
-use App\Models\Product;
-use App\Models\State;
-use App\Models\Tab;
-use App\Models\User;
 
 class MakeDeletePayProduct
 {
@@ -29,7 +25,7 @@ class MakeDeletePayProduct
                 $this->stateMake->deleteFolderChildren($this->stateMake->parentId, $link);
                 if ($link){
                     $this->stateMake->argumentsService->er = $link;
-                    (new BlockedFolderPayException($this->stateMake->user, $this->stateMake->update,
+                    (new InputException($this->stateMake->user, $this->stateMake->update,
                         $this->stateMake->argumentsService))->handleCallbackQuery();
                 }
 

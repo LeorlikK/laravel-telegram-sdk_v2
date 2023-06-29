@@ -25,17 +25,17 @@ class MakeChangeVisibilityFolder
             return null;
         }elseif (is_numeric($this->stateMake->text)){
             if ($this->stateMake->text > 100){
-                return 'Число больше 100';
+                return '4';
             }elseif ($this->stateMake->text < 0){
-                return 'Число меньше 0';
+                return '5';
             }else{
                 $folder = Folder::find($this->stateMake->parentId);
-                $folder->visibility = $this->stateMake->argumentsService->v;
+                $folder->visibility = (int)$this->stateMake->argumentsService->v;
                 $folder->save();
                 return null;
             }
         }else{
-            return 'Неправильный формат числа';
+            return '6';
         }
     }
 }

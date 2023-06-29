@@ -3,15 +3,12 @@
 namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Http\TelegramBot\States\StateMake;
-use App\Models\Folder;
+use App\Http\TelegramBot\Services\RemainingTimeService;
 use App\Models\Pay;
-use App\Models\Product;
+use App\Models\Report;
 use App\Models\User;
-use Doctrine\DBAL\Exception;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
-use function PHPUnit\Framework\isEmpty;
 
 class ExampleTest extends TestCase
 {
@@ -20,16 +17,12 @@ class ExampleTest extends TestCase
      */
     public function test_the_application_returns_a_successful_response(): void
     {
-        $int = '0.53T';
-        $res = is_numeric($int);
-        dump($res);
-
-
-
-
-
-
-
+        $user = User::find(31);
+        /**
+         * @var $user User
+         */
+        $result = $user->countAnswerReportState();
+        dump($result);
 
 
         $this->assertTrue(true);

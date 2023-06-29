@@ -81,7 +81,7 @@ class ChangeSecrecyButtons
             ],
         ]);
         $buttons->add([
-            ['text' => 'Удалить метку времени', 'callback_data' =>
+            ['text' => '❌ Удалить метку времени', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:Confirm".'_'.
                 "bkS:$argumentsService->bkS".'_'.
@@ -92,7 +92,7 @@ class ChangeSecrecyButtons
         ]);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"

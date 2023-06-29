@@ -47,7 +47,7 @@ class MakeChangeSecrecyFolder
             return null;
 
         }else{
-            return 'Неправильный формат даты или времени';
+            return '3';
         }
     }
 }

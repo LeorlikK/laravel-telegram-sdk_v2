@@ -2,7 +2,7 @@
 
 namespace App\Http\TelegramBot\Services;
 
-class MediaConverter
+class MediaConverterService
 {
     public static function messageMediaConverter($message): ?array
     {

@@ -75,7 +75,7 @@ class MenuMonetizationButtons
         }
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '⬇️ Change Sorted Folder', 'callback_data' =>
+                ['text' => '↕️ Change Sorted Folder', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeSortedF".'_'.
                     "bk:$argumentsService->bk".'_'.
@@ -112,15 +112,15 @@ class MenuMonetizationButtons
                 "fp:$argumentsService->fp"]
         ]);
         $buttons->add([
-            ['text' => 'Purchase Period', 'callback_data' =>
+            ['text' => '📅 Purchase Period', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
-                "sw:CreateF".'_'.
+                "sw:PeriodF".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"]
         ]);
         $buttons->add([
-            ['text' => 'Price', 'callback_data' =>
+            ['text' => '💰 Price', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:PriceF".'_'.
                 "bk:$argumentsService->bk".'_'.
@@ -129,15 +129,15 @@ class MenuMonetizationButtons
         ]);
         $buttons->add([
             ['text' => '🗑 Basket', 'callback_data' =>
-                "cl:$argumentsService->cl".'_'.
-                "sw:BasketF".'_'.
+                "cl:IA".'_'.
+                "er:6".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"]
         ]);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>  "cl:$argumentsService->bk".
+            ['text' => '◀️ Back', 'callback_data' =>  "cl:$argumentsService->bk".
                 '_'."ac:N".'_'."fp:$argumentsService->fp"],
         ]);
 

@@ -26,8 +26,11 @@ class MakePayProductClass
         $product = $folder->product;
         Pay::create([
             'user_id' => $this->stateMake->user->id,
+            'subscription' => $product->subscription ? now()->addHours($product->subscription) : null,
             'product_id' => $product->id,
+            'price' => $product->price . " $product->currency"
         ]);
+        $this->stateMake->user->state()->delete();
         $this->stateMake->user->updatePurchasedProducts();
         $this->stateMake->user->updateCache($this->stateMake->user);
 

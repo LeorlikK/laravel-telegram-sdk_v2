@@ -18,7 +18,7 @@ class MenuR extends RecursionClass
         $folderAction = Folder::find($this->argumentsService->fp)?->action;
         if ($this->administrator){
             if (!$this->argumentsService->ac){
-                $buttons = MenuRecursionButtons::adminFirstPage($buttons, $this->argumentsService);
+                $buttons = MenuRecursionButtons::adminFirstPage($buttons, $this->argumentsService, $this->user);
             }else{
                 if ($folderAction){
                     switch (true){
@@ -36,7 +36,7 @@ class MenuR extends RecursionClass
             if ($this->argumentsService->ac){
                 $buttons = MenuRecursionButtons::backPage($buttons, $this->argumentsService);
             }else{
-                $buttons = MenuRecursionButtons::userFirstPage($buttons, $this->argumentsService);
+                $buttons = MenuRecursionButtons::userFirstPage($buttons, $this->argumentsService, $this->user);
             }
         }
 

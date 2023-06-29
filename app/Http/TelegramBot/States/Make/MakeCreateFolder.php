@@ -7,6 +7,7 @@ use App\Models\Folder;
 use App\Models\State;
 use App\Models\Tab;
 use App\Models\User;
+use Doctrine\DBAL\Exception;
 
 class MakeCreateFolder
 {

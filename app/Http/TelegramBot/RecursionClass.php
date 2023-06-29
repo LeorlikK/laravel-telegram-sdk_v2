@@ -96,40 +96,44 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
         foreach ($folders as $folder){
             $timeResult = $folder->display < $timeNow;
 
-            if (($timeResult && $this->user->role->visibility >= $folder->visibility) || $this->administrator){
+            if ($timeResult || $this->administrator){
+                if (($timeResult && $this->user->role->visibility >= $folder->visibility) || $this->administrator || !$folder->blocked){
 
-                $blockedPayText = '';
-                if ($folder->blockedPay){
-                    if ($this->administrator) $blockedPayText = "💳";
-                    elseif($this->user->purchasedProducts->contains($folder->id)) $blockedPayText = "✅";
-                    else $blockedPayText = "💳";
+                    $blockedPayText = '';
+                    if ($folder->blockedPay){
+                        if ($this->administrator) $blockedPayText = "💳";
+                        elseif($this->user->purchasedProducts->contains($folder->id)) $blockedPayText = "✅";
+                        else $blockedPayText = "💳";
+                    }
+
+                    $blockedPayCallback = "";
+                    if ($folder->blockedPay){
+                        if ($this->administrator) $blockedPayCallback = false;
+                        elseif($this->user->purchasedProducts->contains($folder->id)) $blockedPayCallback = false;
+                        else $blockedPayCallback = true;
+                    }
+
+                    if ($blockedPayCallback) $callback = "cl:IA".'_'."er:9";
+                    else{
+                        $callback = !$this->administrator && $this->user->role->visibility <  $folder->visibility?
+                            "cl:IA".'_'."er:1".'_'."ac:N".'_'."fp:$folder->id" :
+                            "cl:".class_basename($this).'_'."ac:N".'_'."fp:$folder->id";
+                    }
+
+                    $buttons->add([
+                        ['text' =>
+                            $folder->name .
+                            ($this->administrator ? "($folder->visibility)" : '') .
+                            ($folder->displayViewBool() ? "⏳" : '') .
+                            ($this->user->role->visibility <  $folder->visibility ? "🔒" : '').
+                            ($this->administrator && $folder->blocked ? "👁" : '').
+                            $blockedPayText,
+                            'callback_data' =>
+                                $callback]
+                    ]);
                 }
-
-                $blockedPayCallback = "";
-                if ($folder->blockedPay){
-                    if ($this->administrator) $blockedPayCallback = false;
-                    elseif($this->user->purchasedProducts->contains($folder->id)) $blockedPayCallback = false;
-                    else $blockedPayCallback = true;
-                }
-
-                if ($blockedPayCallback) $callback = "cl:blockP".'_'."er:1";
-                else{
-                    $callback = $folder->blocked && $this->user->role->visibility <  $folder->visibility ?
-                        "cl:blockedF".'_'."ac:N".'_'."fp:$folder->id" :
-                        "cl:".class_basename($this).'_'."ac:N".'_'."fp:$folder->id";
-                }
-
-                $buttons->add([
-                    ['text' =>
-                        $folder->name .
-                        "($folder->visibility)" .
-                        ($folder->displayViewBool() ? "👁" : '') .
-                        ($folder->blocked && $this->user->role->visibility <  $folder->visibility ? "🔒" : '').
-                        $blockedPayText,
-                        'callback_data' =>
-                            $callback]
-                ]);
             }
+
         }
 
         $this->folderParent = Folder::with('buttons')->where('id', $lala)->first();
@@ -138,10 +142,10 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
                 $timeResult = $button->display < $timeNow;
                 if (($timeResult && $this->user->role->visibility >= $button->visibility) || $this->administrator){
                     $buttons->add([
-                        ['text' => $button->text  . ($button->displayViewBool() ? "👁" : '') .
+                        ['text' => $button->text  . ($button->displayViewBool() ? "⏳" : '') .
                         ($button->blocked && $this->user->role->visibility <  $button->visibility  ? "🔒" : ''),
                         'callback_data' =>
-                            $button->blocked && $this->user->role->visibility <  $button->visibility ? "cl:blockedF".'_'."ac:N".'_'."fp:$button->id" :
+                            $button->blocked && $this->user->role->visibility <  $button->visibility ? "cl:IA".'_'."er:1".'_'."ac:N".'_'."fp:$button->id" :
                                 "cl:$button->callback" . '_' . "ac:N" . '_' . "fp:$button->folder_id"]]);
                 }
             }

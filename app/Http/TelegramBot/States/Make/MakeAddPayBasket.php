@@ -20,7 +20,6 @@ class MakeAddPayBasket
 
     public function make(): null|string
     {
-        dump('ADDDDDDDDDDDDD');
         if ($this->stateMake->argumentsService->v){
             $folder = Folder::with('product')->find($this->stateMake->parentId);
             $product = $folder->product;
@@ -30,6 +29,6 @@ class MakeAddPayBasket
             return null;
         }
 
-        return 'Неправильный ID папки';
+        return '16';
     }
 }

@@ -6,6 +6,7 @@ use App\Http\TelegramBot\Actions\MenuA;
 use App\Http\TelegramBot\Actions\MenuM;
 use App\Http\TelegramBot\Actions\Modules\ChangeBasketPay;
 use App\Http\TelegramBot\Actions\Modules\ChangePaywall;
+use App\Http\TelegramBot\Actions\Modules\ChangePeriodPay;
 use App\Http\TelegramBot\Actions\Modules\ChangePricePay;
 use App\Http\TelegramBot\Actions\Modules\ChangeSecrecy;
 use App\Http\TelegramBot\Actions\Modules\ChangeSorted;
@@ -13,13 +14,17 @@ use App\Http\TelegramBot\Actions\Modules\ChangeVisibility;
 use App\Http\TelegramBot\Actions\Modules\Create;
 use App\Http\TelegramBot\Actions\Modules\CreateSpecialClass;
 use App\Http\TelegramBot\Actions\Modules\Delete;
-use App\Http\TelegramBot\Components\DefaultClass\TestD;
+use App\Http\TelegramBot\Components\DefaultClass\Admin\AdminMenu;
+use App\Http\TelegramBot\Components\DefaultClass\Admin\AdminReports;
+use App\Http\TelegramBot\Components\DefaultClass\Admin\AdminRoles;
+use App\Http\TelegramBot\Components\DefaultClass\Admin\AdminUsers;
+use App\Http\TelegramBot\Components\DefaultClass\PersonalArea\AreaFeedback;
+use App\Http\TelegramBot\Components\DefaultClass\PersonalArea\AreaMenu;
+use App\Http\TelegramBot\Components\DefaultClass\PersonalArea\AreaPurchased;
 use App\Http\TelegramBot\Components\RecursionClass\MenuR;
 use App\Http\TelegramBot\Components\SpecialClass\PayS;
-use App\Http\TelegramBot\Components\SpecialClass\TestS;
-use App\Http\TelegramBot\Exceptions\BasketFolderException;
-use App\Http\TelegramBot\Exceptions\BlockedFolderException;
-use App\Http\TelegramBot\Exceptions\BlockedFolderPayException;
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 
 
 class Aliases
@@ -27,7 +32,6 @@ class Aliases
     public static function getFullNameSpace(string $class):string
     {
         $array = [
-            'TestD' => TestD::class,
             'MenuR' => MenuR::class,
 
             'Create' => Create::class,
@@ -38,27 +42,32 @@ class Aliases
             'Delete' => Delete::class,
             'ChangePaywall' => ChangePaywall::class,
             'ChangePricePay' => ChangePricePay::class,
-
+            'ChangePeriodPay' => ChangePeriodPay::class,
             'ChangeBasketPay' => ChangeBasketPay::class,
 
-            // Buttons
+            // Special Class
             'PayS' => PayS::class,
 
             // Action
             'MenuA' => MenuA::class,
             'MenuM' => MenuM::class,
 
-            // Exceptions
-            'blockedF' => BlockedFolderException::class,
-            'basketF' => BasketFolderException::class,
-            'blockP' => BlockedFolderPayException::class,
+            // Exceptions and Alert
+            'IA' => InputAlert::class,
+            'IE' => InputException::class,
 
-            // SpecialCLass
-            'SClass1' => TestS::class,
-            'SClass2' => TestS::class,
-            'SClass3' => TestS::class,
-            'SClass4' => TestS::class,
-            'SClass5' => TestS::class,
+            // Admin
+            'AdminMenu' => AdminMenu::class,
+            'AdminUsers' => AdminUsers::class,
+            'AdminRoles' => AdminRoles::class,
+            'AdminReports' => AdminReports::class,
+
+            // Personal Area
+            'AreaMenu' => AreaMenu::class,
+            'AreaPurchased' => AreaPurchased::class,
+
+            // Reports
+            'AreaFeedback' => AreaFeedback::class
         ];
 
         return $array[$class];

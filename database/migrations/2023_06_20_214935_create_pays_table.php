@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users', 'id');
             $table->foreignId('product_id')->constrained('products', 'id');
+            $table->string('price')->nullable();
             $table->timestamp('subscription')->nullable();
             $table->timestamps();
         });

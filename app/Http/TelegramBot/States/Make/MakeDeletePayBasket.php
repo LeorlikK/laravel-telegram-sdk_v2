@@ -29,6 +29,6 @@ class MakeDeletePayBasket
             return null;
         }
 
-        return 'Неправильный ID папки';
+        return '16';
     }
 }

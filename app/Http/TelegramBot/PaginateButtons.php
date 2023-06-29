@@ -12,7 +12,7 @@ abstract class PaginateButtons
         if ($totalFolder > $perPage){
             if ($totalFolder > ($perPage*$argumentsService->p) && $argumentsService->p > 1){
                 $buttons->add([
-                    ['text' => '◀️ Назад ◀️', 'callback_data' =>
+                    ['text' => '◀️ Back', 'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "bk:$argumentsService->bk".'_'.
                         "sw:Add".'_'.
@@ -21,7 +21,7 @@ abstract class PaginateButtons
                         "fp:$argumentsService->fp".'_'.
                         "p:$buttonMinus"
                     ],
-                    ['text' => '▶️ Вперед ▶️', 'callback_data' =>
+                    ['text' => 'Next ▶️ ', 'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "bk:$argumentsService->bk".'_'.
                         "sw:Add".'_'.
@@ -33,7 +33,7 @@ abstract class PaginateButtons
                 ]);
             }elseif ($totalFolder <= ($perPage*$argumentsService->p) && $argumentsService->p > 1){
                 $buttons->add([
-                    ['text' => '◀️ Назад ◀️', 'callback_data' =>
+                    ['text' => '◀️ Back', 'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "bk:$argumentsService->bk".'_'.
                         "sw:Add".'_'.
@@ -45,7 +45,7 @@ abstract class PaginateButtons
                 ]);
             }elseif ($totalFolder > ($perPage*$argumentsService->p)){
                 $buttons->add([
-                    ['text' => '▶️ Вперед ▶️', 'callback_data' =>
+                    ['text' => 'Next ▶️', 'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "bk:$argumentsService->bk".'_'.
                         "sw:Add".'_'.

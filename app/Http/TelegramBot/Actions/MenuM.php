@@ -8,6 +8,7 @@ use App\Http\TelegramBot\Actions\Modules\ChangeImage;
 use App\Http\TelegramBot\Actions\Modules\ChangeName;
 use App\Http\TelegramBot\Actions\Modules\ChangeBasketPay;
 use App\Http\TelegramBot\Actions\Modules\ChangePaywall;
+use App\Http\TelegramBot\Actions\Modules\ChangePeriodPay;
 use App\Http\TelegramBot\Actions\Modules\ChangePricePay;
 use App\Http\TelegramBot\Actions\Modules\ChangeSecrecy;
 use App\Http\TelegramBot\Actions\Modules\ChangeSorted;
@@ -119,6 +120,13 @@ class MenuM extends DefaultClass
                 $this->argumentsService->setArgument('sw' , null);
                 $this->argumentsService->setArgument('m' , 'C');
                 (new CreateSpecialClass($this->user, $this->update, $this->argumentsService))->handleCallbackQuery();
+                break;
+            case 'PeriodF':
+                $this->argumentsService->setArgument('bk' , class_basename($this));
+                $this->argumentsService->setArgument('bkS' , 'MenuR');
+                $this->argumentsService->setArgument('sw' , null);
+                $this->argumentsService->setArgument('m' , 'F');
+                (new ChangePeriodPay($this->user, $this->update, $this->argumentsService))->handleCallbackQuery();
                 break;
             case 'PriceF':
                 $this->argumentsService->setArgument('bk' , class_basename($this));

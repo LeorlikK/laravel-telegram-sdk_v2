@@ -13,7 +13,7 @@ class ChangeVisibilityButtons
         $folder = Folder::find($argumentsService->fp);
 
         $buttons->add([
-            ['text' => 'Scope', 'callback_data' =>
+            ['text' => '👁‍🗨 Scope', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "sw:Scope".'_'.
@@ -24,7 +24,7 @@ class ChangeVisibilityButtons
             ],
         ]);
         $buttons->add([
-            ['text' => $folder->blocked ? "✅ Unblocked" : "❌ Blocked", 'callback_data' =>
+            ['text' => $folder->blocked ? "✅ For all" : "👁 Have access level", 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "sw:Blocked".'_'.
@@ -36,7 +36,7 @@ class ChangeVisibilityButtons
         ]);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"
@@ -134,7 +134,7 @@ class ChangeVisibilityButtons
         ]);
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "bkS:$argumentsService->bkS".'_'.

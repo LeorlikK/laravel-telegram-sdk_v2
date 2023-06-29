@@ -36,6 +36,10 @@ class ArgumentsService
             'bkS: ' . $this->bkS,
             'ac: ' . $this->ac,
             'fp: ' . $this->fp,
+            'm: ' . $this->m,
+            'p: ' . $this->p,
+            'v: ' . $this->v,
+            'er: ' . $this->er,
             '=>>>>>>>>>>>>>>>>>>>'
         );
     }

@@ -19,7 +19,8 @@ class MakeDeletePayFolder
         if ($this->stateMake->argumentsService->v === 'del'){
             if ($this->stateMake->parentId != 0){
                 $backId = Folder::find($this->stateMake->parentId)->parentId;
-                $this->stateMake->deleteFolderChildren($this->stateMake->parentId);
+                $link = false;
+                $this->stateMake->deleteFolderChildren($this->stateMake->parentId, $link);
                 $this->stateMake->parentId = $backId;
             }
         }
