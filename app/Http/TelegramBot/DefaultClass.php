@@ -6,6 +6,8 @@ use App\Http\TelegramBot\Services\ArgumentsService;
 use App\Models\Tab;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;
@@ -85,6 +87,21 @@ abstract class DefaultClass implements DefaultInterface
             'message_id' => $this->update->getMessage()->get('message_id'),
             'media' => json_encode(["type" => "photo", "media" => $photo->getFile(), "caption" => $caption, "parse_mode" => "Markdown"], JSON_UNESCAPED_UNICODE),
             'reply_markup' => json_encode($reply_markup, JSON_UNESCAPED_UNICODE)
+        ]);
+    }
+
+    public function callbackAnswer(bool $show_alert): void
+    {
+        /**
+         * @var $photo InputFile
+         */
+        [$text] = $this->main();
+
+        Telegram::answerCallbackQuery([
+            'callback_query_id' => $this->update->callbackQuery->get('id'),
+            'text' => $text,
+            'show_alert' => $show_alert,
+            'cache_time' => 60
         ]);
     }
 }

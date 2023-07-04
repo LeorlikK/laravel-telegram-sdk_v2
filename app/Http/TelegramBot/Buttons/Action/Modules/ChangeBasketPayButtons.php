@@ -2,14 +2,13 @@
 
 namespace App\Http\TelegramBot\Buttons\Action\Modules;
 
-use App\Http\TelegramBot\PaginateButtons;
+use App\Http\TelegramBot\Buttons;
 use App\Http\TelegramBot\Services\ArgumentsService;
 use App\Models\Folder;
 use App\Models\Product;
 use Illuminate\Support\Collection;
-use phpDocumentor\Reflection\Types\Self_;
 
-class ChangeBasketPayButtons extends PaginateButtons
+class ChangeBasketPayButtons extends Buttons
 {
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
@@ -19,7 +18,6 @@ class ChangeBasketPayButtons extends PaginateButtons
                 "bk:$argumentsService->bk".'_'.
                 "sw:Add".'_'.
                 "bkS:$argumentsService->bkS".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "m:$argumentsService->m".'_'
             ],
@@ -30,7 +28,6 @@ class ChangeBasketPayButtons extends PaginateButtons
                 "bk:$argumentsService->bk".'_'.
                 "sw:Del".'_'.
                 "bkS:$argumentsService->bkS".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "m:$argumentsService->m".'_'
             ],
@@ -64,7 +61,6 @@ class ChangeBasketPayButtons extends PaginateButtons
         $buttons->add([
             ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp"
             ],
         ]);
@@ -78,7 +74,7 @@ class ChangeBasketPayButtons extends PaginateButtons
         $buttonPlus = ((int)$argumentsService->p) + 1;
         $buttonMinus = ((int)$argumentsService->p) - 1;
         $perPage = 10;
-        $folders = Folder::doesntHave('product')->doesntHave('products')->orderBy('created_at', 'DESC')->paginate($perPage, ['*'], null, $argumentsService->p);
+        $folders = Folder::doesntHave('product')->orderBy('created_at', 'DESC')->paginate($perPage, ['*'], null, $argumentsService->p);
         $totalFolder = $folders->total();
 
         foreach ($folders->items() as $folder) {
@@ -90,7 +86,6 @@ class ChangeBasketPayButtons extends PaginateButtons
                     'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "sw:ConfirmAdd".'_'.
-                        "ac:N".'_'.
                         "fp:$argumentsService->fp".'_'.
                         "v:$folder->id".'_'
                 ],
@@ -100,13 +95,13 @@ class ChangeBasketPayButtons extends PaginateButtons
         $buttons = self::paginateNavigation($buttons, $totalFolder, $perPage, $argumentsService, $buttonMinus, $buttonPlus);
 
         $buttons->add([
-            ['text' => '◀️ Back', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "bkS:$argumentsService->bkS".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp".'_'.
-                "m:$argumentsService->m".'_'
+                "m:$argumentsService->m".'_'.
+                "s:1"
             ],
         ]);
 
@@ -134,7 +129,6 @@ class ChangeBasketPayButtons extends PaginateButtons
                     'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "sw:ConfirmDel".'_'.
-                        "ac:N".'_'.
                         "fp:$argumentsService->fp".'_'.
                         "v:$folder->id".'_'
                 ],
@@ -144,13 +138,13 @@ class ChangeBasketPayButtons extends PaginateButtons
         $buttons = self::paginateNavigation($buttons, $totalFolder, $perPage, $argumentsService, $buttonMinus, $buttonPlus);
 
         $buttons->add([
-            ['text' => '◀️ Back', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "bkS:$argumentsService->bkS".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp".'_'.
-                "m:$argumentsService->m".'_'
+                "m:$argumentsService->m".'_'.
+                "s:1"
             ],
         ]);
 

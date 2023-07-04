@@ -2,6 +2,7 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
 use App\Models\Tab;
@@ -30,6 +31,9 @@ class MakeChangeSortedFolder
         $first->save();
         $second->save();
 
+        $this->stateMake->argumentsService->er = '22';
+        (new InputException($this->stateMake->user, $this->stateMake->update,
+            $this->stateMake->argumentsService))->handleCallbackQuery();
         return null;
     }
 }

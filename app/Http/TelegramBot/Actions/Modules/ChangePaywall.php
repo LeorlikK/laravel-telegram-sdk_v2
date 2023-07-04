@@ -5,7 +5,6 @@ namespace App\Http\TelegramBot\Actions\Modules;
 use App\Http\TelegramBot\Buttons\Action\Modules\ChangePaywallButtons;
 use App\Http\TelegramBot\DefaultClass;
 use App\Http\TelegramBot\States\StateCreate;
-use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
 
 class ChangePaywall extends DefaultClass

@@ -3,12 +3,14 @@
 namespace App\Http\TelegramBot\Buttons\Action;
 
 use App\Http\TelegramBot\Services\ArgumentsService;
+use App\Models\Folder;
 use Illuminate\Support\Collection;
 
 class MenuActionButtons
 {
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService):Collection
     {
+        $folder = Folder::with('product')->find($argumentsService->fp);
         $buttons->add([
             ['text' => '📚 Create Folder', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
@@ -55,7 +57,7 @@ class MenuActionButtons
         ]);
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '⏳ Change Secrecy Folder', 'callback_data' =>
+                ['text' => '⏳ Change Secrecy Folder' . ($folder->display ? '( ' . $folder->display . ' )' : ""), 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeSecrecyF".'_'.
                     "bk:$argumentsService->bk".'_'.
@@ -65,7 +67,7 @@ class MenuActionButtons
         }
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '🔒 Change Visibility Folder', 'callback_data' =>
+                ['text' => '🔒 Change Visibility Folder' . '( ' . ($folder->visibility) . ($folder->blocked ? "👁‍🗨" : "👁") . ' )', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeVisibilityF".'_'.
                     "bk:$argumentsService->bk".'_'.
@@ -95,7 +97,7 @@ class MenuActionButtons
         }
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '💳 Paywall', 'callback_data' =>
+                ['text' => '💳 Paywall' . '( ' . ($folder->blockedPay ? "✅" : "❌") . ' )', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:PaywallF".'_'.
                     "bk:$argumentsService->bk".'_'.

@@ -2,11 +2,9 @@
 
 namespace App\Http\TelegramBot\States\Make\Admin;
 
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
-use App\Models\Folder;
 use App\Models\Role;
-use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 
 class MakeCreateRole
 {
@@ -34,6 +32,9 @@ class MakeCreateRole
                     'visibility' => $visibility,
                 ]);
 
+                $this->stateMake->argumentsService->er = '34';
+                (new InputException($this->stateMake->user, $this->stateMake->update,
+                    $this->stateMake->argumentsService))->handleCallbackQuery();
                 return null;
             }
         }else {

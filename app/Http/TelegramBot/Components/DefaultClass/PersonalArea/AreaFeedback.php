@@ -2,7 +2,6 @@
 
 namespace App\Http\TelegramBot\Components\DefaultClass\PersonalArea;
 
-use App\Http\TelegramBot\Buttons\DefaultClass\Admin\AdminReportsButtons;
 use App\Http\TelegramBot\Buttons\DefaultClass\PersonalArea\AreaFeedbackButtons;
 use App\Http\TelegramBot\DefaultClass;
 use App\Http\TelegramBot\States\StateCreate;
@@ -19,18 +18,19 @@ class AreaFeedback extends DefaultClass
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 $this->argumentsService->setArgument('bk' , class_basename($this));
                 $this->argumentsService->setArgument('bkS' , class_basename($this));
+                $this->argumentsService->setArgument('sw' , 'Write');
                 $this->argumentsService->setArgument('m' , 'C');
-                if ($this->argumentsService->v){
-                    $this->argumentsService->fp = $this->argumentsService->v;
-                    StateCreate::createState($this->update, $this->user, $this->argumentsService, 'CreateReport' . $this->argumentsService->m);
-                    $this->argumentsService->fp = null;
-                }
-                [$buttons, $caption] = AreaFeedbackButtons::writeButtons($buttons, $this->argumentsService);
+                $this->argumentsService->v = $this->argumentsService->v ?? 0;
+                $this->argumentsService->fp = $this->argumentsService->v;
+                StateCreate::createState($this->update, $this->user, $this->argumentsService, 'CreateReport' . $this->argumentsService->m);
+                $this->argumentsService->fp = null;
+                $caption = "Опишите вашу проблему и мы постараемся её решить";
+                $buttons = AreaFeedbackButtons::writeButtons($buttons, $this->argumentsService);
                 break;
             case 'Answer':
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 $this->argumentsService->setArgument('bk' , class_basename($this));
-                $buttons = AreaFeedbackButtons::answerFromAdminButtons($buttons, $this->argumentsService);
+                $buttons = AreaFeedbackButtons::answerFromAdminButtons($buttons, $this->argumentsService, $this->user);
                 break;
             case 'Report':
                 Report::where('id', $this->argumentsService->fp)->where('state', false)->update(['state' => true]);
@@ -42,10 +42,13 @@ class AreaFeedback extends DefaultClass
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 $this->argumentsService->setArgument('bk' , class_basename($this));
                 $this->argumentsService->setArgument('bkS' , class_basename($this));
+                $this->argumentsService->setArgument('sw' , 'AnswerAdmin');
                 $this->argumentsService->setArgument('m' , 'C');
                 if ($this->argumentsService->fp){
+                    $fp = $this->argumentsService->fp;
+                    $this->argumentsService->fp = $this->argumentsService->v;
                     StateCreate::createState($this->update, $this->user, $this->argumentsService, 'CreateReport' . $this->argumentsService->m);
-//                    $this->argumentsService->fp = null;
+                    $this->argumentsService->fp = $fp;
                 }
                 $buttons = AreaFeedbackButtons::answerReportButtons($buttons, $this->argumentsService);
                 $caption = $this->caption("Напишите ответ администратору");
@@ -56,6 +59,7 @@ class AreaFeedback extends DefaultClass
                 $this->argumentsService->setArgument('bkS' , class_basename($this));
                 $this->argumentsService->setArgument('fp' , null);
                 $this->argumentsService->setArgument('p' , null);
+                $this->argumentsService->setArgument('v' , null);
                 $buttons = AreaFeedbackButtons::defaultButtons($buttons, $this->argumentsService, $this->user);
                 break;
         }
@@ -79,6 +83,7 @@ class AreaFeedback extends DefaultClass
     public static function theme($themeId): string
     {
         $theme = [
+            '0' => 'Без темы',
             '1' => 'Ошибка с оплатой крабов',
             '2' => 'Я краб',
             '3' => 'Кто-то краб',

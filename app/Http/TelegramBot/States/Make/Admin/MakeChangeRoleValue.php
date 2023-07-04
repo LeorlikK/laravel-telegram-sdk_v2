@@ -2,6 +2,7 @@
 
 namespace App\Http\TelegramBot\States\Make\Admin;
 
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Role;
 
@@ -28,6 +29,10 @@ class MakeChangeRoleValue
                 ]);
 
                 $this->stateMake->argumentsService->setArgument('sw', 'СhoiceChangeRole');
+
+                $this->stateMake->argumentsService->er = '33';
+                (new InputException($this->stateMake->user, $this->stateMake->update,
+                    $this->stateMake->argumentsService))->handleCallbackQuery();
                 return null;
             }
 

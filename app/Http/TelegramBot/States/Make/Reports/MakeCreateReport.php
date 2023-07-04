@@ -2,7 +2,7 @@
 
 namespace App\Http\TelegramBot\States\Make\Reports;
 
-use App\Http\TelegramBot\Exceptions\UserAlertException;
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
 use App\Models\Report;
@@ -19,17 +19,19 @@ class MakeCreateReport
     public function make(): null|string
     {
         if ($this->stateMake->text){
-            if ($this->stateMake->parentId != 0){
-                Report::create([
-                    'user_id' => $this->stateMake->user->id,
-                    'theme' => $this->stateMake->parentId,
-                    'message' => $this->stateMake->text,
-                    'state' => 0,
-                    'type' => 'report',
-                ]);
+            Report::create([
+                'from' => $this->stateMake->user->id,
+                'to_whom' => null,
+                'theme' => $this->stateMake->parentId,
+                'message' => $this->stateMake->text,
+                'state' => 0,
+                'type' => 'report',
+            ]);
 
-                return null;
-            }
+            $this->stateMake->argumentsService->er = '41';
+            (new InputException($this->stateMake->user, $this->stateMake->update,
+                $this->stateMake->argumentsService))->handleCallbackQuery();
+            return null;
         }
 
         return null;

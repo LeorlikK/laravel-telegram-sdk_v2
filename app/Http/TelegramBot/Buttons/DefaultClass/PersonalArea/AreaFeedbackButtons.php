@@ -2,14 +2,14 @@
 
 namespace App\Http\TelegramBot\Buttons\DefaultClass\PersonalArea;
 
+use App\Http\TelegramBot\Buttons;
 use App\Http\TelegramBot\Components\DefaultClass\PersonalArea\AreaFeedback;
-use App\Http\TelegramBot\PaginateButtons;
 use App\Http\TelegramBot\Services\ArgumentsService;
 use App\Models\Report;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
-class AreaFeedbackButtons extends PaginateButtons
+class AreaFeedbackButtons extends Buttons
 {
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService, User $user): Collection
     {
@@ -17,7 +17,6 @@ class AreaFeedbackButtons extends PaginateButtons
             ['text' => '💬 Write Report', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:Write".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp"
             ],
         ]);
@@ -25,7 +24,6 @@ class AreaFeedbackButtons extends PaginateButtons
             ['text' => '📨 Answer from admin' . ($user->countAnswerReportState('answer')), 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:Answer".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp"
             ],
         ]);
@@ -33,7 +31,6 @@ class AreaFeedbackButtons extends PaginateButtons
         $buttons->add([
             ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp"
             ],
         ]);
@@ -41,81 +38,30 @@ class AreaFeedbackButtons extends PaginateButtons
         return $buttons;
     }
 
-    public static function writeButtons(Collection $buttons, ArgumentsService $argumentsService): array
+    public static function writeButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
-        if ($argumentsService->v){
-            $caption = "Опишите вашу проблему и мы постараемся её решить";
-        }else{
-            $caption = "Выберите тему";
-        }
-        $buttons->add([
-            ['text' => ($argumentsService->v === '1' ? "✅" : "").(AreaFeedback::theme(1)), 'callback_data' =>
-                "cl:$argumentsService->cl".'_'.
-                "sw:Write".'_'.
-                "ac:N".'_'.
-                "v:1"
-            ],
-        ]);
-        $buttons->add([
-            ['text' => ($argumentsService->v === '2' ? "✅" : "").(AreaFeedback::theme(2)), 'callback_data' =>
-                "cl:$argumentsService->cl".'_'.
-                "sw:Write".'_'.
-                "ac:N".'_'.
-                "v:2"
-            ],
-        ]);
-        $buttons->add([
-            ['text' => ($argumentsService->v === '3' ? "✅" : "").(AreaFeedback::theme(3)), 'callback_data' =>
-                "cl:$argumentsService->cl".'_'.
-                "sw:Write".'_'.
-                "ac:N".'_'.
-                "v:3"
-            ],
-        ]);
-        $buttons->add([
-            ['text' => ($argumentsService->v === '4' ? "✅" : "").(AreaFeedback::theme(4)), 'callback_data' =>
-                "cl:$argumentsService->cl".'_'.
-                "sw:Write".'_'.
-                "ac:N".'_'.
-                "v:4"
-            ],
-        ]);
-        $buttons->add([
-            ['text' => ($argumentsService->v === '5' ? "✅" : "").(AreaFeedback::theme(5)), 'callback_data' =>
-                "cl:$argumentsService->cl".'_'.
-                "sw:Write".'_'.
-                "ac:N".'_'.
-                "v:5"
-            ],
-        ]);
-        $buttons->add([
-            ['text' => ($argumentsService->v === '6' ? "✅" : "").(AreaFeedback::theme(6)), 'callback_data' =>
-                "cl:$argumentsService->cl".'_'.
-                "sw:Write".'_'.
-                "ac:N".'_'.
-                "v:6"
-            ],
-        ]);
-
+        $buttons = self::choiceThemeButtons($buttons, $argumentsService);
 
         $buttons->add([
-            ['text' => '◀️ Back', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
-                "ac:N".'_'.
-                "fp:$argumentsService->fp"
+                "fp:$argumentsService->fp".'_'.
+                "s:1"
             ],
         ]);
 
-        return [$buttons, $caption];
+        return $buttons;
     }
 
-    public static function answerFromAdminButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
+    public static function answerFromAdminButtons(Collection $buttons, ArgumentsService $argumentsService, User $user): Collection
     {
         $argumentsService->p = $argumentsService->p ?? 1;
         $buttonPlus = ((int)$argumentsService->p) + 1;
         $buttonMinus = ((int)$argumentsService->p) - 1;
         $perPage = 10;
-        $reports = Report::with('user')
+        $reports = Report::with(['userWhom' => function($item)use($user){
+            $item->where('id', $user->id);
+        }])
             ->where('type', 'answer')
             ->orderBy('created_at', 'DESC')
             ->paginate($perPage, ['*'], null, $argumentsService->p);
@@ -126,7 +72,7 @@ class AreaFeedbackButtons extends PaginateButtons
              * @var $report Report
              */
             $buttons->add([
-                ['text' => ($report->state ? "" : "❗️") . $report->user->username . "(".(AreaFeedback::theme($report->theme).")"),
+                ['text' => ($report->state ? "" : "❗️") . $report->userWhom->username . "(".(AreaFeedback::theme($report->theme).")"),
                     'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "sw:Report".'_'.
@@ -141,7 +87,6 @@ class AreaFeedbackButtons extends PaginateButtons
         $buttons->add([
             ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp"
             ],
         ]);
@@ -151,7 +96,7 @@ class AreaFeedbackButtons extends PaginateButtons
 
     public static function reportButtons(Collection $buttons, ArgumentsService $argumentsService): array
     {
-        $report = Report::with('user')->find($argumentsService->fp);
+        $report = Report::with('userWhom')->find($argumentsService->fp);
         $caption =
             '📇 Theme: ' . (AreaFeedback::theme($report->theme)) . "\n\r".
             '✉️ Message: ' . $report->message . "\n\r";
@@ -162,7 +107,8 @@ class AreaFeedbackButtons extends PaginateButtons
                     "cl:$argumentsService->cl".'_'.
                     "sw:AnswerAdmin".'_'.
                     "p:$argumentsService->p".'_'.
-                    "fp:$argumentsService->fp"
+                    "fp:$argumentsService->fp".'_'.
+                    "v:$report->theme"
             ],
         ]);
 
@@ -170,7 +116,6 @@ class AreaFeedbackButtons extends PaginateButtons
             ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "sw:Answer".'_'.
-                "ac:N".'_'.
                 "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp"
             ],
@@ -181,16 +126,73 @@ class AreaFeedbackButtons extends PaginateButtons
 
     public static function answerReportButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
+        $buttons = self::choiceThemeButtons($buttons, $argumentsService);
+
         $buttons->add([
             ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "sw:Report".'_'.
-                "ac:N".'_'.
                 "p:$argumentsService->p".'_'.
-                "fp:$argumentsService->fp"
+                "fp:$argumentsService->fp".'_'.
+                "s:1"
             ],
         ]);
 
         return $buttons;
     }
+
+    public static function choiceThemeButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
+    {
+        $buttons->add([
+            ['text' => ($argumentsService->v === '0' ? "✅" : "").(AreaFeedback::theme(0)), 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:$argumentsService->sw".'_'.
+                "fp:$argumentsService->fp".'_'.
+                "v:0"
+            ],
+        ]);
+        $buttons->add([
+            ['text' => ($argumentsService->v === '1' ? "✅" : "").(AreaFeedback::theme(1)), 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:$argumentsService->sw".'_'.
+                "fp:$argumentsService->fp".'_'.
+                "v:1"
+            ],
+        ]);
+        $buttons->add([
+            ['text' => ($argumentsService->v === '2' ? "✅" : "").(AreaFeedback::theme(2)), 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:$argumentsService->sw".'_'.
+                "fp:$argumentsService->fp".'_'.
+                "v:2"
+            ],
+        ]);
+        $buttons->add([
+            ['text' => ($argumentsService->v === '3' ? "✅" : "").(AreaFeedback::theme(3)), 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:$argumentsService->sw".'_'.
+                "fp:$argumentsService->fp".'_'.
+                "v:3"
+            ],
+        ]);
+        $buttons->add([
+            ['text' => ($argumentsService->v === '4' ? "✅" : "").(AreaFeedback::theme(4)), 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:$argumentsService->sw".'_'.
+                "fp:$argumentsService->fp".'_'.
+                "v:4"
+            ],
+        ]);
+        $buttons->add([
+            ['text' => ($argumentsService->v === '5' ? "✅" : "").(AreaFeedback::theme(5)), 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:$argumentsService->sw".'_'.
+                "fp:$argumentsService->fp".'_'.
+                "v:5"
+            ],
+        ]);
+
+        return $buttons;
+    }
+
 }

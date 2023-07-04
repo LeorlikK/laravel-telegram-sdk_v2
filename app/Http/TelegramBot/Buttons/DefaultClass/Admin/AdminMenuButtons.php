@@ -13,19 +13,19 @@ class AdminMenuButtons
         $buttons->add([
             ['text' => '👥 Users', 'callback_data' =>
                 "cl:AdminUsers".'_'.
-                "fp:$argumentsService->fp".'_'
+                "fp:$argumentsService->fp"
             ],
         ]);
         $buttons->add([
             ['text' => '📝 Roles', 'callback_data' =>
                 "cl:AdminRoles".'_'.
-                "fp:$argumentsService->fp".'_'
+                "fp:$argumentsService->fp"
             ],
         ]);
         $buttons->add([
             ['text' => '📣 Reports' . ($user->countAnswerReportState('report')), 'callback_data' =>
                 "cl:AdminReports".'_'.
-                "fp:$argumentsService->fp".'_'
+                "fp:$argumentsService->fp"
             ],
         ]);
 
@@ -33,7 +33,6 @@ class AdminMenuButtons
         $buttons->add([
             ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp"
             ],
         ]);

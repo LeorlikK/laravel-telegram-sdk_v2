@@ -4,9 +4,11 @@ namespace App\Http\TelegramBot\States\Make\Admin;
 
 use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
-use App\Models\Role;
+use App\Models\Pay;
+use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
-class MakeChangeRoleName
+class MakeDeletePayForUser
 {
     protected StateMake $stateMake;
 
@@ -17,20 +19,17 @@ class MakeChangeRoleName
 
     public function make(): null|string
     {
-        if (preg_match('/^[a-zA-Z0-9]+$/', $this->stateMake->text)){
-            Role::where('id', $this->stateMake->parentId)->update([
-                'name' => $this->stateMake->text
-            ]);
+        if ($this->stateMake->argumentsService->v){
+            $user = User::where('id', $this->stateMake->parentId)->first();
+            Pay::destroy($this->stateMake->argumentsService->v);
+            Cache::forget($user->tg_id);
 
-            $this->stateMake->argumentsService->setArgument('sw', 'СhoiceChangeRole');
-
-            $this->stateMake->argumentsService->er = '31';
+            $this->stateMake->argumentsService->er = '35';
             (new InputException($this->stateMake->user, $this->stateMake->update,
                 $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
-
-        }else {
-            return '10';
         }
+
+        return '19';
     }
 }

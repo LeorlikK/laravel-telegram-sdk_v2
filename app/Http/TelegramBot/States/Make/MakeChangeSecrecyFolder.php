@@ -2,9 +2,9 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
-use App\Models\Tab;
 use Carbon\Carbon;
 
 class MakeChangeSecrecyFolder
@@ -36,6 +36,9 @@ class MakeChangeSecrecyFolder
                 $folder->save();
             }
 
+            $this->stateMake->argumentsService->er = '21';
+            (new InputException($this->stateMake->user, $this->stateMake->update,
+                $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
 
         }elseif(Carbon::hasFormat($this->stateMake->text, 'Y-m-d H:i:s')){
@@ -44,6 +47,9 @@ class MakeChangeSecrecyFolder
             $folder->display = $carbon;
             $folder->save();
 
+            $this->stateMake->argumentsService->er = '21';
+            (new InputException($this->stateMake->user, $this->stateMake->update,
+                $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
 
         }else{

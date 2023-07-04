@@ -2,8 +2,6 @@
 
 namespace App\Http\TelegramBot\Services;
 
-use Telegram\Bot\Objects\Update;
-
 class ArgumentsService
 {
     public ?string $cl=null; // class
@@ -15,6 +13,8 @@ class ArgumentsService
     public ?string $m=null; // module
     public ?string $p=null; // page
     public ?string $v=null; // some value
+    public ?string $r=null; // redirect
+    public ?string $s=null; // state delete
     public ?string $er=null; // error
 
     public function __construct(string $arguments)
@@ -39,6 +39,7 @@ class ArgumentsService
             'm: ' . $this->m,
             'p: ' . $this->p,
             'v: ' . $this->v,
+            'r: ' . $this->r,
             'er: ' . $this->er,
             '=>>>>>>>>>>>>>>>>>>>'
         );

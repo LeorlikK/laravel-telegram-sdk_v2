@@ -18,17 +18,16 @@ class ChangePaywallButtons
                 "bk:$argumentsService->bk".'_'.
                 "sw:Blocked".'_'.
                 "bkS:$argumentsService->bkS".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "m:$argumentsService->m".'_'
             ],
         ]);
 
         $buttons->add([
-            ['text' => '◀️ Back', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
-                "ac:N".'_'.
-                "fp:$argumentsService->fp"
+                "fp:$argumentsService->fp".'_'.
+                "s:1"
             ],
         ]);
 

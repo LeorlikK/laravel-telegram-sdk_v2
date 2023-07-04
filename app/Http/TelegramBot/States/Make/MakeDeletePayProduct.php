@@ -30,6 +30,11 @@ class MakeDeletePayProduct
                 }
 
                 $this->stateMake->parentId = $backId;
+
+                $this->stateMake->argumentsService->er = '27';
+                (new InputException($this->stateMake->user, $this->stateMake->update,
+                    $this->stateMake->argumentsService))->handleCallbackQuery();
+                return null;
             }
         }
 

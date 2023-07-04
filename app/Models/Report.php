@@ -14,8 +14,13 @@ class Report extends Model
     protected $table = 'reports';
     protected $guarded = [];
 
-    public function user():BelongsTo
+    public function userFrom():BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'from', 'id');
+    }
+
+    public function userWhom():BelongsTo
+    {
+        return $this->belongsTo(User::class, 'to_whom', 'id');
     }
 }

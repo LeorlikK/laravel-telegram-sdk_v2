@@ -2,14 +2,10 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
 use App\Models\Pay;
-use App\Models\Product;
-use App\Models\State;
-use App\Models\Tab;
-use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 
 class MakePayProductClass
 {
@@ -31,9 +27,13 @@ class MakePayProductClass
             'price' => $product->price . " $product->currency"
         ]);
         $this->stateMake->user->state()->delete();
+        $this->stateMake->user->unsetRelation('state');
         $this->stateMake->user->updatePurchasedProducts();
         $this->stateMake->user->updateCache($this->stateMake->user);
 
+        $this->stateMake->argumentsService->er = '28';
+        (new InputException($this->stateMake->user, $this->stateMake->update,
+            $this->stateMake->argumentsService))->handleCallbackQuery();
         return null;
     }
 }

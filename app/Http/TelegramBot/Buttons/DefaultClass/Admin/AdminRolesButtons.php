@@ -2,32 +2,29 @@
 
 namespace App\Http\TelegramBot\Buttons\DefaultClass\Admin;
 
-use App\Http\TelegramBot\PaginateButtons;
+use App\Http\TelegramBot\Buttons;
 use App\Http\TelegramBot\Services\ArgumentsService;
-use App\Models\Folder;
-use App\Models\Product;
 use App\Models\Role;
-use App\Models\User;
 use Illuminate\Support\Collection;
 
-class AdminRolesButtons extends PaginateButtons
+class AdminRolesButtons extends Buttons
 {
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
         $buttons->add([
-            ['text' => '➕ Создать роль', 'callback_data' =>
+            ['text' => '➕ Create Role', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:CreateRole"
             ]
         ]);
         $buttons->add([
-            ['text' => '♻️ Изменить роль', 'callback_data' =>
+            ['text' => '♻️ Change Role', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:СhoiceChangeRole"
             ]
         ]);
         $buttons->add([
-            ['text' => '❌ Удалить роль', 'callback_data' =>
+            ['text' => '❌ Delete Role', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:СhoiceDeleteRole"
             ]
@@ -45,10 +42,11 @@ class AdminRolesButtons extends PaginateButtons
     public static function createRoleButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
         $buttons->add([
-            ['text' => '◀️ Back', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "p:$argumentsService->p".'_'.
-                "fp:$argumentsService->fp"
+                "fp:$argumentsService->fp".'_'.
+                "s:1"
             ],
         ]);
 
@@ -94,7 +92,7 @@ class AdminRolesButtons extends PaginateButtons
     public static function changeRoleButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
         $buttons->add([
-            ['text' => ($argumentsService->fp == 2 ? "🔒 " : "♻️ ") . 'Изменить имя', 'callback_data' =>
+            ['text' => ($argumentsService->fp == 2 ? "🔒 " : "♻️ ") . 'Change Name', 'callback_data' =>
                 $argumentsService->fp == 2 ? "cl:IA".'_'."er:12" :
                 "cl:$argumentsService->cl".'_'.
                 "sw:ChangeRoleName".'_'.
@@ -103,7 +101,7 @@ class AdminRolesButtons extends PaginateButtons
             ]
         ]);
         $buttons->add([
-            ['text' => '♻️ Изменить значение', 'callback_data' =>
+            ['text' => '♻️ Change Role', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:ChangeRoleValue".'_'.
                 "p:$argumentsService->p"."_".
@@ -126,11 +124,12 @@ class AdminRolesButtons extends PaginateButtons
     public static function confirmChangeRoleNameButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
         $buttons->add([
-            ['text' => '◀️ Back', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "sw:ChangeRole".'_'.
                 "p:$argumentsService->p".'_'.
-                "fp:$argumentsService->fp"
+                "fp:$argumentsService->fp".'_'.
+                "s:1"
             ],
         ]);
 
@@ -144,7 +143,8 @@ class AdminRolesButtons extends PaginateButtons
                 "cl:$argumentsService->bk".'_'.
                 "sw:ChangeRole".'_'.
                 "p:$argumentsService->p".'_'.
-                "fp:$argumentsService->fp"
+                "fp:$argumentsService->fp".'_'.
+                "s:1"
             ],
         ]);
 
@@ -200,10 +200,11 @@ class AdminRolesButtons extends PaginateButtons
         ]);
 
         $buttons->add([
-            ['text' => '◀️ Back', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 'sw:СhoiceDeleteRole'.'_'.
-                "p:$argumentsService->p"
+                "p:$argumentsService->p".'_'.
+                "s:1"
             ],
         ]);
 

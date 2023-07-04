@@ -11,9 +11,9 @@ class MenuRecursionButtons
     public static function adminFirstPage(Collection $buttons, ArgumentsService $argumentsService, User $user):Collection
     {
         return $buttons->add([
-            ['text' => '🔑 Админ панель' . ($user->countAnswerReportState('report')), 'callback_data' =>
+            ['text' => '🔑 Admin panel' . ($user->countAnswerReportState('report')), 'callback_data' =>
                 'cl:AdminMenu'],
-            ['text' => '🕹 Действия', 'callback_data' =>
+            ['text' => '🕹 Actions', 'callback_data' =>
                 'cl:MenuA'.'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp"],
         ]);
     }
@@ -23,7 +23,7 @@ class MenuRecursionButtons
         return $buttons->add([
             ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp"],
-            ['text' => '🕹 Действия', 'callback_data' =>
+            ['text' => '🕹 Actions', 'callback_data' =>
                 'cl:MenuA'.'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp"],
         ]);
     }
@@ -31,7 +31,7 @@ class MenuRecursionButtons
     public static function userFirstPage(Collection $buttons, ArgumentsService $argumentsService, User $user):Collection
     {
         return $buttons->add([
-            ['text' => '🔑 Личный кабинет ' . ($user->countAnswerReportState('answer')), 'callback_data' =>
+            ['text' => '🔑 Personal Area' . ($user->countAnswerReportState('answer')), 'callback_data' =>
                 'cl:AreaMenu'],
         ]);
     }

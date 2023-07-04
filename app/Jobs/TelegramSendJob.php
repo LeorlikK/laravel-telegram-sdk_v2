@@ -50,6 +50,7 @@ class TelegramSendJob implements ShouldQueue
                 $createdClass = new $className($user, $this->update, $this->argumentsService);
                 $createdClass->sendCreate();
             }elseif ($this->action === 'edit'){
+                if ($this->argumentsService->s) $user->state()->delete();
                 $className = Aliases::getFullNameSpace($this->argumentsService->cl);
                 $createdClass = new $className($user, $this->update, $this->argumentsService);
                 $createdClass->handleCallbackQuery();

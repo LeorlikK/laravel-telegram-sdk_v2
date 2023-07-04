@@ -12,9 +12,9 @@ class MonetizationRecursionButtons
     public static function adminNotFirstPage(Collection $buttons, ArgumentsService $argumentsService):Collection
     {
         return $buttons->add([
-            ['text' => '◀️ Назад ◀️', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp"],
-            ['text' => '🕹 Настройки продукта', 'callback_data' =>
+            ['text' => '🕹 Product settings', 'callback_data' =>
                 'cl:MenuM'.'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp"],
         ]);
     }

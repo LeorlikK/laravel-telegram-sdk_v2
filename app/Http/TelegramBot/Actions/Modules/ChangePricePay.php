@@ -38,9 +38,6 @@ class ChangePricePay extends DefaultClass
     public function handleCallbackQuery(): void
     {
         switch ($this->argumentsService->sw){
-//            case 'Confirm':
-//                (new StateMake($this->update, $this->user, $this->argumentsService, $this->user->state))->make();
-//                break;
             default:
                 $this->callbackUpdate();
                 break;

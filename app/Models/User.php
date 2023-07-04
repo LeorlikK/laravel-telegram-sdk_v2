@@ -99,9 +99,14 @@ class User extends Authenticatable
         return $this->hasMany(Pay::class, 'user_id', 'id');
     }
 
-    public function reports():HasMany
+    public function reportsFrom():HasMany
     {
-        return $this->hasMany(Report::class, 'user_id', 'id');
+        return $this->hasMany(Report::class, 'from', 'id');
+    }
+
+    public function reportsWhom():HasMany
+    {
+        return $this->hasMany(Report::class, 'to_whom', 'id');
     }
 
     public function updateCache(User $newUserValue): void
@@ -140,11 +145,11 @@ class User extends Authenticatable
             '6' => "6️⃣",
             '7' => "7️⃣",
             '8' => "8️⃣",
-            '9' => "9️⃣",
+            '9' => "9️⃣➕",
         ];
 
         if ($type === 'answer'){
-            $reports = Report::where('user_id', $this->id)
+            $reports = Report::where('to_whom', $this->id)
                 ->where('type', $type)
                 ->where('state', false)
                 ->get();

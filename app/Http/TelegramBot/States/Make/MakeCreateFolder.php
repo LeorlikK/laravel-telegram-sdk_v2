@@ -2,12 +2,10 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
-use App\Models\State;
 use App\Models\Tab;
-use App\Models\User;
-use Doctrine\DBAL\Exception;
 
 class MakeCreateFolder
 {
@@ -40,6 +38,9 @@ class MakeCreateFolder
             'action' => class_basename($this->stateMake->state->TabClass)
         ]);
 
+        $this->stateMake->argumentsService->er = '24';
+        (new InputException($this->stateMake->user, $this->stateMake->update,
+            $this->stateMake->argumentsService))->handleCallbackQuery();
         return null;
     }
 }

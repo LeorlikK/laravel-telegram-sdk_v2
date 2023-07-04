@@ -5,9 +5,15 @@ namespace App\Http\TelegramBot;
 use App\Http\TelegramBot\Services\ArgumentsService;
 use Illuminate\Support\Collection;
 
-abstract class PaginateButtons
+abstract class Buttons
 {
-    protected static function paginateNavigation(Collection $buttons, $totalFolder, $perPage, ArgumentsService $argumentsService, $buttonMinus, $buttonPlus): Collection
+    protected static function paginateNavigation(
+        Collection $buttons,
+        $totalFolder,
+        $perPage,
+        ArgumentsService $argumentsService,
+        $buttonMinus,
+        $buttonPlus): Collection
     {
         if ($totalFolder > $perPage){
             if ($totalFolder > ($perPage*$argumentsService->p) && $argumentsService->p > 1){
@@ -15,7 +21,7 @@ abstract class PaginateButtons
                     ['text' => '◀️ Back', 'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "bk:$argumentsService->bk".'_'.
-                        "sw:Add".'_'.
+                        "sw:$argumentsService->sw".'_'.
                         "bkS:$argumentsService->bkS".'_'.
                         "ac:N".'_'.
                         "fp:$argumentsService->fp".'_'.
@@ -24,7 +30,7 @@ abstract class PaginateButtons
                     ['text' => 'Next ▶️ ', 'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "bk:$argumentsService->bk".'_'.
-                        "sw:Add".'_'.
+                        "sw:$argumentsService->sw".'_'.
                         "bkS:$argumentsService->bkS".'_'.
                         "ac:N".'_'.
                         "fp:$argumentsService->fp".'_'.
@@ -36,7 +42,7 @@ abstract class PaginateButtons
                     ['text' => '◀️ Back', 'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "bk:$argumentsService->bk".'_'.
-                        "sw:Add".'_'.
+                        "sw:$argumentsService->sw".'_'.
                         "bkS:$argumentsService->bkS".'_'.
                         "ac:N".'_'.
                         "fp:$argumentsService->fp".'_'.
@@ -48,7 +54,7 @@ abstract class PaginateButtons
                     ['text' => 'Next ▶️', 'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "bk:$argumentsService->bk".'_'.
-                        "sw:Add".'_'.
+                        "sw:$argumentsService->sw".'_'.
                         "bkS:$argumentsService->bkS".'_'.
                         "ac:N".'_'.
                         "fp:$argumentsService->fp".'_'.
@@ -59,5 +65,16 @@ abstract class PaginateButtons
         }
 
         return $buttons;
+    }
+
+    public static function findSelectedValue($divider, $denominators, $result): ?string
+    {
+        if (!$divider) return null;
+        foreach ($denominators as $key => $denominator) {
+            if ($divider/$denominator === $result){
+                return $key;
+            }
+        }
+        return null;
     }
 }

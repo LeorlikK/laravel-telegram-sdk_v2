@@ -2,12 +2,9 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
-use App\Models\Product;
-use App\Models\State;
-use App\Models\Tab;
-use App\Models\User;
 
 class MakeDeletePayBasket
 {
@@ -26,6 +23,9 @@ class MakeDeletePayBasket
             $linkFolder = Folder::find($this->stateMake->argumentsService->v);
             $product->folders()->detach($linkFolder->id);
 
+            $this->stateMake->argumentsService->er = '14';
+            (new InputAlert($this->stateMake->user, $this->stateMake->update,
+                $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
         }
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\TelegramBot\Components\DefaultClass\PersonalArea;
 
-use App\Http\TelegramBot\Buttons\DefaultClass\Admin\AdminMenuButtons;
 use App\Http\TelegramBot\Buttons\DefaultClass\PersonalArea\AreaMenuButtons;
 use App\Http\TelegramBot\DefaultClass;
 

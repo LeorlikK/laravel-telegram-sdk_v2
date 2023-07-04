@@ -2,7 +2,6 @@
 
 namespace App\Http\TelegramBot\Actions\Modules;
 
-use App\Http\TelegramBot\ActionModuleClass;
 use App\Http\TelegramBot\Buttons\Action\Modules\ChangeEmojiButtons;
 use App\Http\TelegramBot\DefaultClass;
 use App\Http\TelegramBot\States\StateCreate;

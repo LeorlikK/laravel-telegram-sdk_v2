@@ -2,10 +2,7 @@
 
 namespace App\Http\TelegramBot\Components\DefaultClass\Admin;
 
-use App\Http\TelegramBot\Buttons\Action\Modules\ChangePeriodPayButtons;
-use App\Http\TelegramBot\Buttons\DefaultClass\Admin\AdminMenuButtons;
 use App\Http\TelegramBot\Buttons\DefaultClass\Admin\AdminReportsButtons;
-use App\Http\TelegramBot\Buttons\DefaultClass\Admin\AdminUsersButtons;
 use App\Http\TelegramBot\DefaultClass;
 use App\Http\TelegramBot\States\StateCreate;
 use App\Http\TelegramBot\States\StateMake;
@@ -13,18 +10,36 @@ use App\Models\Report;
 
 class AdminReports extends DefaultClass
 {
-
     public function main(): array
     {
         $buttons = collect();
 
         switch ($this->argumentsService->sw){
+            case 'ChoiceAnswer':
+                $this->argumentsService->setArgument('cl' , class_basename($this));
+                $this->argumentsService->setArgument('bk' , class_basename($this));
+                $this->argumentsService->setArgument('bkS' , class_basename($this));
+                $this->argumentsService->setArgument('m' , 'C');
+                $buttons = AdminReportsButtons::choiceAnswerReportButtons($buttons, $this->argumentsService);
+                $caption = $this->caption("Выберите способ ответа");
+                break;
+            case 'AnswerChat':
+                $this->argumentsService->setArgument('cl' , class_basename($this));
+                $this->argumentsService->setArgument('bk' , class_basename($this));
+                $this->argumentsService->setArgument('bkS' , class_basename($this));
+                $this->argumentsService->setArgument('m' , 'C');
+                StateCreate::createState($this->update, $this->user, $this->argumentsService,
+                    'WriteUser' . $this->argumentsService->m, null, 'Report');
+                $buttons = AdminReportsButtons::answerReportButtons($buttons, $this->argumentsService);
+                $caption = $this->caption("Напишите пользователю");
+                break;
             case 'Answer':
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 $this->argumentsService->setArgument('bk' , class_basename($this));
                 $this->argumentsService->setArgument('bkS' , class_basename($this));
                 $this->argumentsService->setArgument('m' , 'C');
-                StateCreate::createState($this->update, $this->user, $this->argumentsService, 'AnswerReportUser' . $this->argumentsService->m);
+                StateCreate::createState($this->update, $this->user, $this->argumentsService,
+                    'AnswerReportUser' . $this->argumentsService->m);
                 $buttons = AdminReportsButtons::answerReportButtons($buttons, $this->argumentsService);
                 $caption = $this->caption("Напишите ответ пользователю");
                 break;
@@ -33,7 +48,8 @@ class AdminReports extends DefaultClass
                 $this->argumentsService->setArgument('bk' , class_basename($this));
                 $this->argumentsService->setArgument('bkS' , class_basename($this));
                 $this->argumentsService->setArgument('m' , 'C');
-                StateCreate::createState($this->update, $this->user, $this->argumentsService, 'DeleteReportUser' . $this->argumentsService->m);
+                StateCreate::createState($this->update, $this->user, $this->argumentsService,
+                    'DeleteReportUser' . $this->argumentsService->m);
                 $buttons = AdminReportsButtons::deleteReportButtons($buttons, $this->argumentsService);
                 $caption = $this->caption("Подтвердите удаление обращения");
                 break;

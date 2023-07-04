@@ -20,7 +20,6 @@ class ChangeSortedButtons
                     "cl:$argumentsService->cl".'_'.
                     "sw:Confirm".'_'.
                     "bkS:$argumentsService->bkS".'_'.
-                    "ac:N".'_'.
                     "fp:$argumentsService->fp".'_'.
                     "v:$folderParent->id"
                 ],
@@ -28,10 +27,10 @@ class ChangeSortedButtons
         }
 
         $buttons->add([
-            ['text' => '◀️ Back', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
-                "ac:N".'_'.
-                "fp:$argumentsService->fp"
+                "fp:$argumentsService->fp".'_'.
+                "s:1"
             ],
         ]);
 

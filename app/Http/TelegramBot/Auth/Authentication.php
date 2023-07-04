@@ -22,7 +22,7 @@ class Authentication
                 'first_name' => $from->first_name,
                 'last_name' => $from->last_name ?? null,
                 'language' => $from->language_code,
-                'role_id' => 1,
+                'role_id' => 2,
                 'mail' => $from->mail,
                 'number' => $from->number,
                 'is_premium' => $from->is_premium ?? false,

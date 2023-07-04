@@ -2,9 +2,8 @@
 
 namespace App\Http\TelegramBot\States\Make\Reports;
 
-use App\Http\TelegramBot\Exceptions\UserAlertException;
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
-use App\Models\Folder;
 use App\Models\Report;
 
 class MakeDeleterReport
@@ -23,6 +22,9 @@ class MakeDeleterReport
                 $this->stateMake->argumentsService->setArgument('sw', null);
                 Report::find($this->stateMake->parentId)->delete();
 
+                $this->stateMake->argumentsService->er = '42';
+                (new InputException($this->stateMake->user, $this->stateMake->update,
+                    $this->stateMake->argumentsService))->handleCallbackQuery();
                 return null;
             }
         }

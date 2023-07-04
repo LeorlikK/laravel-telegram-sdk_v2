@@ -25,6 +25,11 @@ class InputException extends DefaultClass
             '14' => 'Указано некорректное значение',
             '15' => 'Неправильный ID валюты',
             '16' => 'Неправильный ID папки',
+            '17' => 'Папка или одна из внутренних папок не могут быть удалены т.к добавлены в корзину продуктов',
+            '18' => 'Пользователь с таким tg-id не найден',
+            '19' => 'Не указан id элеманта',
+            '20' => 'Нет сообщения',
+            '21' => 'Не указан sw',
         ];
 
         if (key_exists($this->argumentsService->er, $errorsArray)){
@@ -39,7 +44,7 @@ class InputException extends DefaultClass
     {
         switch ($this->argumentsService->sw){
             default:
-                $this->sendMessage();
+                $this->callbackAnswer(true);
                 break;
         }
     }

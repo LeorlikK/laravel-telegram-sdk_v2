@@ -68,11 +68,18 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
             $caption = $this->folderParent->caption .
                 "\n\r" . "\n\r" .
                 '◀️ ' . $this->folderParent->name;
-            if ($this->user->is_administrator){
+            if ($this->administrator){
                 $caption .= "\n\r" .
                     'Видимость: ' . $this->folderParent->visibility . ($this->folderParent->displayViewBool() ? "\n\r" .
-                        'Скрыта до: ' . ($this->folderParent->displayViewString()) : '');
+                        'Скрыта до: ' . ($this->folderParent->displayViewString()) : ''). "\n\r" .
+                        ($this->folderParent->action === 'MenuM' ?
+                            "Price: " . $this->folderParent->product->price . ' ' . $this->folderParent->product->currency . "\n\r" .
+                            "Purchase: " . ($this->folderParent->product->subscription ? $this->folderParent->product->subscription . ' h' : "♾") . "\n\r" .
+                            "Products: " . ($this->folderParent->product->folders->count() > 0 ? $this->folderParent->product->folders->count() . '  products' : "❌") . "\n\r"
+                            :
+                            "");
             }
+
             return $caption;
         }else{
             return $tab->caption ?? '';
@@ -101,7 +108,7 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
 
                     $blockedPayText = '';
                     if ($folder->blockedPay){
-                        if ($this->administrator) $blockedPayText = "💳";
+                        if ($this->administrator && !$this->user->purchasedProducts->contains($folder->id)) $blockedPayText = "💳";
                         elseif($this->user->purchasedProducts->contains($folder->id)) $blockedPayText = "✅";
                         else $blockedPayText = "💳";
                     }
@@ -126,7 +133,7 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
                             ($this->administrator ? "($folder->visibility)" : '') .
                             ($folder->displayViewBool() ? "⏳" : '') .
                             ($this->user->role->visibility <  $folder->visibility ? "🔒" : '').
-                            ($this->administrator && $folder->blocked ? "👁" : '').
+                            ($this->administrator && $folder->blocked ? "👁‍🗨" : '').
                             $blockedPayText,
                             'callback_data' =>
                                 $callback]
@@ -136,7 +143,7 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
 
         }
 
-        $this->folderParent = Folder::with('buttons')->where('id', $lala)->first();
+        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $lala)->first();
         if (isset($this->folderParent->buttons)){
             foreach ($this->folderParent->buttons as $button){
                 $timeResult = $button->display < $timeNow;

@@ -2,11 +2,9 @@
 
 namespace App\Http\TelegramBot\Actions\Modules;
 
-use App\Http\TelegramBot\ActionModuleClass;
 use App\Http\TelegramBot\Buttons\Action\Modules\CreateSpecialClassButtons;
 use App\Http\TelegramBot\DefaultClass;
 use App\Http\TelegramBot\States\StateCreate;
-use App\Http\TelegramBot\States\StateMake;
 
 class CreateSpecialClass extends DefaultClass
 {

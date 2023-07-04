@@ -4,13 +4,17 @@ namespace App\Http\TelegramBot\States;
 
 use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\Services\ArgumentsService;
+use App\Http\TelegramBot\States\Make\Admin\MakeAddPayForUser;
 use App\Http\TelegramBot\States\Make\Admin\MakeBlockUser;
 use App\Http\TelegramBot\States\Make\Admin\MakeChangeRoleName;
 use App\Http\TelegramBot\States\Make\Admin\MakeChangeRoleUser;
 use App\Http\TelegramBot\States\Make\Admin\MakeChangeRoleValue;
 use App\Http\TelegramBot\States\Make\Admin\MakeCreateRole;
+use App\Http\TelegramBot\States\Make\Admin\MakeDeletePayForUser;
 use App\Http\TelegramBot\States\Make\Admin\MakeDeleteRoleValue;
+use App\Http\TelegramBot\States\Make\Admin\MakeFindByTgId;
 use App\Http\TelegramBot\States\Make\Admin\MakeUnlockUser;
+use App\Http\TelegramBot\States\Make\Admin\MakeWriteUser;
 use App\Http\TelegramBot\States\Make\MakeAddPayBasket;
 use App\Http\TelegramBot\States\Make\MakeChangeCaptionFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeEmojiFolder;
@@ -263,6 +267,60 @@ class StateMake
                 $this->argumentsService->fp = $this->parentId;
                 break;
 
+            case $this->state->action === 'FindByIdC':
+                $makeClass = new MakeFindByTgId($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                break;
+
+            case $this->state->action === 'AddPayForUserC':
+                $makeClass = new MakeAddPayForUser($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'DeletePayForUserC':
+                $makeClass = new MakeDeletePayForUser($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'WriteUserC':
+                $makeClass = new MakeWriteUser($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+//            case $this->state->action === 'WritePersonalAreaC':
+//                $makeClass = new MakeDeletePayForUser($this);
+//                $error = $makeClass->make();
+//                $arguments = [
+//                    'callbackClassName' => $this->state->TabClass,
+//                    'update' => $this->reworkUpdate($this->chatId)
+//                ];
+//                $this->argumentsService->ac = 'N';
+//                $this->argumentsService->fp = $this->parentId;
+//                break;
+
             // PAY
             case $this->state->action === 'PayProductC':
                 $makeClass = new MakePayProductClass($this);
@@ -397,7 +455,7 @@ class StateMake
         }
 
         if ($folder->products->isNotEmpty()) {
-            $link = 2;
+            $link = 17;
             return;
         }
 

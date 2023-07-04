@@ -2,14 +2,14 @@
 
 namespace App\Http\TelegramBot\Buttons\DefaultClass\PersonalArea;
 
-use App\Http\TelegramBot\PaginateButtons;
+use App\Http\TelegramBot\Buttons;
 use App\Http\TelegramBot\Services\ArgumentsService;
 use App\Http\TelegramBot\Services\RemainingTimeService;
 use App\Models\Pay;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
-class AreaPurchasedButtons extends PaginateButtons
+class AreaPurchasedButtons extends Buttons
 {
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService, User $user): Collection
     {
@@ -17,7 +17,9 @@ class AreaPurchasedButtons extends PaginateButtons
         $buttonPlus = ((int)$argumentsService->p) + 1;
         $buttonMinus = ((int)$argumentsService->p) - 1;
         $perPage = 10;
-        $pays = Pay::with('product.folder')->where('user_id', $user->id)->orderBy('created_at', 'DESC')->paginate($perPage, ['*'], null, $argumentsService->p);
+        $pays = Pay::with('product.folder')->where('user_id', $user->id)
+            ->orderBy('created_at', 'DESC')
+            ->paginate($perPage, ['*'], null, $argumentsService->p);
         $totalFolder = $pays->total();
 
         $remainingTimeService = new RemainingTimeService();

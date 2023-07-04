@@ -2,9 +2,9 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
-use App\Models\Product;
 
 class MakeChangePeriodPay
 {
@@ -42,6 +42,9 @@ class MakeChangePeriodPay
                 $product->save();
             }
 
+            $this->stateMake->argumentsService->er = '19';
+            (new InputException($this->stateMake->user, $this->stateMake->update,
+                $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
 
         }else{
@@ -51,24 +54,36 @@ class MakeChangePeriodPay
                 if ($matches[0] == 0) return '12';
                 $product->subscription = $matches[0];
                 $product->save();
+                $this->stateMake->argumentsService->er = '19';
+                (new InputException($this->stateMake->user, $this->stateMake->update,
+                    $this->stateMake->argumentsService))->handleCallbackQuery();
                 return null;
             }elseif (preg_match('/\dd$/', $this->stateMake->text)){
                 preg_match('/\d+/', $this->stateMake->text, $matches);
                 if ($matches[0] == 0) return '12';
                 $product->subscription = $matches[0]*24;
                 $product->save();
+                $this->stateMake->argumentsService->er = '19';
+                (new InputException($this->stateMake->user, $this->stateMake->update,
+                    $this->stateMake->argumentsService))->handleCallbackQuery();
                 return null;
             }elseif (preg_match('/\dw$/', $this->stateMake->text)){
                 preg_match('/\d+/', $this->stateMake->text, $matches);
                 if ($matches[0] == 0) return '12';
                 $product->subscription = $matches[0]*168;
                 $product->save();
+                $this->stateMake->argumentsService->er = '19';
+                (new InputException($this->stateMake->user, $this->stateMake->update,
+                    $this->stateMake->argumentsService))->handleCallbackQuery();
                 return null;
             }elseif (preg_match('/\dm$/', $this->stateMake->text)){
                 preg_match('/\d+/', $this->stateMake->text, $matches);
                 if ($matches[0] == 0) return '12';
                 $product->subscription = $matches[0]*672;
                 $product->save();
+                $this->stateMake->argumentsService->er = '19';
+                (new InputException($this->stateMake->user, $this->stateMake->update,
+                    $this->stateMake->argumentsService))->handleCallbackQuery();
                 return null;
             }else{
                 return '13';

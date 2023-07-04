@@ -3,12 +3,14 @@
 namespace App\Http\TelegramBot\Buttons\Action;
 
 use App\Http\TelegramBot\Services\ArgumentsService;
+use App\Models\Folder;
 use Illuminate\Support\Collection;
 
 class MenuMonetizationButtons
 {
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService):Collection
     {
+        $folder = Folder::with('product')->find($argumentsService->fp);
         $buttons->add([
             ['text' => '📚 Create Folder', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
@@ -55,7 +57,7 @@ class MenuMonetizationButtons
         ]);
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '👁 Change Secrecy Folder', 'callback_data' =>
+                ['text' => '⏳  Change Secrecy Folder' . ($folder->display ? '( ' . $folder->display . ' )' : ""), 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeSecrecyF".'_'.
                     "bk:$argumentsService->bk".'_'.
@@ -65,7 +67,7 @@ class MenuMonetizationButtons
         }
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '🔒 Change Visibility Folder', 'callback_data' =>
+                ['text' => '🔒 Change Visibility Folder' . '( ' . ($folder->visibility) . ($folder->blocked ? "👁‍🗨" : "👁") . ' )', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeVisibilityF".'_'.
                     "bk:$argumentsService->bk".'_'.
@@ -95,7 +97,7 @@ class MenuMonetizationButtons
         }
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '💳 Paywall', 'callback_data' =>
+                ['text' => '💳 Paywall' . '( ' . ($folder->blockedPay ? "✅" : "❌") . ' )', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:PaywallF".'_'.
                     "bk:$argumentsService->bk".'_'.
@@ -111,8 +113,9 @@ class MenuMonetizationButtons
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"]
         ]);
+
         $buttons->add([
-            ['text' => '📅 Purchase Period', 'callback_data' =>
+            ['text' => '📅 Purchase Period' . '( ' . ($folder->product->subscription ? $folder->product->subscription . ' h' : "♾") . ' )', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:PeriodF".'_'.
                 "bk:$argumentsService->bk".'_'.
@@ -120,7 +123,7 @@ class MenuMonetizationButtons
                 "fp:$argumentsService->fp"]
         ]);
         $buttons->add([
-            ['text' => '💰 Price', 'callback_data' =>
+            ['text' => '💰 Price' . '( ' . ($folder->product->price) . ' ' . ($folder->product->currency) . ' )', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:PriceF".'_'.
                 "bk:$argumentsService->bk".'_'.
@@ -128,9 +131,9 @@ class MenuMonetizationButtons
                 "fp:$argumentsService->fp"]
         ]);
         $buttons->add([
-            ['text' => '🗑 Basket', 'callback_data' =>
-                "cl:IA".'_'.
-                "er:6".'_'.
+            ['text' => '🗑 Basket' . ($folder->product->folders->count() > 0 ? '( ' . $folder->product->folders->count() . ' products' . ' )' : ""), 'callback_data' =>
+                "cl:$argumentsService->cl".'_'.
+                "sw:BasketF".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"]

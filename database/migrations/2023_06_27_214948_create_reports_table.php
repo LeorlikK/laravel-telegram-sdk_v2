@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users', 'id')->onDelete('cascade');
+            $table->foreignId('from')->constrained('users', 'id')->onDelete('cascade');
+            $table->foreignId('to_whom')->nullable()->constrained('users', 'id')->onDelete('cascade');
             $table->string('theme');
             $table->text('message');
             $table->boolean('state');

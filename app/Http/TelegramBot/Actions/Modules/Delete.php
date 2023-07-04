@@ -18,7 +18,7 @@ class Delete extends DefaultClass
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'DeletePay' . $this->argumentsService->m);
                 $buttons = DeleteButtons::defaultButtons($buttons, $this->argumentsService);
-                $caption = $this->caption('Е');
+                $caption = $this->caption('Подтвердите удаление');
                 break;
             default:
                 $this->argumentsService->setArgument('cl' , class_basename($this));
