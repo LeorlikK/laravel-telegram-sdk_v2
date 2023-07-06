@@ -11,7 +11,7 @@ use App\Http\TelegramBot\States\Make\Admin\MakeChangeRoleUser;
 use App\Http\TelegramBot\States\Make\Admin\MakeChangeRoleValue;
 use App\Http\TelegramBot\States\Make\Admin\MakeCreateRole;
 use App\Http\TelegramBot\States\Make\Admin\MakeDeletePayForUser;
-use App\Http\TelegramBot\States\Make\Admin\MakeDeleteRoleValue;
+use App\Http\TelegramBot\States\Make\Admin\MakeDeleteRole;
 use App\Http\TelegramBot\States\Make\Admin\MakeFindByTgId;
 use App\Http\TelegramBot\States\Make\Admin\MakeUnlockUser;
 use App\Http\TelegramBot\States\Make\Admin\MakeWriteUser;
@@ -30,7 +30,7 @@ use App\Http\TelegramBot\States\Make\MakeCreateSpecialClass;
 use App\Http\TelegramBot\States\Make\MakeDeleteFolder;
 use App\Http\TelegramBot\States\Make\MakeDeletePayBasket;
 use App\Http\TelegramBot\States\Make\MakeDeletePayProduct;
-use App\Http\TelegramBot\States\Make\MakePayProductClass;
+use App\Http\TelegramBot\States\Make\MakePayProduct;
 use App\Http\TelegramBot\States\Make\Reports\MakeAnswerReport;
 use App\Http\TelegramBot\States\Make\Reports\MakeCreateReport;
 use App\Http\TelegramBot\States\Make\Reports\MakeDeleterReport;
@@ -38,6 +38,7 @@ use App\Models\Folder;
 use App\Models\Pay;
 use App\Models\State;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Telegram\Bot\Objects\Chat;
 use Telegram\Bot\Objects\Message;
@@ -257,7 +258,7 @@ class StateMake
                 break;
 
             case $this->state->action === 'DeleteRoleValueC':
-                $makeClass = new MakeDeleteRoleValue($this);
+                $makeClass = new MakeDeleteRole($this);
                 $error = $makeClass->make();
                 $arguments = [
                     'callbackClassName' => $this->state->TabClass,
@@ -323,7 +324,7 @@ class StateMake
 
             // PAY
             case $this->state->action === 'PayProductC':
-                $makeClass = new MakePayProductClass($this);
+                $makeClass = new MakePayProduct($this);
                 $error = $makeClass->make();
                 $arguments = [
                     'callbackClassName' => $this->state->TabClass,
@@ -462,7 +463,17 @@ class StateMake
         if (!$link){
             $folder->product?->folders()->detach();
             $productId = $folder->product?->id;
-            if ($productId) Pay::where('product_id', $productId)->delete();
+            if ($productId){
+                $pays = Pay::with('user')->where('product_id', $productId)->get();
+                Pay::where('product_id', $productId)->delete();
+                $usersTgId = $pays->pluck('user.tg_id');
+                Cache::deleteMultiple($usersTgId);
+
+                Cache::forget($this->user->tg_id);
+                $this->user->unsetRelation('state');
+                $this->user->updatePurchasedProducts();
+                $this->user->updateCache($this->user);
+            }
             $folder->product?->delete();
 
             $folder->delete();

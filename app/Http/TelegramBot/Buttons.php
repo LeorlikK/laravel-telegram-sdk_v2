@@ -23,7 +23,6 @@ abstract class Buttons
                         "bk:$argumentsService->bk".'_'.
                         "sw:$argumentsService->sw".'_'.
                         "bkS:$argumentsService->bkS".'_'.
-                        "ac:N".'_'.
                         "fp:$argumentsService->fp".'_'.
                         "p:$buttonMinus"
                     ],

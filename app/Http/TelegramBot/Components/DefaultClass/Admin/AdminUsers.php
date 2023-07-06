@@ -79,7 +79,7 @@ class AdminUsers extends DefaultClass
                 $this->argumentsService->setArgument('bkS' , class_basename($this));
                 $this->argumentsService->setArgument('m' , 'C');
                 $buttons = AdminUsersButtons::purchaseUserButtons($buttons, $this->argumentsService);
-                $caption = 'Способ отправки сообщения';
+                $caption = 'Список покупок пользователя';
                 break;
             case 'Add':
                 $this->argumentsService->setArgument('cl' , class_basename($this));
@@ -105,7 +105,7 @@ class AdminUsers extends DefaultClass
                 $this->argumentsService->setArgument('bkS' , class_basename($this));
                 $this->argumentsService->setArgument('m' , 'C');
                 $buttons = AdminUsersButtons::choiceWriteButtons($buttons, $this->argumentsService);
-                $caption = 'Список покупок пользователя:';
+                $caption = 'Способ отправки сообщения';
                 break;
             case 'WriteU':
                 $this->argumentsService->setArgument('cl' , class_basename($this));
@@ -132,6 +132,7 @@ class AdminUsers extends DefaultClass
                 $this->argumentsService->setArgument('bk' , 'AdminMenu');
                 $this->argumentsService->setArgument('fp' , null);
                 $this->argumentsService->setArgument('sw' , null);
+                $this->argumentsService->setArgument('r' , null);
                 $buttons = AdminUsersButtons::defaultButtons($buttons, $this->argumentsService);
                 $caption = $this->caption("Список пользователей");
                 break;

@@ -74,7 +74,9 @@ class ChangeBasketPayButtons extends Buttons
         $buttonPlus = ((int)$argumentsService->p) + 1;
         $buttonMinus = ((int)$argumentsService->p) - 1;
         $perPage = 10;
-        $folders = Folder::doesntHave('product')->orderBy('created_at', 'DESC')->paginate($perPage, ['*'], null, $argumentsService->p);
+        $folder = Folder::with('product.folders')->find($argumentsService->fp);
+        $foldersId = $folder->product->folders->pluck('id');
+        $folders = Folder::doesntHave('product')->whereNotIn('id', $foldersId)->orderBy('created_at', 'DESC')->paginate($perPage, ['*'], null, $argumentsService->p);
         $totalFolder = $folders->total();
 
         foreach ($folders->items() as $folder) {
@@ -85,6 +87,7 @@ class ChangeBasketPayButtons extends Buttons
                 ['text' => $folder->name,
                     'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
+                        "bkS:$argumentsService->bkS".'_'.
                         "sw:ConfirmAdd".'_'.
                         "fp:$argumentsService->fp".'_'.
                         "v:$folder->id".'_'
@@ -128,6 +131,7 @@ class ChangeBasketPayButtons extends Buttons
                 ['text' => $folder->name,
                     'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
+                        "bkS:$argumentsService->bkS".'_'.
                         "sw:ConfirmDel".'_'.
                         "fp:$argumentsService->fp".'_'.
                         "v:$folder->id".'_'

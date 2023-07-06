@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -114,21 +115,18 @@ class User extends Authenticatable
         Cache::put($this->tg_id, $newUserValue, now()->addMinutes(20));
     }
 
-    public function updatePurchasedProducts()
+    public function updatePurchasedProducts(): void
     {
         $collect = collect();
-        $purchasedProducts = User::with('pays.product.folders')->where('tg_id', $this->tg_id)->first();
-        if ($purchasedProducts) {
-            $purchasedProducts->each(function ($user) use ($collect) {
-                if ($user->pays) {
-                    $user->pays->each(function ($item) use ($collect) {
-                        if ($item->product && $item->product->folders && ($item->subscription > now() || $item->subscription === null)) {
-                            $collect->add($item->product->folders->pluck('id'));
-                        }
-                    });
+        $this->load('pays.product.folders');
+        if (!$this->pays->isEmpty()) {
+            $this->pays->each(function ($item) use ($collect) {
+                if ($item->product && $item->product->folders && ($item->subscription > now() || $item->subscription === null)) {
+                    $collect->add($item->product->folders->pluck('id'));
                 }
             });
         }
+        $this->unsetRelation('pays');
 
         $purchasedProducts = $collect->flatten()->unique();
         $this->purchasedProducts = $purchasedProducts;

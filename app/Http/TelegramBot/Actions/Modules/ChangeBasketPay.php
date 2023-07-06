@@ -46,9 +46,11 @@ class ChangeBasketPay extends DefaultClass
     {
         switch ($this->argumentsService->sw){
             case 'ConfirmAdd':
+                $this->argumentsService->setArgument('sw', null);
                 (new StateMake($this->update, $this->user, $this->argumentsService, $this->user->state))->make();
                 break;
             case 'ConfirmDel':
+                $this->argumentsService->setArgument('sw', null);
                 (new StateMake($this->update, $this->user, $this->argumentsService, $this->user->state))->make();
                 break;
             default:

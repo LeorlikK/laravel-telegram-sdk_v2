@@ -44,7 +44,7 @@ class InputException extends DefaultClass
     {
         switch ($this->argumentsService->sw){
             default:
-                $this->callbackAnswer(true);
+                $this->sendMessage();
                 break;
         }
     }

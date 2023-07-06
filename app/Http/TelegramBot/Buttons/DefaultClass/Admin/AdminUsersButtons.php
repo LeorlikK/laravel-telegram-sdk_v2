@@ -143,7 +143,7 @@ class AdminUsersButtons extends Buttons
             ['text' => '🛍 User purchases' . ($user->pays->count() > 0 ? '( ' . $user->pays->count() . ' pays' . ' )' : ""), 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "sw:Purchase".'_'.
-                "p:$argumentsService->p".'_'.
+//                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "r:$argumentsService->r"
             ]
@@ -320,7 +320,7 @@ class AdminUsersButtons extends Buttons
             ['text' => "➕ Add a purchase to a user", 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:Add".'_'.
-                "p:$argumentsService->p".'_'.
+//                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "r:$argumentsService->r"
             ],
@@ -329,7 +329,7 @@ class AdminUsersButtons extends Buttons
             ['text' => "❌ Delete a purchase from a user", 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:Del".'_'.
-                "p:$argumentsService->p".'_'.
+//                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "r:$argumentsService->r"
             ],
@@ -420,7 +420,7 @@ class AdminUsersButtons extends Buttons
                 "sw:Purchase".'_'.
                 "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
-                "r:$argumentsService->r".
+                "r:$argumentsService->r".'_'.
                 "s:1"
             ],
         ]);

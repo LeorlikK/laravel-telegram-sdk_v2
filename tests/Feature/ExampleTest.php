@@ -5,7 +5,12 @@ namespace Tests\Feature;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Http\TelegramBot\Services\RemainingTimeService;
 use App\Models\Folder;
+use App\Models\Pay;
+use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Telegram\Bot\Laravel\Facades\Telegram;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -13,31 +18,56 @@ class ExampleTest extends TestCase
     /**
      * A basic test example.
      */
+
+    public function test_my(): void
+    {
+        $user30 = 68448;
+        $user31 = 1059208615;
+        $user32 = 1434698404;
+        $user = Cache::get('1059208615');
+        dump($user);
+    }
+
     public function test_the_application_returns_a_successful_response(): void
     {
-        $folder = Folder::find(2);
-        $carbonTime = Carbon::parse($folder->display);
+        /**
+         * Если я вызывают метод, который использует твис в другом классе, то какое твис он возмет?
+         */
+        $users = User::whereIn('id', [30, 31])->get();
 
-        $str = '';
-        $lostTime = $carbonTime->diff(now());
-        $str .= $lostTime->y != 0 ? " $lostTime->y" . " y" : "";
-        $str .= $lostTime->m != 0 ? " $lostTime->m" . " m" : "";
-        $str .= $lostTime->d != 0 ? " $lostTime->d" . " d" : "";
-        $str .= $lostTime->h != 0 ? "$lostTime->h" . ":" : "";
-        $str .= $lostTime->i != 0 ? "$lostTime->i" . ":" : "";
-        $str .= $lostTime->s != 0 ? "$lostTime->s" : "";
-//        $res = $lostTime->format('%Y дней %m дней %d дней, %h часов, %i минут, %s секунд');
-        dump($str);
+        $users->each(function ($user){
+            $this->user = Cache::remember($user['tg_id'], now()->addMinutes(20), function () use($user){
 
-//        $targetDate = Carbon::parse('2023-07-10 12:00:00'); // Замените на вашу целевую дату
+                /**
+                 * @var $user User
+                 */
+                $user = User::where('tg_id', $user['tg_id'])->first();
+//                $user->load('role');
 
-//        $currentTime = Carbon::now();
-//        $remainingTime = $currentTime->diff($targetDate);
+                $user->updatePurchasedProducts();
 
-// Получение оставшегося времени в читаемом формате
-//        $remainingTimeString = $remainingTime->format('%d дней, %h часов, %i минут, %s секунд');
+                return $user;
+            });
+        });
 
-//        dump($remainingTimeString);
+
+        $user30 = 68448;
+        $user31 = 1059208615;
+
+        $keys = $users->pluck('tg_id')->toArray();
+        $data = Cache::many($keys);
+//        $keys = ['68448', '1059208615', 'key3'];
+//        Cache::deleteMultiple($keys);
+        $res = Cache::many(['68448', '1059208615']);
+        dump($res);
+
+
+//        $user = User::find(31);
+//        if (!$user->pays->isEmpty()){
+//            dump($user->pays);
+//        }else{
+//            dump('nno');
+//        }
 
         $this->assertTrue(true);
     }
