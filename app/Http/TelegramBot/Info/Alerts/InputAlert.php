@@ -9,7 +9,7 @@ class InputAlert extends DefaultClass
     public function main(): array
     {
         $errorsArray = [
-            '1' => 'У вас не куплен доступ к этой папке',
+            '1' => 'У вас не хватает уровня доступа к этому товару',
             '2' => 'Папка или одна из внутренних папок не могут быть удалены т.к добавлены в корзину продуктов',
             '3' => 'Ваш аккаунт был заблокирован!',
             '4' => 'Вы уже приобрели этот товар',
@@ -65,7 +65,7 @@ class InputAlert extends DefaultClass
     {
         switch ($this->argumentsService->sw){
             default:
-                $this->callbackAnswer(false);
+                $this->sendMessage();
                 break;
         }
     }

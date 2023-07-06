@@ -7,7 +7,7 @@ use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
 use App\Models\Pay;
 
-class MakePayProductClass
+class MakePayProduct
 {
     protected StateMake $stateMake;
 

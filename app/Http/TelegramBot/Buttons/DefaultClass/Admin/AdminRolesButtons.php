@@ -101,7 +101,7 @@ class AdminRolesButtons extends Buttons
             ]
         ]);
         $buttons->add([
-            ['text' => '♻️ Change Role', 'callback_data' =>
+            ['text' => '♻️ Change Value', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:ChangeRoleValue".'_'.
                 "p:$argumentsService->p"."_".

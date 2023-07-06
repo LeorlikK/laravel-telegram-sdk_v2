@@ -21,7 +21,7 @@ class MakeAddPayForUser
     public function make(): null|string
     {
         if ($this->stateMake->argumentsService->v){
-            $user = User::find($this->stateMake->parentId)->first();
+            $user = User::find($this->stateMake->parentId);
             $product = Product::find($this->stateMake->argumentsService->v)->first();
 
             Pay::create([

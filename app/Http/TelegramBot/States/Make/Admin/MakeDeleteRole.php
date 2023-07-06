@@ -8,7 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 
-class MakeDeleteRoleValue
+class MakeDeleteRole
 {
     protected StateMake $stateMake;
 

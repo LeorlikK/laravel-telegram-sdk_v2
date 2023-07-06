@@ -5,6 +5,7 @@ namespace Tests\Feature;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Http\TelegramBot\Services\RemainingTimeService;
 use App\Models\Folder;
+use App\Models\Pay;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -20,34 +21,14 @@ class ExampleTest extends TestCase
 
     public function test_my(): void
     {
-        $offset = 644021339;
-        $token = '5373817318:AAF4tHynVvmWuQUBBcb10r7JPlAVBsU2u9I';
-        $response = Http::get("https://api.telegram.org/bot$token/getUpdates?offset=$offset");
-        $data = $response->json();
-
-        if ($data['ok']) {
-            $updates = $data['result'];
-            dump($updates);
-            foreach ($updates as $update) {
-                $offset = $update['update_id'] + 1;
-
-                // Обработайте полученное обновление
-                // Ваш код для обработки обновлений здесь
-            }
-        }
-
-//        Telegram::sendMessage([
-//            'chat_id' => '1059208615',
-//            'text' => '111',
-//        ]);
-
-//        $users = User::where('role_id', 2)->update(['role_id' => 2]);
-//        dump($users);
 
     }
 
     public function test_the_application_returns_a_successful_response(): void
     {
+        /**
+         * Если я вызывают метод, который использует твис в другом классе, то какое твис он возмет?
+         */
         $users = User::whereIn('id', [30, 31])->get();
 
         $users->each(function ($user){
