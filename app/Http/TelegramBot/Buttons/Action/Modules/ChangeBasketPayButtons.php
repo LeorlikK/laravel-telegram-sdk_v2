@@ -87,6 +87,7 @@ class ChangeBasketPayButtons extends Buttons
                 ['text' => $folder->name,
                     'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
+                        "bkS:$argumentsService->bkS".'_'.
                         "sw:ConfirmAdd".'_'.
                         "fp:$argumentsService->fp".'_'.
                         "v:$folder->id".'_'
@@ -130,6 +131,7 @@ class ChangeBasketPayButtons extends Buttons
                 ['text' => $folder->name,
                     'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
+                        "bkS:$argumentsService->bkS".'_'.
                         "sw:ConfirmDel".'_'.
                         "fp:$argumentsService->fp".'_'.
                         "v:$folder->id".'_'

@@ -470,6 +470,7 @@ class StateMake
                 Cache::deleteMultiple($usersTgId);
 
                 Cache::forget($this->user->tg_id);
+                $this->user->unsetRelation('state');
                 $this->user->updatePurchasedProducts();
                 $this->user->updateCache($this->user);
             }
