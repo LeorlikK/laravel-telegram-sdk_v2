@@ -11,10 +11,11 @@ class MenuR extends RecursionClass
 {
     public function main(): array
     {
-        [$photo, $caption, $buttons] = $this->getRecursionFoldersAndButtons();
-
         $this->argumentsService->setArgument('cl' , class_basename($this));
         $this->argumentsService->setArgument('bk' , class_basename($this));
+        [$photo, $caption, $buttons] = $this->getRecursionFoldersAndButtons();
+
+
         $folderAction = Folder::find($this->argumentsService->fp)?->action;
         if ($this->administrator){
             if (!$this->argumentsService->ac){

@@ -13,9 +13,9 @@ class MonetizationRecursionButtons
     {
         return $buttons->add([
             ['text' => '◀️ Back', 'callback_data' =>
-                "cl:$argumentsService->cl".'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp"],
+                "cl:$argumentsService->cl".'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp".'_'."p:$argumentsService->p"],
             ['text' => '🕹 Product settings', 'callback_data' =>
-                'cl:MenuM'.'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp"],
+                'cl:MenuM'.'_'."ac:$argumentsService->ac".'_'."fp:$argumentsService->fp".'_'."p:$argumentsService->p"],
         ]);
     }
 }

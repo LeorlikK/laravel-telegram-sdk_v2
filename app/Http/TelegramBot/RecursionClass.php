@@ -21,7 +21,7 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
         if($action === 'B') $buttons = $this->back($parentId);
         else $buttons = $this->next($parentId);
 
-        $tab = Tab::where('name', class_basename($this))->first();
+        $tab = Tab::where('name', class_basename($this))->first(); // 4
 
         $caption = $this->recursionCaption($tab);
         $photo = $this->recursionPhoto($tab);
@@ -33,15 +33,31 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
     {
         $buttons = collect();
 
-        $query = Tab::query()->with(['folders' => function($query)use($parentId){
-            $query->where('parentId', $parentId)->orderBy('sorted_id');
-        }])->where('name', class_basename($this));
-        $tab = $query->first();
+//        $query = Tab::query()->with(['folders' => function($query)use($parentId){ // 1
+//            $query->where('parentId', $parentId)->orderBy('sorted_id');
+//        }])->where('name', class_basename($this));
+//        $tab = $query->first();
+//
+//        $tab = Tab::where('name', class_basename($this))->first();
 
-        $buttons = $this->recursionFolders($buttons, $tab->folders, $parentId, $parentId);
+        $this->argumentsService->p = $this->argumentsService->p ?? 1;
+        $buttonPlus = ((int)$this->argumentsService->p) + 1;
+        $buttonMinus = ((int)$this->argumentsService->p) - 1;
+        $perPage = 5;
+        $folders = Folder::with(['buttons', 'product'])
+            ->where('parentId', $parentId)
+            ->where('tab_id', Tab::where('name', class_basename($this))->first()->id)
+            ->paginate($perPage, ['*'], null, $this->argumentsService->p);
+        $totalFolder = $folders->total();
+
+        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $parentId)->first(); // 2
+        $buttons = $this->recursionFolders($buttons, $folders->items(), $parentId, $parentId);
 
         $this->argumentsService->ac = $parentId == 0 ? null : 'B';
         $this->argumentsService->fp = $parentId == 0 ? null : $parentId;
+
+        $recursionButtons = new RecursionButtons();
+        $buttons = $recursionButtons->getPaginate($buttons, $totalFolder, $perPage, $this->argumentsService, $buttonMinus, $buttonPlus);
 
         return $buttons;
     }
@@ -50,21 +66,33 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
     {
         $buttons = collect();
 
-        $folderLala = Folder::where('id', $parentId)->first();
-        $folders = Folder::where('parentId', $folderLala->parentId)->where('tab_id', $folderLala->tab_id)->orderBy('sorted_id')->get();
+        $this->argumentsService->p = $this->argumentsService->p ?? 1;
+        $buttonPlus = ((int)$this->argumentsService->p) + 1;
+        $buttonMinus = ((int)$this->argumentsService->p) - 1;
+        $perPage = 5;
+        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $parentId)->first();
+        $folders = Folder::where('parentId', $this->folderParent->parentId)
+            ->where('tab_id', $this->folderParent->tab_id)
+            ->orderBy('sorted_id')
+            ->paginate($perPage, ['*'], null, $this->argumentsService->p);
+        $totalFolder = $folders->total();
 
-        $buttons = $this->recursionFolders($buttons, $folders, $parentId, $folderLala->parentId);
+        $buttons = $this->recursionFolders($buttons, $folders, $parentId, $this->folderParent->parentId);
 
-        $backId = $folderLala->parentId;
+        $backId = $this->folderParent->parentId;
+        dump('BACK: ' . $backId);
         $this->argumentsService->ac = $backId == 0 ? null : 'B';
         $this->argumentsService->fp = $backId == 0 ? null : $backId;
+
+        $recursionButtons = new RecursionButtons();
+        $buttons = $recursionButtons->getPaginate($buttons, $totalFolder, $perPage, $this->argumentsService, $buttonMinus, $buttonPlus);
 
         return $buttons;
     }
 
     private function recursionCaption(Tab $tab):string
     {
-        if (isset($this->folderParent)) {
+        if (isset($this->argumentsService->fp)) {
             $caption = $this->folderParent->caption .
                 "\n\r" . "\n\r" .
                 '◀️ ' . $this->folderParent->name;
@@ -97,16 +125,18 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
         return InputFile::create($photoPath, 'defaultImage');
     }
 
-    private function recursionFolders(Collection $buttons, \Illuminate\Database\Eloquent\Collection $folders, int $parentId, $lala): Collection
+    private function recursionFolders(Collection $buttons,  $folders, int $parentId): Collection
     {
-        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $lala)->first();
+//        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $lala)->first();
 
         $timeNow = now();
-        if ($this->folderParent){
-            $parentsFolders = Folder::where('parentId', $this->folderParent->parentId)->orderBy('sorted_id')->get();
+        if ($this->folderParent && $this->folderParent->parentId != 0){
+            $parentsFolders = Folder::where('parentId', $this->folderParent->parentId)
+                ->orderBy('sorted_id')
+                ->paginate(5, ['*'], null, $this->argumentsService->p);
             $testCollect = collect();
 
-            foreach ($parentsFolders as $parentsFolder) {
+            foreach ($parentsFolders->items() as $parentsFolder) {
                 $timeResult = $parentsFolder->display < $timeNow;
 
                 if ($timeResult || $this->administrator){
@@ -133,28 +163,31 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
                 }
             }
 
-
-            dump($this->folderParent->id);
-            dump($testCollect);
-            dump($testCollect->keys());
+//            dump($this->folderParent->id);
+//            dump($testCollect);
+//            dump($testCollect->keys());
             $indexThisFolder = $testCollect->keys()->search($this->folderParent->id);
             $back = $indexThisFolder - 1;
             $next = $indexThisFolder + 1;
             $backIndex = $testCollect->keys()[$back] ?? null;
             $nextIndex = $testCollect->keys()[$next] ?? null;
-            dump($backIndex, $this->folderParent->id, $nextIndex);
+//            dump($backIndex, $this->folderParent->id, $nextIndex);
             if ($backIndex && $nextIndex){
                 $buttons->add([
-                    ['text' => '⏮', 'callback_data' => "cl:".class_basename($this).'_'. "fp:$backIndex"],
-                    ['text' => '⏭', 'callback_data' => "cl:".class_basename($this).'_'. "fp:$nextIndex"],
+                    ['text' => '⏮', 'callback_data' =>
+                        "cl:".class_basename($this).'_'."fp:$backIndex".'_'."p:".($this->argumentsService->p)],
+                    ['text' => '⏭', 'callback_data' =>
+                        "cl:".class_basename($this).'_'."fp:$nextIndex".'_'."p:".($this->argumentsService->p)],
                 ]);
             }elseif ($backIndex){
                 $buttons->add([
-                    ['text' => '⏮', 'callback_data' => "cl:".class_basename($this).'_'. "fp:$backIndex"],
+                    ['text' => '⏮', 'callback_data' =>
+                        "cl:".class_basename($this).'_'. "fp:$backIndex".'_'."p:".($this->argumentsService->p)],
                 ]);
             }elseif ($nextIndex){
                 $buttons->add([
-                    ['text' => '⏭', 'callback_data' => "cl:".class_basename($this).'_'. "fp:$nextIndex"],
+                    ['text' => '⏭', 'callback_data' =>
+                        "cl:".class_basename($this).'_'. "fp:$nextIndex".'_'."p:".($this->argumentsService->p)],
                 ]);
             }
         }
@@ -183,7 +216,7 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
                          if(!$this->administrator && $this->user->role->visibility <  $folder->visibility){
                              $callback = "cl:IA".'_'."er:1".'_'."ac:N".'_'."fp:$folder->id";
                         }else{
-                             $callback = "cl:".class_basename($this).'_'."ac:N".'_'."fp:$folder->id";
+                             $callback = "cl:".class_basename($this).'_'."ac:N".'_'."fp:$folder->id".'_'."p:".($this->argumentsService->p);
                         }
                     }
 
@@ -215,7 +248,6 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
                 }
             }
         }
-
         return $buttons;
     }
 }
