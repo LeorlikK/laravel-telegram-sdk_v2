@@ -99,7 +99,65 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
 
     private function recursionFolders(Collection $buttons, \Illuminate\Database\Eloquent\Collection $folders, int $parentId, $lala): Collection
     {
+        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $lala)->first();
+
         $timeNow = now();
+        if ($this->folderParent){
+            $parentsFolders = Folder::where('parentId', $this->folderParent->parentId)->orderBy('sorted_id')->get();
+            $testCollect = collect();
+
+            foreach ($parentsFolders as $parentsFolder) {
+                $timeResult = $parentsFolder->display < $timeNow;
+
+                if ($timeResult || $this->administrator){
+                    if (($timeResult && $this->user->role->visibility >= $parentsFolder->visibility) || $this->administrator || !$parentsFolder->blocked){
+
+                        $blockedPayCallback = "";
+                        if ($parentsFolder->blockedPay){
+                            if ($this->administrator) $blockedPayCallback = false;
+                            elseif($this->user->purchasedProducts->contains($parentsFolder->id)) $blockedPayCallback = false;
+                            else $blockedPayCallback = true;
+                        }
+
+                        if ($blockedPayCallback) $callback = "cl:IA".'_'."er:9";
+                        else{
+                            if(!$this->administrator && $this->user->role->visibility <  $parentsFolder->visibility){
+                                $callback = "cl:IA".'_'."er:1".'_'."ac:N".'_'."fp:$parentsFolder->id";
+                            }else{
+                                $callback = "cl:".class_basename($this).'_'."ac:N".'_'."fp:$parentsFolder->id";
+//                                $testCollect->add([$parentsFolder->id => $callback]);
+                                $testCollect->put($parentsFolder->id, $callback);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            dump($this->folderParent->id);
+            dump($testCollect);
+            dump($testCollect->keys());
+            $indexThisFolder = $testCollect->keys()->search($this->folderParent->id);
+            $back = $indexThisFolder - 1;
+            $next = $indexThisFolder + 1;
+            $backIndex = $testCollect->keys()[$back] ?? null;
+            $nextIndex = $testCollect->keys()[$next] ?? null;
+            dump($backIndex, $this->folderParent->id, $nextIndex);
+            if ($backIndex && $nextIndex){
+                $buttons->add([
+                    ['text' => '⏮', 'callback_data' => "cl:".class_basename($this).'_'. "fp:$backIndex"],
+                    ['text' => '⏭', 'callback_data' => "cl:".class_basename($this).'_'. "fp:$nextIndex"],
+                ]);
+            }elseif ($backIndex){
+                $buttons->add([
+                    ['text' => '⏮', 'callback_data' => "cl:".class_basename($this).'_'. "fp:$backIndex"],
+                ]);
+            }elseif ($nextIndex){
+                $buttons->add([
+                    ['text' => '⏭', 'callback_data' => "cl:".class_basename($this).'_'. "fp:$nextIndex"],
+                ]);
+            }
+        }
         foreach ($folders as $folder){
             $timeResult = $folder->display < $timeNow;
 
@@ -122,9 +180,11 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
 
                     if ($blockedPayCallback) $callback = "cl:IA".'_'."er:9";
                     else{
-                        $callback = !$this->administrator && $this->user->role->visibility <  $folder->visibility?
-                            "cl:IA".'_'."er:1".'_'."ac:N".'_'."fp:$folder->id" :
-                            "cl:".class_basename($this).'_'."ac:N".'_'."fp:$folder->id";
+                         if(!$this->administrator && $this->user->role->visibility <  $folder->visibility){
+                             $callback = "cl:IA".'_'."er:1".'_'."ac:N".'_'."fp:$folder->id";
+                        }else{
+                             $callback = "cl:".class_basename($this).'_'."ac:N".'_'."fp:$folder->id";
+                        }
                     }
 
                     $buttons->add([
@@ -140,10 +200,8 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
                     ]);
                 }
             }
-
         }
 
-        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $lala)->first();
         if (isset($this->folderParent->buttons)){
             foreach ($this->folderParent->buttons as $button){
                 $timeResult = $button->display < $timeNow;

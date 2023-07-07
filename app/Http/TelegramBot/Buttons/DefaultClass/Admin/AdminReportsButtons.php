@@ -67,7 +67,10 @@ class AdminReportsButtons extends Buttons
             '    is blocked - ' . $report->userFrom->is_blocked . "\n\r" . "\n\r".
             '📇 Theme: ' . (AreaFeedback::theme($report->theme)) . "\n\r".
             '✉️ Message: ' . $report->message . "\n\r";
-        $caption = Str::limit($caption, 1024);
+
+        if (mb_strlen($caption > 1024)){
+            $caption = Str::limit($caption, 1024);
+        }
 
         $buttons->add([
             ['text' => '💬 Answer',

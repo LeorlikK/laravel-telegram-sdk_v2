@@ -147,6 +147,7 @@ class AreaFeedbackButtons extends Buttons
             ['text' => ($argumentsService->v === '0' ? "✅" : "").(AreaFeedback::theme(0)), 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:$argumentsService->sw".'_'.
+                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "v:0"
             ],
@@ -155,6 +156,7 @@ class AreaFeedbackButtons extends Buttons
             ['text' => ($argumentsService->v === '1' ? "✅" : "").(AreaFeedback::theme(1)), 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:$argumentsService->sw".'_'.
+                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "v:1"
             ],
@@ -163,6 +165,7 @@ class AreaFeedbackButtons extends Buttons
             ['text' => ($argumentsService->v === '2' ? "✅" : "").(AreaFeedback::theme(2)), 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:$argumentsService->sw".'_'.
+                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "v:2"
             ],
@@ -171,6 +174,7 @@ class AreaFeedbackButtons extends Buttons
             ['text' => ($argumentsService->v === '3' ? "✅" : "").(AreaFeedback::theme(3)), 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:$argumentsService->sw".'_'.
+                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "v:3"
             ],
@@ -179,6 +183,7 @@ class AreaFeedbackButtons extends Buttons
             ['text' => ($argumentsService->v === '4' ? "✅" : "").(AreaFeedback::theme(4)), 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:$argumentsService->sw".'_'.
+                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "v:4"
             ],
@@ -187,6 +192,7 @@ class AreaFeedbackButtons extends Buttons
             ['text' => ($argumentsService->v === '5' ? "✅" : "").(AreaFeedback::theme(5)), 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:$argumentsService->sw".'_'.
+                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "v:5"
             ],

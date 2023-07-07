@@ -134,7 +134,6 @@ class AdminUsersButtons extends Buttons
             ['text' => '♻️ Change Role', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "sw:ChangeRole".'_'.
-                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "r:$argumentsService->r"
             ]
@@ -202,17 +201,22 @@ class AdminUsersButtons extends Buttons
 
     public static function changeRoleButtons(Collection $buttons, ArgumentsService $argumentsService): Collection
     {
-        $user = User::where('id', $argumentsService->fp)->first();
-        $roles = Role::all();
+        $argumentsService->p = $argumentsService->p ?? 1;
+        $buttonPlus = ((int)$argumentsService->p) + 1;
+        $buttonMinus = ((int)$argumentsService->p) - 1;
+        $perPage = 10;
 
-        foreach ($roles as $role) {
+        $user = User::where('id', $argumentsService->fp)->first();
+        $roles = Role::whereNotIn('id', [$user->role_id])->paginate($perPage, ['*'], null, $argumentsService->p);
+        $totalFolder = $roles->total();
+
+        foreach ($roles->items() as $role) {
             if ($user->role_id !== $role->id) {
                 $buttons->add([
                     ['text' => $role->name . "($role->visibility)", 'callback_data' =>
                         "cl:$argumentsService->cl".'_'.
                         "sw:ConfirmChangeRole".'_'.
                         "p:$argumentsService->p".'_'.
-                        "fp:$argumentsService->fp".'_'.
                         "fp:$argumentsService->fp".'_'.
                         "r:$argumentsService->r".'_'.
                         "v:$role->id"
@@ -221,11 +225,12 @@ class AdminUsersButtons extends Buttons
             }
         }
 
+        $buttons = self::paginateNavigation($buttons, $totalFolder, $perPage, $argumentsService, $buttonMinus, $buttonPlus);
+
         $buttons->add([
             ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "sw:User".'_'.
-                "p:$argumentsService->p".'_'.
                 "r:$argumentsService->r".'_'.
                 "fp:$argumentsService->fp"
             ],
@@ -368,7 +373,6 @@ class AdminUsersButtons extends Buttons
             ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "sw:User".'_'.
-                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "r:$argumentsService->r"
             ],
@@ -418,7 +422,6 @@ class AdminUsersButtons extends Buttons
             ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "sw:Purchase".'_'.
-                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "r:$argumentsService->r".'_'.
                 "s:1"
@@ -463,7 +466,6 @@ class AdminUsersButtons extends Buttons
             ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
                 "sw:Purchase".'_'.
-                "p:$argumentsService->p".'_'.
                 "fp:$argumentsService->fp".'_'.
                 "r:$argumentsService->r".
                 "s:1"

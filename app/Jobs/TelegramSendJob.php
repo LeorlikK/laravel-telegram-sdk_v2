@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Http\TelegramBot\Aliases;
 use App\Http\TelegramBot\Auth\Authentication;
-use App\Http\TelegramBot\Exceptions\UserAlertException;
+use App\Http\TelegramBot\Components\RecursionClass\MenuR;
 use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\Services\ArgumentsService;
 use App\Http\TelegramBot\States\StateMake;
@@ -50,6 +50,9 @@ class TelegramSendJob implements ShouldQueue
                 $createdClass = new $className($user, $this->update, $this->argumentsService);
                 $createdClass->sendCreate();
             }elseif ($this->action === 'edit'){
+//                $argumentsService = new ArgumentsService('');
+//                $menuR = new MenuR($user, $this->update, $argumentsService);
+//                $menuR->handleCallbackQuery();
                 if ($this->argumentsService->s) $user->state()->delete();
                 $className = Aliases::getFullNameSpace($this->argumentsService->cl);
                 $createdClass = new $className($user, $this->update, $this->argumentsService);

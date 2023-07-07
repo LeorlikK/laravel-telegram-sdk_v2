@@ -33,41 +33,22 @@ class ExampleTest extends TestCase
         /**
          * Если я вызывают метод, который использует твис в другом классе, то какое твис он возмет?
          */
-        $users = User::whereIn('id', [30, 31])->get();
+        $collection = collect([
+            1 => "cl:MenuR_ac:N_fp:1",
+            2 => "cl:MenuR_ac:N_fp:2",
+            8 => "cl:MenuR_ac:N_fp:8",
+            11 => "cl:MenuR_ac:N_fp:11",
+            12 => "cl:MenuR_ac:N_fp:12",
+            13 => "cl:MenuR_ac:N_fp:13",
+            14 => "cl:MenuR_ac:N_fp:14",
+            15 => "cl:MenuR_ac:N_fp:15",
+            16 => "cl:MenuR_ac:N_fp:16",
+            17 => "cl:MenuR_ac:N_fp:17",
+        ]);
 
-        $users->each(function ($user){
-            $this->user = Cache::remember($user['tg_id'], now()->addMinutes(20), function () use($user){
-
-                /**
-                 * @var $user User
-                 */
-                $user = User::where('tg_id', $user['tg_id'])->first();
-//                $user->load('role');
-
-                $user->updatePurchasedProducts();
-
-                return $user;
-            });
-        });
-
-
-        $user30 = 68448;
-        $user31 = 1059208615;
-
-        $keys = $users->pluck('tg_id')->toArray();
-        $data = Cache::many($keys);
-//        $keys = ['68448', '1059208615', 'key3'];
-//        Cache::deleteMultiple($keys);
-        $res = Cache::many(['68448', '1059208615']);
-        dump($res);
-
-
-//        $user = User::find(31);
-//        if (!$user->pays->isEmpty()){
-//            dump($user->pays);
-//        }else{
-//            dump('nno');
-//        }
+        $keysCollection = $collection->keys();
+        $index = $keysCollection->search(8);
+        dump($index);
 
         $this->assertTrue(true);
     }

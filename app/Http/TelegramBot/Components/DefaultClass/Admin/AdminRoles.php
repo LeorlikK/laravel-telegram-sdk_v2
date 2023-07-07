@@ -81,7 +81,7 @@ class AdminRoles extends DefaultClass
                 $this->argumentsService->setArgument('bk' , 'AdminMenu');
                 $this->argumentsService->setArgument('fp' , null);
                 $buttons = AdminRolesButtons::defaultButtons($buttons, $this->argumentsService);
-                $caption = $this->caption("Список пользователей");
+                $caption = $this->caption("Список ролей");
                 break;
         }
 

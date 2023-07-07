@@ -12,6 +12,7 @@ class ArgumentsService
     public ?string $fp=null; // folderParent
     public ?string $m=null; // module
     public ?string $p=null; // page
+    public ?string $c=null; // len caption
     public ?string $v=null; // some value
     public ?string $r=null; // redirect
     public ?string $s=null; // state delete
@@ -38,6 +39,7 @@ class ArgumentsService
             'fp: ' . $this->fp,
             'm: ' . $this->m,
             'p: ' . $this->p,
+            'c: ' . $this->c,
             'v: ' . $this->v,
             'r: ' . $this->r,
             'er: ' . $this->er,
