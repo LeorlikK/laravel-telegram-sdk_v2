@@ -53,6 +53,7 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
         $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $parentId)->first(); // 2
         $buttons = $this->recursionFolders($buttons, $folders->items(), $parentId, $parentId);
 
+        $this->TTT = $this->argumentsService->ac;
         $this->argumentsService->ac = $parentId == 0 ? null : 'B';
         $this->argumentsService->fp = $parentId == 0 ? null : $parentId;
 
@@ -77,13 +78,16 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
             ->paginate($perPage, ['*'], null, $this->argumentsService->p);
         $totalFolder = $folders->total();
 
-        $buttons = $this->recursionFolders($buttons, $folders, $parentId, $this->folderParent->parentId);
 
-        $backId = $this->folderParent->parentId;
+        $buttons = $this->recursionFolders($buttons, $folders, $parentId);
+
+//        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $this->folderParent->parentId)->first();
+
+        $backId = $this->folderParent?->parentId ?? 0;
         dump('BACK: ' . $backId);
+        $this->TTT = $this->argumentsService->ac;
         $this->argumentsService->ac = $backId == 0 ? null : 'B';
         $this->argumentsService->fp = $backId == 0 ? null : $backId;
-
         $recursionButtons = new RecursionButtons();
         $buttons = $recursionButtons->getPaginate($buttons, $totalFolder, $perPage, $this->argumentsService, $buttonMinus, $buttonPlus);
 
@@ -92,7 +96,18 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
 
     private function recursionCaption(Tab $tab):string
     {
+        dump('CAPTION START');
+        dump('TTT: ' . $this->TTT);
+        dump($this->folderParent?->id);
+        dump($this->argumentsService->ac);
+        dump($this->argumentsService->fp);
+        dump('CAPTION FINISH');
         if (isset($this->argumentsService->fp)) {
+            if ($this->TTT == 'B'){
+                $this->folderParent = Folder::with(['buttons', 'product'])->
+                where('id', $this->folderParent->parentId)->first();
+            }
+
             $caption = $this->folderParent->caption .
                 "\n\r" . "\n\r" .
                 '◀️ ' . $this->folderParent->name;
@@ -130,7 +145,8 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
 //        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $lala)->first();
 
         $timeNow = now();
-        if ($this->folderParent && $this->folderParent->parentId != 0){
+// && ($this->folderParent->parentId != 0 || $this->argumentsService->ac == 'N')
+        if ($this->folderParent){
             $parentsFolders = Folder::where('parentId', $this->folderParent->parentId)
                 ->orderBy('sorted_id')
                 ->paginate(5, ['*'], null, $this->argumentsService->p);
