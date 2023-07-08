@@ -6,6 +6,7 @@ use App\Http\TelegramBot\Services\ArgumentsService;
 use App\Models\Folder;
 use App\Models\Tab;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Telegram\Bot\FileUpload\InputFile;
 
@@ -33,13 +34,6 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
     {
         $buttons = collect();
 
-//        $query = Tab::query()->with(['folders' => function($query)use($parentId){ // 1
-//            $query->where('parentId', $parentId)->orderBy('sorted_id');
-//        }])->where('name', class_basename($this));
-//        $tab = $query->first();
-//
-//        $tab = Tab::where('name', class_basename($this))->first();
-
         $this->argumentsService->p = $this->argumentsService->p ?? 1;
         $buttonPlus = ((int)$this->argumentsService->p) + 1;
         $buttonMinus = ((int)$this->argumentsService->p) - 1;
@@ -48,20 +42,20 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
             ->where('parentId', $parentId)
             ->where('tab_id', Tab::where('name', class_basename($this))->first()->id)
             ->when(!$this->administrator, function ($query) {
-                $query->where(function ($subquery) {
-                    $subquery->where(function ($subquery) {
-                        $subquery->where('blocked', true)
+                $query->where('display', '<', Carbon::now())
+                    ->orWhereNull('display');
+                $query->where('blocked', false)
+                    ->orWhere(function ($subQuery) {
+                        $subQuery->where('blocked', true)
                             ->where('visibility', '<=', $this->user->role->visibility);
-                    })
-                        ->orWhere('display', '<', now())
-                        ->orWhereNull('display');
-                });
+                    });
                 return $query;
             })
             ->paginate($perPage, ['*'], null, $this->argumentsService->p);
 
 
         dump(array_column($folders->items(), 'id'));
+        dump('БДФБФДФБФДБФДФ');
         $totalFolder = $folders->total();
 
         $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $parentId)->first(); // 2
@@ -105,9 +99,6 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
 
 
         $buttons = $this->recursionFolders($buttons, $folders, $parentId);
-
-//        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $this->folderParent->parentId)->first();
-
 
         $recursionButtons = new RecursionButtons();
         $buttons = $recursionButtons->getPaginate($buttons, $totalFolder, $perPage, $this->argumentsService, $buttonMinus, $buttonPlus);
