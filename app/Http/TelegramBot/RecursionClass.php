@@ -43,11 +43,25 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
         $this->argumentsService->p = $this->argumentsService->p ?? 1;
         $buttonPlus = ((int)$this->argumentsService->p) + 1;
         $buttonMinus = ((int)$this->argumentsService->p) - 1;
-        $perPage = 5;
+        $perPage = 3;
         $folders = Folder::with(['buttons', 'product'])
             ->where('parentId', $parentId)
             ->where('tab_id', Tab::where('name', class_basename($this))->first()->id)
+            ->when(!$this->administrator, function ($query) {
+                $query->where(function ($subquery) {
+                    $subquery->where(function ($subquery) {
+                        $subquery->where('blocked', true)
+                            ->where('visibility', '<=', $this->user->role->visibility);
+                    })
+                        ->orWhere('display', '<', now())
+                        ->orWhereNull('display');
+                });
+                return $query;
+            })
             ->paginate($perPage, ['*'], null, $this->argumentsService->p);
+
+
+        dump(array_column($folders->items(), 'id'));
         $totalFolder = $folders->total();
 
         $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $parentId)->first(); // 2
@@ -70,7 +84,7 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
         $this->argumentsService->p = $this->argumentsService->p ?? 1;
         $buttonPlus = ((int)$this->argumentsService->p) + 1;
         $buttonMinus = ((int)$this->argumentsService->p) - 1;
-        $perPage = 5;
+        $perPage = 3;
         $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $parentId)->first();
         $folders = Folder::where('parentId', $this->folderParent->parentId)
             ->where('tab_id', $this->folderParent->tab_id)
@@ -79,15 +93,22 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
         $totalFolder = $folders->total();
 
 
-        $buttons = $this->recursionFolders($buttons, $folders, $parentId);
-
-//        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $this->folderParent->parentId)->first();
-
         $backId = $this->folderParent?->parentId ?? 0;
         dump('BACK: ' . $backId);
         $this->TTT = $this->argumentsService->ac;
         $this->argumentsService->ac = $backId == 0 ? null : 'B';
         $this->argumentsService->fp = $backId == 0 ? null : $backId;
+        if ($this->TTT == 'B'){
+            $this->folderParent = Folder::with(['buttons', 'product'])->
+            where('id', $this->folderParent->parentId)->first();
+        }
+
+
+        $buttons = $this->recursionFolders($buttons, $folders, $parentId);
+
+//        $this->folderParent = Folder::with(['buttons', 'product'])->where('id', $this->folderParent->parentId)->first();
+
+
         $recursionButtons = new RecursionButtons();
         $buttons = $recursionButtons->getPaginate($buttons, $totalFolder, $perPage, $this->argumentsService, $buttonMinus, $buttonPlus);
 
@@ -103,10 +124,7 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
         dump($this->argumentsService->fp);
         dump('CAPTION FINISH');
         if (isset($this->argumentsService->fp)) {
-            if ($this->TTT == 'B'){
-                $this->folderParent = Folder::with(['buttons', 'product'])->
-                where('id', $this->folderParent->parentId)->first();
-            }
+
 
             $caption = $this->folderParent->caption .
                 "\n\r" . "\n\r" .
@@ -149,7 +167,7 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
         if ($this->folderParent){
             $parentsFolders = Folder::where('parentId', $this->folderParent->parentId)
                 ->orderBy('sorted_id')
-                ->paginate(5, ['*'], null, $this->argumentsService->p);
+                ->paginate(3, ['*'], null, $this->argumentsService->p);
             $testCollect = collect();
 
             foreach ($parentsFolders->items() as $parentsFolder) {

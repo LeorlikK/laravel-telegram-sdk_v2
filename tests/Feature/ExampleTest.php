@@ -33,22 +33,24 @@ class ExampleTest extends TestCase
         /**
          * Если я вызывают метод, который использует твис в другом классе, то какое твис он возмет?
          */
-        $collection = collect([
-            1 => "cl:MenuR_ac:N_fp:1",
-            2 => "cl:MenuR_ac:N_fp:2",
-            8 => "cl:MenuR_ac:N_fp:8",
-            11 => "cl:MenuR_ac:N_fp:11",
-            12 => "cl:MenuR_ac:N_fp:12",
-            13 => "cl:MenuR_ac:N_fp:13",
-            14 => "cl:MenuR_ac:N_fp:14",
-            15 => "cl:MenuR_ac:N_fp:15",
-            16 => "cl:MenuR_ac:N_fp:16",
-            17 => "cl:MenuR_ac:N_fp:17",
-        ]);
+        $roleV = 10;
 
-        $keysCollection = $collection->keys();
-        $index = $keysCollection->search(8);
-        dump($index);
+        $folders = Folder::with(['buttons', 'product'])
+            ->where('blocked', '!=', true)
+            ->orWhere(function ($query) use ($roleV) {
+                $query->where('blocked', true)
+                    ->where('visibility', '>', $roleV);
+            })
+            ->orWhere(function ($query) use ($roleV) {
+                $query->where('blocked', true)
+                    ->where('visibility', null)
+                    ->orWhere('visibility', '>', $roleV);
+            })
+
+            ->get();
+        dump($folders->pluck('id'));
+
+
 
         $this->assertTrue(true);
     }
