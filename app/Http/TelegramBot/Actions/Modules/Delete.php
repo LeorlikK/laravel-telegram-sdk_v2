@@ -14,15 +14,23 @@ class Delete extends DefaultClass
         $buttons = collect();
 
         switch ($this->argumentsService->sw){
+            case 'M':
+                $this->argumentsService->setArgument('cl' , class_basename($this));
+                StateCreate::createState($this->update, $this->user, $this->argumentsService, 'DeletePay' . $this->argumentsService->m);
+                $buttons = DeleteButtons::defaultButtons($buttons, $this->argumentsService);
+                $caption = $this->caption('Подтвердите удаление');
+                break;
             default:
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'Delete' . $this->argumentsService->m);
                 $buttons = DeleteButtons::defaultButtons($buttons, $this->argumentsService);
                 $caption = $this->caption('Подтвердите удаление');
-                $photo = $this->photo(null);
-                $reply_markup = $this->replyMarkup($buttons);
                 break;
         }
+
+        $caption = $caption ?? $this->caption('');
+        $photo = $photo ?? $this->photo(null);
+        $reply_markup = $reply_markup ?? $this->replyMarkup($buttons);
 
         return [$photo, $caption, $reply_markup];
     }

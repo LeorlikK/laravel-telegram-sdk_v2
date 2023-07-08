@@ -10,31 +10,18 @@ class CreateSpecialClassButtons
     public static function defaultButtons(Collection $buttons, ArgumentsService $argumentsService):Collection
     {
         $buttons->add([
-            ['text' => 'Class One', 'callback_data' =>
+            ['text' => '💳 Monetization', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:SClass1".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "bkS:$argumentsService->bkS".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp"
             ],
         ]);
 
         $buttons->add([
-            ['text' => 'Class Two', 'callback_data' =>
-                "cl:$argumentsService->cl".'_'.
-                "sw:SClass2".'_'.
-                "bk:$argumentsService->bk".'_'.
-                "bkS:$argumentsService->bkS".'_'.
-                "ac:N".'_'.
-                "fp:$argumentsService->fp"
-            ],
-        ]);
-
-        $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Back', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
-                "ac:N".'_'.
                 "fp:$argumentsService->fp"],
         ]);
 
@@ -44,12 +31,13 @@ class CreateSpecialClassButtons
     public static function createSpecialClass(Collection $buttons, ArgumentsService $argumentsService):Collection
     {
         $buttons->add([
-            ['text' => 'Cancel', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:CreateClass".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "bkS:$argumentsService->bkS".'_'.
-                "ac:N".'_'.
-                "fp:$argumentsService->fp"],
+                "fp:$argumentsService->fp".'_'.
+                "s:1"
+            ],
         ]);
 
         return $buttons;

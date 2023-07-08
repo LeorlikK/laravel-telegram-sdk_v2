@@ -22,20 +22,24 @@ class Authentication
                 'first_name' => $from->first_name,
                 'last_name' => $from->last_name ?? null,
                 'language' => $from->language_code,
-                'role_id' => 1,
+                'role_id' => 2,
                 'mail' => $from->mail,
                 'number' => $from->number,
-                'is_administrator' => $from->is_administrator ?? false, # Заменить на false
                 'is_premium' => $from->is_premium ?? false,
                 'is_blocked' => $from->is_blocked ?? false,
             ];
 
-            /**
-             * @var $user User
-             */
+
             $this->user = Cache::remember($user['tg_id'], now()->addMinutes(20), function () use($user){
+
+                /**
+                 * @var $user User
+                 */
                 $user = User::firstOrCreate(['tg_id' => $user['tg_id']], $user);
-                $user->load('role');
+//                $user->load('role');
+
+                $user->updatePurchasedProducts();
+
                 return $user;
             });
         }

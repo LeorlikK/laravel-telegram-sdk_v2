@@ -23,13 +23,28 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        Role::factory(1)->create();
-        User::factory(30)->create();
-        Tab::factory(1)->create();
-        Tab::factory(1)->create([
-            'name' => 'AdminRecursion'
+//        Role::factory(1)->create();
+        Role::create([
+            'name' => 'admin',
+            'visibility' => 100,
         ]);
-        Folder::factory(3)->create();
-        Button::factory(5)->create();
+        Role::create([
+            'name' => 'user',
+            'visibility' => 0,
+        ]);
+        User::factory(30)->create();
+        User::create([
+            'tg_id' => 1059208615,
+            'username' => 'leorlik',
+            'first_name' => 'Kirill',
+            'last_name' => 'Orlov',
+            'language' => 'ru',
+            'role_id' => 1,
+            'mail' => 'leorl1k@yandex.ru',
+            'number' => '+7',
+            'is_premium' => $from->is_premium ?? false,
+            'is_blocked' => $from->is_blocked ?? false,
+        ]);
+        Tab::factory(1)->create();
     }
 }

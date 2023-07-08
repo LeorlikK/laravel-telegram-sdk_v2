@@ -14,18 +14,12 @@ class ChangeSortedButtons
         $foldersParent = Folder::where('parentId', $folder->parentId)->where('tab_id', $folder->tab_id)->orderBy('sorted_id')->get();
 
         foreach ($foldersParent as $folderParent){
-//            $buttons->add([
-//                ['text' => $folderParent->id === $folder->id ? 'Выбранная папка >>> ' . $folderParent->name : $folderParent->name,
-//                    'callback_data' => $folderParent->id === $folder->id ? 'blockedF' : $className . '_' . 'MakeSortedFolder' . $folderParent->id]
-//            ]);
-
             $buttons->add([
-                ['text' => $folderParent->id === $folder->id ? 'Выбранная папка >>> ' . $folderParent->name : $folderParent->name, 'callback_data' =>
-                    $folderParent->id === $folder->id ? 'blockedF' :
+                ['text' => $folderParent->id === $folder->id ? '🔃 ' . $folderParent->name : $folderParent->name, 'callback_data' =>
+                    $folderParent->id === $folder->id ? 'cl:IA'.'_'.'er:5' :
                     "cl:$argumentsService->cl".'_'.
                     "sw:Confirm".'_'.
                     "bkS:$argumentsService->bkS".'_'.
-                    "ac:N".'_'.
                     "fp:$argumentsService->fp".'_'.
                     "v:$folderParent->id"
                 ],
@@ -33,10 +27,10 @@ class ChangeSortedButtons
         }
 
         $buttons->add([
-            ['text' => 'Back', 'callback_data' =>
+            ['text' => '◀️ Cancel', 'callback_data' =>
                 "cl:$argumentsService->bk".'_'.
-                "ac:N".'_'.
-                "fp:$argumentsService->fp"
+                "fp:$argumentsService->fp".'_'.
+                "s:1"
             ],
         ]);
 

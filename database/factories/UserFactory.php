@@ -24,10 +24,9 @@ class UserFactory extends Factory
             'first_name' => $this->faker->firstName(),
             'last_name' => $from->last_name ?? null,
             'language' => 'ru',
-            'role_id' => Role::all()->random()->id,
+            'role_id' => 2,
             'mail' => 'random_mail@ya.ru',
             'number' => $this->faker->phoneNumber(),
-            'is_administrator' => false,
             'is_premium' => false,
             'is_blocked' => false,
         ];

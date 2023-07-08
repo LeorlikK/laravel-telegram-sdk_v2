@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users', 'id');
-            $table->text('text');
+            $table->foreignId('folder_id')->constrained('folders', 'id');
+            $table->unsignedInteger('subscription')->nullable();
+            $table->float('price')->nullable()->default(100000);
+            $table->string('currency')->nullable()->default('rub');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('products');
     }
 };

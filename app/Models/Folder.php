@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -66,5 +67,15 @@ class Folder extends Model
     public function buttons():HasMany
     {
         return $this->hasMany(Button::class, 'folder_id', 'id');
+    }
+
+    public function product():HasOne
+    {
+        return $this->hasOne(Product::class, 'folder_id', 'id');
+    }
+
+    public function products():BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_folders', 'folder_id', 'product_id');
     }
 }

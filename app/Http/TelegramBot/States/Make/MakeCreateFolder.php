@@ -2,11 +2,10 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
-use App\Models\State;
 use App\Models\Tab;
-use App\Models\User;
 
 class MakeCreateFolder
 {
@@ -36,8 +35,12 @@ class MakeCreateFolder
             'parentId' => $this->stateMake->parentId,
             'name' => '📚 ' . $this->stateMake->text,
             'sorted_id' => $this->stateMake->sortedId,
+            'action' => class_basename($this->stateMake->state->TabClass)
         ]);
 
+        $this->stateMake->argumentsService->er = '24';
+        (new InputAlert($this->stateMake->user, $this->stateMake->update,
+            $this->stateMake->argumentsService))->handleCallbackQuery();
         return null;
     }
 }

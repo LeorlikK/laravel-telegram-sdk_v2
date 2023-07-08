@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -93,8 +95,72 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 
-    public function reports():HasMany
+    public function pays():HasMany
     {
-        return $this->hasMany(Feedback::class, 'user_id', 'id');
+        return $this->hasMany(Pay::class, 'user_id', 'id');
+    }
+
+    public function reportsFrom():HasMany
+    {
+        return $this->hasMany(Report::class, 'from', 'id');
+    }
+
+    public function reportsWhom():HasMany
+    {
+        return $this->hasMany(Report::class, 'to_whom', 'id');
+    }
+
+    public function updateCache(User $newUserValue): void
+    {
+        Cache::put($this->tg_id, $newUserValue, now()->addMinutes(20));
+    }
+
+    public function updatePurchasedProducts(): void
+    {
+        $collect = collect();
+        $this->load('pays.product.folders');
+        if (!$this->pays->isEmpty()) {
+            $this->pays->each(function ($item) use ($collect) {
+                if ($item->product && $item->product->folders && ($item->subscription > now() || $item->subscription === null)) {
+                    $collect->add($item->product->folders->pluck('id'));
+                }
+            });
+        }
+        $this->unsetRelation('pays');
+
+        $purchasedProducts = $collect->flatten()->unique();
+        $this->purchasedProducts = $purchasedProducts;
+    }
+
+    public function countAnswerReportState(string $type): string
+    {
+        $numberArray = [
+            '1' => "1️⃣",
+            '2' => "2️⃣",
+            '3' => "3️⃣",
+            '4' => "4️⃣",
+            '5' => "5️⃣",
+            '6' => "6️⃣",
+            '7' => "7️⃣",
+            '8' => "8️⃣",
+            '9' => "9️⃣➕",
+        ];
+
+        if ($type === 'answer'){
+            $reports = Report::where('to_whom', $this->id)
+                ->where('type', $type)
+                ->where('state', false)
+                ->get();
+        }elseif ($type === 'report'){
+            $reports = Report::where('type', $type)
+                ->where('state', false)
+                ->get();
+        }else return "";
+
+
+        $count = $reports->count();
+        if ($count == 0) return "";
+        elseif ($count > 0 && $count < 10) return $numberArray[$count];
+        else return $numberArray[9];
     }
 }

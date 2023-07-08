@@ -2,7 +2,8 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
-use App\Http\TelegramBot\Services\MediaConverter;
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
+use App\Http\TelegramBot\Services\MediaConverterService;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
 use App\Models\Tab;
@@ -18,7 +19,7 @@ class MakeChangeImageFolder
 
     public function make(): null|string
     {
-        $media = MediaConverter::messageMediaConverter($this->stateMake->update->getMessage());
+        $media = MediaConverterService::messageMediaConverter($this->stateMake->update->getMessage());
         if (($media && $media['type'] === 'photo') || $this->stateMake->text === 'null'){
             if ($this->stateMake->parentId == 0){
                 $tab = Tab::where('name', class_basename($this->stateMake->state->TabClass))->first();
@@ -38,12 +39,15 @@ class MakeChangeImageFolder
                 $folder->save();
             }
 
+            $this->stateMake->argumentsService->er = '17';
+            (new InputAlert($this->stateMake->user, $this->stateMake->update,
+                $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
 
         }elseif ($media && $media['type'] === 'document'){
-            return 'Сохранение формата из документа находится в разработке';
+            return '1';
         }else{
-            return 'Неудовлетворимый формат изображения';
+            return '2';
         }
     }
 }

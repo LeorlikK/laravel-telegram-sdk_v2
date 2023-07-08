@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('action');
             $table->string('TabClass');
             $table->string('parentId')->nullable();
+            $table->string('v1')->nullable();
+            $table->string('v2')->nullable();
+            $table->string('v3')->nullable();
         });
     }
 

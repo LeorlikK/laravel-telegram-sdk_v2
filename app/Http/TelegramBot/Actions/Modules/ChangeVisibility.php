@@ -2,8 +2,6 @@
 
 namespace App\Http\TelegramBot\Actions\Modules;
 
-use App\Http\TelegramBot\ActionModuleClass;
-use App\Http\TelegramBot\Buttons\Action\Modules\ChangeSecrecyButtons;
 use App\Http\TelegramBot\Buttons\Action\Modules\ChangeVisibilityButtons;
 use App\Http\TelegramBot\DefaultClass;
 use App\Http\TelegramBot\States\StateCreate;
@@ -20,12 +18,11 @@ class ChangeVisibility extends DefaultClass
             case $this->argumentsService->sw === 'Scope':
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'ChangeVisibility' . $this->argumentsService->m);
-                $buttons = ChangeVisibilityButtons::scope($buttons, $this->argumentsService);
-                $caption = $this->caption('Выберите уровень доступа к папке или введите число от 0 до 100');
+                [$buttons, $caption] = ChangeVisibilityButtons::scope($buttons, $this->argumentsService);
                 break;
             default:
                 $this->argumentsService->setArgument('cl' , class_basename($this));
-                $buttons = ChangeVisibilityButtons::defaultButtons($buttons, $this->argumentsService);
+                [$buttons, $caption] = ChangeVisibilityButtons::defaultButtons($buttons, $this->argumentsService);
                 break;
         }
 

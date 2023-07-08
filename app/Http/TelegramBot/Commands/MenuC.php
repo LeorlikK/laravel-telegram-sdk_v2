@@ -2,11 +2,8 @@
 
 namespace App\Http\TelegramBot\Commands;
 
-use App\Http\TelegramBot\Components\DefaultClass\TestD;
 use App\Jobs\TelegramSendJob;
-use App\Models\User;
 use Telegram\Bot\Commands\Command;
-use Telegram\Bot\Objects\Update;
 
 class MenuC extends Command
 {
@@ -41,3 +38,4 @@ class MenuC extends Command
         TelegramSendJob::dispatch($this->update, 'cl:MenuR', 'send');
     }
 }
+//$gif = '❓❗️🔑🕹✏️📚✅☑️✔️📌🖼◀️▶️⬇️↕️🔄↩️↔️🔃↖️⤴️↘️↗️↪️⤵️↙️♾🛒📅📣👁👁‍🗨❌💳💰💵💷💴💶👥🆘➕🗑✉️⚪️🔵💎🔹♻️⏳🔒🔓📊🛍📝📋📨🚀💬';

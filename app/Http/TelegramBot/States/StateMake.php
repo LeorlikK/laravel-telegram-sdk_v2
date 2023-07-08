@@ -2,28 +2,47 @@
 
 namespace App\Http\TelegramBot\States;
 
-use App\Http\TelegramBot\Exceptions\UserInputException;
+use App\Http\TelegramBot\Info\Exceptions\InputException;
 use App\Http\TelegramBot\Services\ArgumentsService;
+use App\Http\TelegramBot\States\Make\Admin\MakeAddPayForUser;
+use App\Http\TelegramBot\States\Make\Admin\MakeBlockUser;
+use App\Http\TelegramBot\States\Make\Admin\MakeChangeRoleName;
+use App\Http\TelegramBot\States\Make\Admin\MakeChangeRoleUser;
+use App\Http\TelegramBot\States\Make\Admin\MakeChangeRoleValue;
+use App\Http\TelegramBot\States\Make\Admin\MakeCreateRole;
+use App\Http\TelegramBot\States\Make\Admin\MakeDeletePayForUser;
+use App\Http\TelegramBot\States\Make\Admin\MakeDeleteRole;
+use App\Http\TelegramBot\States\Make\Admin\MakeFindByTgId;
+use App\Http\TelegramBot\States\Make\Admin\MakeUnlockUser;
+use App\Http\TelegramBot\States\Make\Admin\MakeWriteUser;
+use App\Http\TelegramBot\States\Make\MakeAddPayBasket;
 use App\Http\TelegramBot\States\Make\MakeChangeCaptionFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeEmojiFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeImageFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeNameFolder;
+use App\Http\TelegramBot\States\Make\MakeChangePeriodPay;
+use App\Http\TelegramBot\States\Make\MakeChangePricePay;
 use App\Http\TelegramBot\States\Make\MakeChangeSecrecyFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeSortedFolder;
 use App\Http\TelegramBot\States\Make\MakeChangeVisibilityFolder;
 use App\Http\TelegramBot\States\Make\MakeCreateFolder;
 use App\Http\TelegramBot\States\Make\MakeCreateSpecialClass;
 use App\Http\TelegramBot\States\Make\MakeDeleteFolder;
-use App\Models\Button;
+use App\Http\TelegramBot\States\Make\MakeDeletePayBasket;
+use App\Http\TelegramBot\States\Make\MakeDeletePayProduct;
+use App\Http\TelegramBot\States\Make\MakePayProduct;
+use App\Http\TelegramBot\States\Make\Reports\MakeAnswerReport;
+use App\Http\TelegramBot\States\Make\Reports\MakeCreateReport;
+use App\Http\TelegramBot\States\Make\Reports\MakeDeleterReport;
 use App\Models\Folder;
+use App\Models\Pay;
 use App\Models\State;
-use App\Models\Tab;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Telegram\Bot\Objects\Chat;
 use Telegram\Bot\Objects\Message;
 use Telegram\Bot\Objects\Update;
-use function PHPUnit\Framework\isEmpty;
 
 class StateMake
 {
@@ -171,6 +190,238 @@ class StateMake
                 $this->argumentsService->fp = $this->parentId;
                 break;
 
+            // Admin Panel
+            case $this->state->action === 'ChangeRoleUserC':
+                $makeClass = new MakeChangeRoleUser($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'UserUnlockC':
+                $makeClass = new MakeUnlockUser($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'UserBlockC':
+                $makeClass = new MakeBlockUser($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'CreateRoleC':
+                $makeClass = new MakeCreateRole($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'ChangeRoleNameC':
+                $makeClass = new MakeChangeRoleName($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'ChangeRoleValueC':
+                $makeClass = new MakeChangeRoleValue($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'DeleteRoleValueC':
+                $makeClass = new MakeDeleteRole($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'FindByIdC':
+                $makeClass = new MakeFindByTgId($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                break;
+
+            case $this->state->action === 'AddPayForUserC':
+                $makeClass = new MakeAddPayForUser($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'DeletePayForUserC':
+                $makeClass = new MakeDeletePayForUser($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'WriteUserC':
+                $makeClass = new MakeWriteUser($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+//            case $this->state->action === 'WritePersonalAreaC':
+//                $makeClass = new MakeDeletePayForUser($this);
+//                $error = $makeClass->make();
+//                $arguments = [
+//                    'callbackClassName' => $this->state->TabClass,
+//                    'update' => $this->reworkUpdate($this->chatId)
+//                ];
+//                $this->argumentsService->ac = 'N';
+//                $this->argumentsService->fp = $this->parentId;
+//                break;
+
+            // PAY
+            case $this->state->action === 'PayProductC':
+                $makeClass = new MakePayProduct($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'ChangePeriodPayF':
+                $makeClass = new MakeChangePeriodPay($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case str_starts_with($this->state->action, 'ChangePricePayF'):
+                $makeClass = new MakeChangePricePay($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'AddPayF':
+                $makeClass = new MakeAddPayBasket($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'DeletePayF':
+                $makeClass = new MakeDeletePayBasket($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'DeletePayM':
+                $makeClass = new MakeDeletePayProduct($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            // Reports
+            case $this->state->action === 'CreateReportC':
+                $makeClass = new MakeCreateReport($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = 0;
+                break;
+
+            case $this->state->action === 'AnswerReportUserC':
+                $makeClass = new MakeAnswerReport($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
+
+            case $this->state->action === 'DeleteReportUserC':
+                $makeClass = new MakeDeleterReport($this);
+                $error = $makeClass->make();
+                $arguments = [
+                    'callbackClassName' => $this->state->TabClass,
+                    'update' => $this->reworkUpdate($this->chatId)
+                ];
+                $this->argumentsService->ac = 'N';
+                $this->argumentsService->fp = $this->parentId;
+                break;
 
 
             default:
@@ -183,12 +434,14 @@ class StateMake
             $this->deleteMessage($this->chatId, $this->messageId);
             $this->redirectBeforeCreate($arguments);
         }else{
+            $this->argumentsService->er = $error;
             $this->deleteMessage($this->chatId, $this->messageId);
-            UserInputException::sendError($this->update, $error);
+            (new InputException($this->user, $this->update,
+                $this->argumentsService))->handleCallbackQuery();
         }
     }
 
-    function deleteFolderChildren($folderId): void
+    function deleteFolderChildren($folderId, &$link): void
     {
         $folder = Folder::find($folderId);
 
@@ -199,10 +452,32 @@ class StateMake
         $children = Folder::where('parentId', $folderId)->get();
 
         foreach ($children as $child) {
-            $this->deleteFolderChildren($child->id);
+            $this->deleteFolderChildren($child->id,$link);
         }
 
-        $folder->delete();
+        if ($folder->products->isNotEmpty()) {
+            $link = 17;
+            return;
+        }
+
+        if (!$link){
+            $folder->product?->folders()->detach();
+            $productId = $folder->product?->id;
+            if ($productId){
+                $pays = Pay::with('user')->where('product_id', $productId)->get();
+                Pay::where('product_id', $productId)->delete();
+                $usersTgId = $pays->pluck('user.tg_id');
+                Cache::deleteMultiple($usersTgId);
+
+                Cache::forget($this->user->tg_id);
+                $this->user->unsetRelation('state');
+                $this->user->updatePurchasedProducts();
+                $this->user->updateCache($this->user);
+            }
+            $folder->product?->delete();
+
+            $folder->delete();
+        }
     }
 
     public function deleteMessage(string $chatId, string $messageId): void

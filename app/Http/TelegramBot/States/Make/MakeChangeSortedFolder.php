@@ -2,10 +2,9 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
-use App\Models\Tab;
-use Carbon\Carbon;
 
 class MakeChangeSortedFolder
 {
@@ -30,6 +29,9 @@ class MakeChangeSortedFolder
         $first->save();
         $second->save();
 
+        $this->stateMake->argumentsService->er = '22';
+        (new InputAlert($this->stateMake->user, $this->stateMake->update,
+            $this->stateMake->argumentsService))->handleCallbackQuery();
         return null;
     }
 }
