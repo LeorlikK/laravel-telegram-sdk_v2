@@ -2,7 +2,7 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
-use App\Http\TelegramBot\Info\Exceptions\InputException;
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
 
@@ -25,14 +25,14 @@ class MakeDeletePayProduct
                 $this->stateMake->deleteFolderChildren($this->stateMake->parentId, $link);
                 if ($link){
                     $this->stateMake->argumentsService->er = $link;
-                    (new InputException($this->stateMake->user, $this->stateMake->update,
+                    (new InputAlert($this->stateMake->user, $this->stateMake->update,
                         $this->stateMake->argumentsService))->handleCallbackQuery();
                 }
 
                 $this->stateMake->parentId = $backId;
 
                 $this->stateMake->argumentsService->er = '27';
-                (new InputException($this->stateMake->user, $this->stateMake->update,
+                (new InputAlert($this->stateMake->user, $this->stateMake->update,
                     $this->stateMake->argumentsService))->handleCallbackQuery();
                 return null;
             }

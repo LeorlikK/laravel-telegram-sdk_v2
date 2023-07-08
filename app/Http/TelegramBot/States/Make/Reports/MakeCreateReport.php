@@ -2,9 +2,8 @@
 
 namespace App\Http\TelegramBot\States\Make\Reports;
 
-use App\Http\TelegramBot\Info\Exceptions\InputException;
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\States\StateMake;
-use App\Models\Folder;
 use App\Models\Report;
 
 class MakeCreateReport
@@ -29,7 +28,7 @@ class MakeCreateReport
             ]);
 
             $this->stateMake->argumentsService->er = '41';
-            (new InputException($this->stateMake->user, $this->stateMake->update,
+            (new InputAlert($this->stateMake->user, $this->stateMake->update,
                 $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
         }
