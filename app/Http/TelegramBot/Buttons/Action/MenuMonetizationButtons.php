@@ -3,6 +3,7 @@
 namespace App\Http\TelegramBot\Buttons\Action;
 
 use App\Http\TelegramBot\Services\ArgumentsService;
+use App\Http\TelegramBot\Services\RemainingTimeService;
 use App\Models\Folder;
 use Illuminate\Support\Collection;
 
@@ -26,11 +27,7 @@ class MenuMonetizationButtons
                     "sw:ChangeNameF".'_'.
                     "bk:$argumentsService->bk".'_'.
                     "ac:N".'_'.
-                    "fp:$argumentsService->fp"]
-            ]);
-        }
-        if ($argumentsService->fp !== null){
-            $buttons->add([
+                    "fp:$argumentsService->fp"],
                 ['text' => '📊 Change Emoji Folder', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeEmojiF".'_'.
@@ -39,15 +36,14 @@ class MenuMonetizationButtons
                     "fp:$argumentsService->fp"]
             ]);
         }
+
         $buttons->add([
             ['text' => '📌 Change Caption Folder', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:ChangeCaptionF".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "ac:N".'_'.
-                "fp:$argumentsService->fp"]
-        ]);
-        $buttons->add([
+                "fp:$argumentsService->fp"],
             ['text' => '🖼 Change Image Folder', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:ChangeImageF".'_'.
@@ -55,9 +51,10 @@ class MenuMonetizationButtons
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"]
         ]);
+
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '⏳  Change Secrecy Folder' . ($folder->display ? '( ' . $folder->display . ' )' : ""), 'callback_data' =>
+                ['text' => '⏳ Change Secrecy Folder' . ($folder->displayViewBool() ? '( ' . $folder->display . ' )' : ""), 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeSecrecyF".'_'.
                     "bk:$argumentsService->bk".'_'.
@@ -115,7 +112,8 @@ class MenuMonetizationButtons
         ]);
 
         $buttons->add([
-            ['text' => '📅 Purchase Period' . '( ' . ($folder->product->subscription ? $folder->product->subscription . ' h' : "♾") . ' )', 'callback_data' =>
+            ['text' => '📅 Purchase Period' . '(' . ($folder->product->subscription ?
+                    (RemainingTimeService::getTimeFromHours($folder->product->subscription)) : "♾") . ' )', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:PeriodF".'_'.
                 "bk:$argumentsService->bk".'_'.

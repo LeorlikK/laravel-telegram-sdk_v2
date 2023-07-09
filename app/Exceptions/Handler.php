@@ -29,7 +29,8 @@ class Handler extends ExceptionHandler
         $message = mb_strcut($e->getMessage(), 0, 300);
         $file = $e->getFile();
         $line = $e->getLine();
-        $message = (string)view('errors.send_message', compact('code',  'message', 'file', 'line'));
+        $message = (string)view('messages.errors.send_message',
+            compact('code',  'message', 'file', 'line'));
 
         $haveAdminsRole = User::where('role_id', 1)->get();
         foreach ($haveAdminsRole as $admin) {

@@ -26,11 +26,7 @@ class MenuActionButtons
                     "sw:ChangeNameF".'_'.
                     "bk:$argumentsService->bk".'_'.
                     "ac:N".'_'.
-                    "fp:$argumentsService->fp"]
-            ]);
-        }
-        if ($argumentsService->fp !== null){
-            $buttons->add([
+                    "fp:$argumentsService->fp"],
                 ['text' => '📊 Change Emoji Folder', 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeEmojiF".'_'.
@@ -39,15 +35,14 @@ class MenuActionButtons
                     "fp:$argumentsService->fp"]
             ]);
         }
+
         $buttons->add([
             ['text' => '📌 Change Caption Folder', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:ChangeCaptionF".'_'.
                 "bk:$argumentsService->bk".'_'.
                 "ac:N".'_'.
-                "fp:$argumentsService->fp"]
-        ]);
-        $buttons->add([
+                "fp:$argumentsService->fp"],
             ['text' => '🖼 Change Image Folder', 'callback_data' =>
                 "cl:$argumentsService->cl".'_'.
                 "sw:ChangeImageF".'_'.
@@ -55,9 +50,10 @@ class MenuActionButtons
                 "ac:N".'_'.
                 "fp:$argumentsService->fp"]
         ]);
+
         if ($argumentsService->fp !== null){
             $buttons->add([
-                ['text' => '⏳ Change Secrecy Folder' . ($folder->display ? '( ' . $folder->display . ' )' : ""), 'callback_data' =>
+                ['text' => '⏳ Change Secrecy Folder' . ($folder->displayViewBool() ? '( ' . $folder->display . ' )' : ""), 'callback_data' =>
                     "cl:$argumentsService->cl".'_'.
                     "sw:ChangeSecrecyF".'_'.
                     "bk:$argumentsService->bk".'_'.
