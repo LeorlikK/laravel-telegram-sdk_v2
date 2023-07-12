@@ -27,8 +27,7 @@ class PayProductSpecialButtons
         }else{
             $buttons->add([
                 ['text' => '💰 Buy item', 'callback_data' =>
-                    "cl:$argumentsService->cl".'_'.
-                    "sw:ConfirmPayC".'_'.
+                    "cl:Yoo".'_'.
                     "bk:$argumentsService->bk".'_'.
                     "bkS:$argumentsService->bkS".'_'.
                     "fp:$argumentsService->fp"],

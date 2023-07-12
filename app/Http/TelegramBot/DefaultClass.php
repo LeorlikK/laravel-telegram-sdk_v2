@@ -104,4 +104,20 @@ abstract class DefaultClass implements DefaultInterface
             'cache_time' => 60
         ]);
     }
+
+    public function sendInvoice(): void
+    {
+        /**
+         * @var $photo InputFile
+         */
+        [$recipient, $amount, $currency, $description, $due_date] = $this->main();
+
+        Telegram::sendInvoice([
+            "recipient" => $recipient,
+            "amount" => $amount,
+            "currency" => $currency,
+            "description" => $description,
+            "due_date" => $due_date,
+        ]);
+    }
 }

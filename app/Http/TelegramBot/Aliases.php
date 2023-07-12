@@ -25,6 +25,7 @@ use App\Http\TelegramBot\Components\RecursionClass\MenuR;
 use App\Http\TelegramBot\Components\SpecialClass\PayS;
 use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\Info\Exceptions\InputException;
+use App\Http\TelegramBot\TradeShop\Yookassa;
 
 
 class Aliases
@@ -47,6 +48,9 @@ class Aliases
 
             // Special Class
             'PayS' => PayS::class,
+
+            // Trade Shop
+            'Yoo' => Yookassa::class,
 
             // Action
             'MenuA' => MenuA::class,
