@@ -83,8 +83,8 @@ abstract class DefaultClass implements DefaultInterface
         [$photo, $caption, $reply_markup] = $this->main();
 
         Telegram::editMessageMedia([
-            'chat_id' => $this->update->getChat()->get('id'),
-            'message_id' => $this->update->getMessage()->get('message_id'),
+            'chat_id' => $this->argumentsService->chat ?? $this->update->getChat()->get('id'),
+            'message_id' => $this->argumentsService->mi ?? $this->update->getMessage()->get('message_id'),
             'media' => json_encode(["type" => "photo", "media" => $photo->getFile(), "caption" => $caption, "parse_mode" => "Markdown"], JSON_UNESCAPED_UNICODE),
             'reply_markup' => json_encode($reply_markup, JSON_UNESCAPED_UNICODE)
         ]);
@@ -110,14 +110,34 @@ abstract class DefaultClass implements DefaultInterface
         /**
          * @var $photo InputFile
          */
-        [$recipient, $amount, $currency, $description, $due_date] = $this->main();
+        [$chat_id, $title, $description, $start_parameter, $payload,
+            $provider_token, $currency, $prices, $photo, $reply_markup] = $this->main();
 
         Telegram::sendInvoice([
-            "recipient" => $recipient,
-            "amount" => $amount,
-            "currency" => $currency,
+            "chat_id" => $chat_id,
+            "title" => $title,
             "description" => $description,
-            "due_date" => $due_date,
+            'start_parameter' => $start_parameter,
+            "payload" => $payload,
+            "provider_token" => $provider_token,
+            "currency" => $currency,
+            "prices" => $prices,
+            'photo_url' => $photo->getFile(),
+            'reply_markup' => json_encode($reply_markup, JSON_UNESCAPED_UNICODE)
+        ]);
+    }
+
+    public function answerPreCheckoutQuery()
+    {
+        /**
+         * @var $photo InputFile
+         */
+        [$pre_checkout_query_id, $ok, $error_message]= $this->main();
+
+        Telegram::answerPreCheckoutQuery([
+            "pre_checkout_query_id" => $pre_checkout_query_id,
+            "ok" => $ok,
+            "error_message" => $error_message,
         ]);
     }
 }

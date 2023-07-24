@@ -36,8 +36,11 @@ class WebHookCommand extends Command
              */
             foreach ($updates as $update) {
                 if ($update->isType('callback_query')) {
+                    dump($update->callbackQuery->get('data'));
                     TelegramSendJob::dispatch($update, $update->callbackQuery->get('data'), 'edit');
-                } else {
+                } elseif ($update->isType('pre_checkout_query')) {
+                    TelegramSendJob::dispatch($update, $update->preCheckoutQuery->get('invoice_payload'), 'answerPreCheckoutQuery');
+                }else{
                     TelegramSendJob::dispatch($update, '', 'state');
                 }
             }

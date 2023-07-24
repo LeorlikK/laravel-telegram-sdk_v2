@@ -5,8 +5,8 @@ use Telegram\Bot\Commands\HelpCommand;
 
 return [
     //My config!!!
-//    'base_url_image' => 'https://vsegda-pomnim.com/uploads/posts/2022-04/1649134272_14-vsegda-pomnim-com-p-krasota-prirodi-foto-15.jpg',
-    'base_url_image' => 'AgACAgIAAxkBAAIWxWSqMk4U-yNy9zVW2NF-bEdtAfsIAAIPxzEb-k5RSe7CDPm-Mj4XAQADAgADcwADLwQ',
+    'base_url_image' => 'https://vsegda-pomnim.com/uploads/posts/2022-04/1649134272_14-vsegda-pomnim-com-p-krasota-prirodi-foto-15.jpg',
+//    'base_url_image' => 'AgACAgIAAxkBAAIWxWSqMk4U-yNy9zVW2NF-bEdtAfsIAAIPxzEb-k5RSe7CDPm-Mj4XAQADAgADcwADLwQ',
     //My config!!!
     /*
     |--------------------------------------------------------------------------

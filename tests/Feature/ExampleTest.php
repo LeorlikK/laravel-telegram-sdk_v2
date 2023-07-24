@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Tests\TestCase;
 
@@ -30,23 +31,13 @@ class ExampleTest extends TestCase
         /**
          * Если я вызывают метод, который использует твис в другом классе, то какое твис он возмет?
          */
-        $collection = collect([
-            1 => "cl:MenuR_ac:N_fp:1",
-            2 => "cl:MenuR_ac:N_fp:2",
-            8 => "cl:MenuR_ac:N_fp:8",
-            11 => "cl:MenuR_ac:N_fp:11",
-            12 => "cl:MenuR_ac:N_fp:12",
-            13 => "cl:MenuR_ac:N_fp:13",
-            14 => "cl:MenuR_ac:N_fp:14",
-            15 => "cl:MenuR_ac:N_fp:15",
-            16 => "cl:MenuR_ac:N_fp:16",
-            17 => "cl:MenuR_ac:N_fp:17",
-        ]);
-
-        $keysCollection = $collection->keys();
-        $index = $keysCollection->search(8);
-        dump($index);
-
+        $string = 'strrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+        rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrttttttttttttttt';
+        $string_2 = 'йййййййййййййййййййййййййййййййййййццццццццццццццццццццццуууууууууууууу
+        кккккккккккккккккккккккккккккааааааааааааааааааааааааааааааааааааааааааааа';
+        $res = Str::substr($string_2, 0, 32);
+        $len = mb_strlen($res);
+        dump($res, $len);
         $this->assertTrue(true);
     }
 }
