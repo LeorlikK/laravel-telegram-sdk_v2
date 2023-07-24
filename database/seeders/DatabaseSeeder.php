@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-//        Role::factory(1)->create();
         Role::create([
             'name' => 'admin',
             'visibility' => 100,
@@ -32,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'user',
             'visibility' => 0,
         ]);
-        User::factory(30)->create();
+//        User::factory(30)->create();
         User::create([
             'tg_id' => 1059208615,
             'username' => 'leorlik',
