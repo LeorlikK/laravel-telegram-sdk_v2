@@ -37,7 +37,7 @@ class Yookassa extends DefaultClass
                     "mi:".($this->update->getMessage()->get('message_id')).'_'.
                     'chat:'.($this->update->getChat()->get('id'))
                 ;
-                $provider_token = '381764678:TEST:61202';
+                $provider_token = config('telegram.pay.yookassa.provider_token');
                 $currency = mb_strtoupper($folder->product->currency);
                 $prices = LabeledPrice::make([
                     'label' => 'Label',

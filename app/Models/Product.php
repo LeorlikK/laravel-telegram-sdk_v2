@@ -8,6 +8,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
+/**
+ * App\Models\Product
+ *
+ * @property-read \App\Models\Folder|null $folder
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Folder> $folders
+ * @property-read int|null $folders_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Pay> $pays
+ * @property-read int|null $pays_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product query()
+ * @mixin \Eloquent
+ */
 class Product extends Model
 {
     use HasFactory;

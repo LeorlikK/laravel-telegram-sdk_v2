@@ -31,13 +31,7 @@ class ExampleTest extends TestCase
         /**
          * Если я вызывают метод, который использует твис в другом классе, то какое твис он возмет?
          */
-        $string = 'strrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-        rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrttttttttttttttt';
-        $string_2 = 'йййййййййййййййййййййййййййййййййййццццццццццццццццццццццуууууууууууууу
-        кккккккккккккккккккккккккккккааааааааааааааааааааааааааааааааааааааааааааа';
-        $res = Str::substr($string_2, 0, 32);
-        $len = mb_strlen($res);
-        dump($res, $len);
+
         $this->assertTrue(true);
     }
 }

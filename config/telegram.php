@@ -7,6 +7,23 @@ return [
     //My config!!!
     'base_url_image' => 'https://vsegda-pomnim.com/uploads/posts/2022-04/1649134272_14-vsegda-pomnim-com-p-krasota-prirodi-foto-15.jpg',
 //    'base_url_image' => 'AgACAgIAAxkBAAIWxWSqMk4U-yNy9zVW2NF-bEdtAfsIAAIPxzEb-k5RSe7CDPm-Mj4XAQADAgADcwADLwQ',
+
+    'pay' => [
+        'min_and_max_price' => [
+            'rub_min' => 94.97,
+            'rub_max' => 949727.02,
+            'usd_min' => 1,
+            'usd_max' => 10000,
+            'eur_min' => 0.9,
+            'eur_max' => 9040.6,
+        ],
+        'yookassa' => [
+            'provider_token' => '381764678:TEST:61202',
+            'shop_id' => '506751',
+            'shop_article_id' => '538350'
+        ],
+    ],
+
     //My config!!!
     /*
     |--------------------------------------------------------------------------

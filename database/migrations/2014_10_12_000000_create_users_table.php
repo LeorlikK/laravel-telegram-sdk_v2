@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreignId('role_id')->constrained('roles', 'id');
             $table->string('mail')->nullable()->default(null);
             $table->string('number')->nullable()->default(null);
-            $table->string('edit')->nullable()->default(null);
-            $table->boolean('is_premium')->nullable()->default(false);
+//            $table->string('edit')->nullable()->default(null);
+//            $table->boolean('is_premium')->nullable()->default(false);
             $table->boolean('is_blocked')->nullable()->default(false);
             $table->timestamps();
         });

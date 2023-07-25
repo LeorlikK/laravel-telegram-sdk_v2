@@ -40,8 +40,7 @@ class DatabaseSeeder extends Seeder
             'language' => 'ru',
             'role_id' => 1,
             'mail' => 'leorl1k@yandex.ru',
-            'number' => '+7',
-            'is_premium' => $from->is_premium ?? false,
+            'number' => '+79817790959',
             'is_blocked' => $from->is_blocked ?? false,
         ]);
         Tab::factory(1)->create();
