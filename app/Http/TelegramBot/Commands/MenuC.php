@@ -2,6 +2,7 @@
 
 namespace App\Http\TelegramBot\Commands;
 
+use App\Http\TelegramBot\States\CreateTelegramAction;
 use App\Jobs\TelegramSendJob;
 use Telegram\Bot\Commands\Command;
 
@@ -35,7 +36,8 @@ class MenuC extends Command
             $text .= sprintf('/%s - %s'.PHP_EOL, $name, $handler->getDescription());
         }
 
-        TelegramSendJob::dispatch($this->update, 'cl:MenuR', 'send');
+//        TelegramSendJob::dispatch($this->update, 'cl:MenuR', 'send');
+        (new CreateTelegramAction($this->update, 'cl:MenuR', 'send'))();
     }
 }
 //$gif = '❓❗️🔑🕹✏️📚✅☑️✔️📌🖼◀️▶️⬇️↕️🔄↩️↔️🔃↖️⤴️↘️↗️↪️⤵️↙️♾🛒📅📣👁👁‍🗨❌💳💰💵💷💴💶👥🆘➕🗑✉️⚪️🔵💎🔹♻️⏳🔒🔓📊🛍📝📋📨🚀💬';

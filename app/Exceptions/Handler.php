@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Jobs\TelegramSendAdminJob;
 use App\Models\User;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Telegram\Bot\Laravel\Facades\Telegram;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -35,7 +36,12 @@ class Handler extends ExceptionHandler
 
             $haveAdminsRole = User::where('role_id', 1)->get();
             foreach ($haveAdminsRole as $admin) {
-                TelegramSendAdminJob::dispatch($admin, $message);
+//                TelegramSendAdminJob::dispatch($admin, $message);
+                Telegram::sendMessage([
+                    'chat_id' => $admin->tg_id,
+                    'text' => $message,
+                    'parse_mode' => 'html'
+                ]);
             }
         }
     }
