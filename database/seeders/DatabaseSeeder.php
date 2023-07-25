@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-//        Role::factory(1)->create();
         Role::create([
             'name' => 'admin',
             'visibility' => 100,
@@ -32,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'user',
             'visibility' => 0,
         ]);
-        User::factory(30)->create();
+//        User::factory(30)->create();
         User::create([
             'tg_id' => 1059208615,
             'username' => 'leorlik',
@@ -41,8 +40,7 @@ class DatabaseSeeder extends Seeder
             'language' => 'ru',
             'role_id' => 1,
             'mail' => 'leorl1k@yandex.ru',
-            'number' => '+7',
-            'is_premium' => $from->is_premium ?? false,
+            'number' => '+79817790959',
             'is_blocked' => $from->is_blocked ?? false,
         ]);
         Tab::factory(1)->create();

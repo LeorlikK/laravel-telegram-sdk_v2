@@ -4,6 +4,7 @@ namespace App\Http\TelegramBot\Buttons\Action\Modules;
 
 use App\Http\TelegramBot\Buttons;
 use App\Http\TelegramBot\Services\ArgumentsService;
+use App\Http\TelegramBot\Services\RemainingTimeService;
 use App\Models\Folder;
 use Illuminate\Support\Collection;
 
@@ -128,7 +129,8 @@ class ChangePeriodPayButtons extends Buttons
         ]);
 
         $caption = "Выберите срок на который пользователь приобретет продукт при покупке или укажите его в формате ('1h', '1d', '1w', '1m')" . "\n\r" .
-            ($product->subscription && $selectedValue === null ? "Выбрано кастомное время: " . $product->subscription . ' h' . " ✅" : "");
+            ($product->subscription && $selectedValue === null ?
+                "Выбрано кастомное время: " . (RemainingTimeService::getTimeFromHours($product->subscription)) . " ✅" : "");
 
         return [$buttons, $caption];
     }

@@ -17,14 +17,27 @@ class ChangePricePay extends DefaultClass
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 StateCreate::createState($this->update, $this->user, $this->argumentsService, 'ChangePricePay' . $this->argumentsService->m);
                 $buttons = ChangePricePayButtons::indicatePrice($buttons, $this->argumentsService);
-                $caption = $this->caption('Введите цену');
+
+                if ($this->argumentsService->m == 'F1'){
+                    $priceMin = str_replace( '.', ',', config('telegram.pay.min_and_max_price.rub_min')) . ' R';
+                    $priceMax = str_replace( '.', ',', config('telegram.pay.min_and_max_price.rub_max')) . ' R';
+                    $currency = 'рублей';
+                }elseif ($this->argumentsService->m == 'F2'){
+                    $priceMin = str_replace( '.', ',', config('telegram.pay.min_and_max_price.usd_min')) . ' $';
+                    $priceMax = str_replace( '.', ',', config('telegram.pay.min_and_max_price.usd_max')) . ' $';
+                    $currency = 'долларов';
+                }else{
+                    $priceMin = str_replace( '.', ',', config('telegram.pay.min_and_max_price.eur_min')) . ' €';
+                    $priceMax = str_replace( '.', ',', config('telegram.pay.min_and_max_price.eur_max')) . ' €';
+                    $currency = 'евро';
+                }
+                $caption = $this->caption("Введите цену. Минимальная цена для $currency = $priceMin, максимальня = $priceMax");
+
                 break;
             default:
                 $this->argumentsService->setArgument('cl' , class_basename($this));
                 $buttons = ChangePricePayButtons::defaultButtons($buttons, $this->argumentsService);
-                $caption = $this->caption("Выберите в какой валюте указать цену
-                Нынешняя цена:
-                ");
+                $caption = $this->caption("Выберите в какой валюте указать цену");
                 break;
         }
 

@@ -21,6 +21,7 @@ use App\Http\TelegramBot\Components\DefaultClass\Admin\AdminUsers;
 use App\Http\TelegramBot\Components\DefaultClass\PersonalArea\AreaFeedback;
 use App\Http\TelegramBot\Components\DefaultClass\PersonalArea\AreaMenu;
 use App\Http\TelegramBot\Components\DefaultClass\PersonalArea\AreaPurchased;
+use App\Http\TelegramBot\Components\DefaultClass\TradeShop\Yookassa;
 use App\Http\TelegramBot\Components\RecursionClass\MenuR;
 use App\Http\TelegramBot\Components\SpecialClass\PayS;
 use App\Http\TelegramBot\Info\Alerts\InputAlert;
@@ -47,6 +48,9 @@ class Aliases
 
             // Special Class
             'PayS' => PayS::class,
+
+            // Trade Shop
+            'Yoo' => Yookassa::class,
 
             // Action
             'MenuA' => MenuA::class,

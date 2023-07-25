@@ -10,28 +10,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+
 /**
  * App\Models\Folder
  *
- * @property int $id
- * @property int $tab_id
- * @property int $parentId
- * @property string $name
- * @property int $sorted_id
- * @property int $layout
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Button> $buttons
  * @property-read int|null $buttons_count
- * @property-read \App\Models\Tab $tab
+ * @property-read \App\Models\Product|null $product
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
+ * @property-read int|null $products_count
+ * @property-read \App\Models\Tab|null $tab
  * @method static \Database\Factories\FolderFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Folder newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Folder newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Folder query()
- * @method static \Illuminate\Database\Eloquent\Builder|Folder whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Folder whereLayout($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Folder whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Folder whereParentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Folder whereSortedId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Folder whereTabId($value)
  * @mixin \Eloquent
  */
 class Folder extends Model

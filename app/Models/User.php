@@ -13,24 +13,20 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 
+
 /**
  * App\Models\User
  *
- * @property int $id
- * @property string $tg_id
- * @property string|null $username
- * @property string $first_name
- * @property string $last_name
- * @property string $language
- * @property string|null $mail
- * @property string|null $number
- * @property string|null $edit
- * @property int|null $is_administrator
- * @property int|null $is_premium
- * @property int|null $is_blocked
  * @property mixed $password
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Pay> $pays
+ * @property-read int|null $pays_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Report> $reportsFrom
+ * @property-read int|null $reports_from_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Report> $reportsWhom
+ * @property-read int|null $reports_whom_count
+ * @property-read \App\Models\Role|null $role
  * @property-read \App\Models\State|null $state
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
@@ -38,18 +34,6 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEdit($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAdministrator($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsBlocked($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsPremium($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLanguage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereTgId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable

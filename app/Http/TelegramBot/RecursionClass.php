@@ -3,6 +3,7 @@
 namespace App\Http\TelegramBot;
 
 use App\Http\TelegramBot\Services\ArgumentsService;
+use App\Http\TelegramBot\Services\RemainingTimeService;
 use App\Models\Folder;
 use App\Models\Tab;
 use App\Models\User;
@@ -74,8 +75,10 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
                         'Скрыта до: ' . ($this->folderParent->displayViewString()) : ''). "\n\r" .
                         ($this->folderParent->action === 'MenuM' ?
                             "Price: " . $this->folderParent->product->price . ' ' . $this->folderParent->product->currency . "\n\r" .
-                            "Purchase: " . ($this->folderParent->product->subscription ? $this->folderParent->product->subscription . ' h' : "♾") . "\n\r" .
-                            "Products: " . ($this->folderParent->product->folders->count() > 0 ? $this->folderParent->product->folders->count() . '  products' : "❌") . "\n\r"
+                            "Purchase: " . ($this->folderParent->product->subscription ?
+                                (RemainingTimeService::getTimeFromHours($this->folderParent->product->subscription)) : "♾") . "\n\r" .
+                            "Products: " . ($this->folderParent->product->folders->count() > 0 ?
+                                $this->folderParent->product->folders->count() . '  products' : "❌") . "\n\r"
                             :
                             "");
             }
@@ -125,7 +128,6 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
                                 $callback = "cl:IA".'_'."er:1".'_'."ac:N".'_'."fp:$parentsFolder->id";
                             }else{
                                 $callback = "cl:".class_basename($this).'_'."ac:N".'_'."fp:$parentsFolder->id";
-//                                $testCollect->add([$parentsFolder->id => $callback]);
                                 $testCollect->put($parentsFolder->id, $callback);
                             }
                         }
@@ -133,16 +135,12 @@ abstract class RecursionClass extends DefaultClass implements RecursionInterface
                 }
             }
 
-
-            dump($this->folderParent->id);
-            dump($testCollect);
-            dump($testCollect->keys());
             $indexThisFolder = $testCollect->keys()->search($this->folderParent->id);
             $back = $indexThisFolder - 1;
             $next = $indexThisFolder + 1;
             $backIndex = $testCollect->keys()[$back] ?? null;
             $nextIndex = $testCollect->keys()[$next] ?? null;
-            dump($backIndex, $this->folderParent->id, $nextIndex);
+
             if ($backIndex && $nextIndex){
                 $buttons->add([
                     ['text' => '⏮', 'callback_data' => "cl:".class_basename($this).'_'. "fp:$backIndex"],
