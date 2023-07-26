@@ -6,6 +6,7 @@ use App\Http\TelegramBot\Aliases;
 use App\Http\TelegramBot\Auth\Authentication;
 use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\Services\ArgumentsService;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Objects\Update;
 
 class CreateTelegramAction
@@ -16,6 +17,7 @@ class CreateTelegramAction
 
     public function __construct(Update $update, string $arguments, string $action)
     {
+//        Log::channel('test')->info($arguments);
         $this->update = $update;
         $this->argumentsService = new ArgumentsService($arguments);
         $this->action = $action;
@@ -26,11 +28,11 @@ class CreateTelegramAction
     {
         $authentication = new Authentication();
         $user = $authentication->handle($this->update);
-        if ($user->is_blocked){
+        if ($user && $user->is_blocked){
             $this->argumentsService->er = '10';
             (new InputAlert($user, $this->update,
                 $this->argumentsService))->handleCallbackQuery();
-        }else{
+        }elseif($user && !$user->is_blocked){
             if ($this->action === 'send'){
                 $user->state()->delete();
                 $className = Aliases::getFullNameSpace($this->argumentsService->cl);
