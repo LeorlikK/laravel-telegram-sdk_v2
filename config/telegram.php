@@ -18,9 +18,9 @@ return [
             'eur_max' => 9040.6,
         ],
         'yookassa' => [
-            'provider_token' => '381764678:TEST:61202',
-            'shop_id' => '506751',
-            'shop_article_id' => '538350'
+            'provider_token' => env('YOOKASSA_PROVIDER_TOKEN'),
+            'shop_id' => env('YOOKASSA_SHOP_ID'),
+            'shop_article_id' => env('YOOKASSA_SHOP_ARTICLE_ID')
         ],
     ],
 
