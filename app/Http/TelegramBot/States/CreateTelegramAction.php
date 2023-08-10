@@ -1,63 +1,44 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Http\TelegramBot\States;
 
 use App\Http\TelegramBot\Aliases;
 use App\Http\TelegramBot\Auth\Authentication;
-use App\Http\TelegramBot\Components\RecursionClass\MenuR;
 use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\Services\ArgumentsService;
-use App\Http\TelegramBot\States\StateMake;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Objects\Update;
 
-class TelegramSendJob implements ShouldQueue
+class CreateTelegramAction
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
     protected Update $update;
     protected ArgumentsService $argumentsService;
     protected string $action;
-    /**
-     * Create a new job instance.
-     */
+
     public function __construct(Update $update, string $arguments, string $action)
     {
+//        Log::channel('test')->info($arguments);
         $this->update = $update;
         $this->argumentsService = new ArgumentsService($arguments);
         $this->action = $action;
     }
 
-    /**
-     * Execute the job.
-     */
-    public function handle(): void
+
+    public function __invoke(): void
     {
         $authentication = new Authentication();
         $user = $authentication->handle($this->update);
-        if ($user->is_blocked){
+        if ($user && $user->is_blocked){
             $this->argumentsService->er = '10';
             (new InputAlert($user, $this->update,
                 $this->argumentsService))->handleCallbackQuery();
-        }else{
+        }elseif($user && !$user->is_blocked){
             if ($this->action === 'send'){
                 $user->state()->delete();
                 $className = Aliases::getFullNameSpace($this->argumentsService->cl);
                 $createdClass = new $className($user, $this->update, $this->argumentsService);
                 $createdClass->sendCreate();
             }elseif ($this->action === 'edit'){
-//                $argumentsService = new ArgumentsService('');
-//                $menuR = new MenuR($user, $this->update, $argumentsService);
-//                $menuR->handleCallbackQuery();
-                if ($this->argumentsService->s) $user->state()->delete();
-                $className = Aliases::getFullNameSpace($this->argumentsService->cl);
-                $createdClass = new $className($user, $this->update, $this->argumentsService);
-                $createdClass->handleCallbackQuery();
-            }elseif ($this->action === 'answerPreCheckoutQuery'){
                 if ($this->argumentsService->s) $user->state()->delete();
                 $className = Aliases::getFullNameSpace($this->argumentsService->cl);
                 $createdClass = new $className($user, $this->update, $this->argumentsService);

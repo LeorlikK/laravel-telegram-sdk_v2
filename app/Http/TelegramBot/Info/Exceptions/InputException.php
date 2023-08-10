@@ -30,6 +30,8 @@ class InputException extends DefaultClass
             '19' => 'Не указан id элеманта',
             '20' => 'Нет сообщения',
             '21' => 'Не указан sw',
+            '23' => 'Указанная цена меньше минимально допустимой',
+            '24' => 'Указанная цена больше максимально допустимой',
         ];
 
         if (key_exists($this->argumentsService->er, $errorsArray)){

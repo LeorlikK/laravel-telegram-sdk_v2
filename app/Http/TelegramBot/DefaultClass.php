@@ -83,8 +83,8 @@ abstract class DefaultClass implements DefaultInterface
         [$photo, $caption, $reply_markup] = $this->main();
 
         Telegram::editMessageMedia([
-            'chat_id' => $this->update->getChat()->get('id'),
-            'message_id' => $this->update->getMessage()->get('message_id'),
+            'chat_id' => $this->argumentsService->chat ?? $this->update->getChat()->get('id'),
+            'message_id' => $this->argumentsService->mi ?? $this->update->getMessage()->get('message_id'),
             'media' => json_encode(["type" => "photo", "media" => $photo->getFile(), "caption" => $caption, "parse_mode" => "Markdown"], JSON_UNESCAPED_UNICODE),
             'reply_markup' => json_encode($reply_markup, JSON_UNESCAPED_UNICODE)
         ]);
@@ -102,6 +102,42 @@ abstract class DefaultClass implements DefaultInterface
             'text' => $text,
             'show_alert' => $show_alert,
             'cache_time' => 60
+        ]);
+    }
+
+    public function sendInvoice(): void
+    {
+        /**
+         * @var $photo InputFile
+         */
+        [$chat_id, $title, $description, $start_parameter, $payload,
+            $provider_token, $currency, $prices, $photo, $reply_markup] = $this->main();
+
+        Telegram::sendInvoice([
+            "chat_id" => $chat_id,
+            "title" => $title,
+            "description" => $description,
+            'start_parameter' => $start_parameter,
+            "payload" => $payload,
+            "provider_token" => $provider_token,
+            "currency" => $currency,
+            "prices" => $prices,
+            'photo_url' => $photo->getFile(),
+            'reply_markup' => json_encode($reply_markup, JSON_UNESCAPED_UNICODE)
+        ]);
+    }
+
+    public function answerPreCheckoutQuery()
+    {
+        /**
+         * @var $photo InputFile
+         */
+        [$pre_checkout_query_id, $ok, $error_message]= $this->main();
+
+        Telegram::answerPreCheckoutQuery([
+            "pre_checkout_query_id" => $pre_checkout_query_id,
+            "ok" => $ok,
+            "error_message" => $error_message,
         ]);
     }
 }

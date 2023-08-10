@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use Tests\TestCase;
 
@@ -21,11 +22,7 @@ class ExampleTest extends TestCase
 
     public function test_my(): void
     {
-        $user30 = 68448;
-        $user31 = 1059208615;
-        $user32 = 1434698404;
-        $user = Cache::get('1059208615');
-        dump($user);
+        $this->assertTrue(true);
     }
 
     public function test_the_application_returns_a_successful_response(): void
@@ -33,24 +30,6 @@ class ExampleTest extends TestCase
         /**
          * Если я вызывают метод, который использует твис в другом классе, то какое твис он возмет?
          */
-        $roleV = 10;
-
-        $folders = Folder::with(['buttons', 'product'])
-            ->where('blocked', '!=', true)
-            ->orWhere(function ($query) use ($roleV) {
-                $query->where('blocked', true)
-                    ->where('visibility', '>', $roleV);
-            })
-            ->orWhere(function ($query) use ($roleV) {
-                $query->where('blocked', true)
-                    ->where('visibility', null)
-                    ->orWhere('visibility', '>', $roleV);
-            })
-
-            ->get();
-        dump($folders->pluck('id'));
-
-
 
         $this->assertTrue(true);
     }

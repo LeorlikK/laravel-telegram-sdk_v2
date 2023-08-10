@@ -2,7 +2,7 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
-use App\Http\TelegramBot\Info\Exceptions\InputException;
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\Services\MediaConverterService;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
@@ -40,7 +40,7 @@ class MakeChangeImageFolder
             }
 
             $this->stateMake->argumentsService->er = '17';
-            (new InputException($this->stateMake->user, $this->stateMake->update,
+            (new InputAlert($this->stateMake->user, $this->stateMake->update,
                 $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
 

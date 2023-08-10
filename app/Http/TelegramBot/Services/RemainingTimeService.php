@@ -2,6 +2,8 @@
 
 namespace App\Http\TelegramBot\Services;
 
+use Illuminate\Support\Carbon;
+
 class RemainingTimeService
 {
     public function getRemainingTime($diff): string
@@ -54,5 +56,21 @@ class RemainingTimeService
         } else {
             return 'часов';
         }
+    }
+
+    public static function getTimeFromHours(string|int $hours): string
+    {
+        $time = Carbon::make($hours) ? $hours : now()->addHours($hours);
+        $carbonTime = Carbon::parse($time);
+        $str = '';
+        $lostTime = $carbonTime->diff(now());
+        $str .= $lostTime->y != 0 ? " $lostTime->y" . "y " : "";
+        $str .= $lostTime->m != 0 ? " $lostTime->m" . "m " : "";
+        $str .= $lostTime->d != 0 ? " $lostTime->d" . "d " : "";
+        $str .= $lostTime->h != 0 ? "$lostTime->h" . "h " : "";
+        $str .= $lostTime->i != 0 ? "$lostTime->i" . "m " : "";
+        $str .= $lostTime->s != 0 ? "$lostTime->s" . "s " : "";
+
+        return $str;
     }
 }

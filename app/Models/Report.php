@@ -7,6 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
+/**
+ * App\Models\Report
+ *
+ * @property-read \App\Models\User|null $userFrom
+ * @property-read \App\Models\User|null $userWhom
+ * @method static \Illuminate\Database\Eloquent\Builder|Report newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Report query()
+ * @mixin \Eloquent
+ */
 class Report extends Model
 {
     use HasFactory;

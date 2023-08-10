@@ -2,7 +2,7 @@
 
 namespace App\Http\TelegramBot\States\Make;
 
-use App\Http\TelegramBot\Info\Exceptions\InputException;
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Folder;
 use App\Models\Pay;
@@ -32,7 +32,7 @@ class MakePayProduct
         $this->stateMake->user->updateCache($this->stateMake->user);
 
         $this->stateMake->argumentsService->er = '28';
-        (new InputException($this->stateMake->user, $this->stateMake->update,
+        (new InputAlert($this->stateMake->user, $this->stateMake->update,
             $this->stateMake->argumentsService))->handleCallbackQuery();
         return null;
     }

@@ -2,7 +2,7 @@
 
 namespace App\Http\TelegramBot\States\Make\Admin;
 
-use App\Http\TelegramBot\Info\Exceptions\InputException;
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\Report;
 use App\Models\User;
@@ -30,15 +30,24 @@ class MakeWriteUser
                 $userId = $user->tg_id;
             }else return '21';
 
-            Telegram::copyMessage([
+
+            $message = mb_strcut($this->stateMake->update->message->text, 0, 900);
+            $message = (string)view('messages.message_for_user',
+                compact('message'));
+            Telegram::sendMessage([
                 'chat_id' => $userId,
-                'from_chat_id' => $this->stateMake->update->message->chat->id,
-                'message_id' => $this->stateMake->update->message->messageId,
+                'text' => $message,
+                'parse_mode' => 'HTML'
             ]);
+//            Telegram::copyMessage([
+//                'chat_id' => $userId,
+//                'from_chat_id' => $this->stateMake->update->message->chat->id,
+//                'message_id' => $this->stateMake->update->message->messageId,
+//            ]);
             if ($this->stateMake->state->v2) $this->stateMake->argumentsService->setArgument('sw', $this->stateMake->state->v2);
 
             $this->stateMake->argumentsService->er = '39';
-            (new InputException($this->stateMake->user, $this->stateMake->update,
+            (new InputAlert($this->stateMake->user, $this->stateMake->update,
                 $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
         }

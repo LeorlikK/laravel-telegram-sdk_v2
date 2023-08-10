@@ -2,7 +2,7 @@
 
 namespace App\Http\TelegramBot\States\Make\Admin;
 
-use App\Http\TelegramBot\Info\Exceptions\InputException;
+use App\Http\TelegramBot\Info\Alerts\InputAlert;
 use App\Http\TelegramBot\States\StateMake;
 use App\Models\User;
 use Telegram\Bot\Laravel\Facades\Telegram;
@@ -29,7 +29,7 @@ class MakeWritePersonalArea
             $this->stateMake->argumentsService->setArgument('sw', 'User');
 
             $this->stateMake->argumentsService->er = '38';
-            (new InputException($this->stateMake->user, $this->stateMake->update,
+            (new InputAlert($this->stateMake->user, $this->stateMake->update,
                 $this->stateMake->argumentsService))->handleCallbackQuery();
             return null;
         }
