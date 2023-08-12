@@ -27,10 +27,6 @@ class ExampleTest extends TestCase
 
     public function test_the_application_returns_a_successful_response(): void
     {
-        /**
-         * Если я вызывают метод, который использует твис в другом классе, то какое твис он возмет?
-         */
-
         $this->assertTrue(true);
     }
 }

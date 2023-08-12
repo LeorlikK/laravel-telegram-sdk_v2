@@ -1,66 +1,65 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# laravel-telegram-sdk_v2
+## Описание:
+Конструктор создания телеграм ботов для продажи товаров или предоставения временного доступа.
+Имеет панель администратора, личный кабинет пользователя, функционал настройки товара, настроки корзины товаров(цена, время аренды, указание валюты).
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Расположение проекта** ```App\Http\TelegramBot```
+## Технологии:
+- **php**: 8.2.8
+- **Laravel**: 10.10
+- **telegram-bot-sdk**: dev-develop
+## Основные термины:
+- **Папка** - может содержать контент и являться продуктом или быть продуктовой корзиной для других папок при покупке. 
+- **Продукт** - это папка, при покупке которой, пользователь получает доступ ко всем папкам, что были в корзине товаров продукта.
+- **Продуктовая корзина** - папки, связанные с продуктом, при покупке которого, они становятся доступны.
+- **Рекурсия папок** - каждая папка имеет запись в базе данных и родителя за счет чего достигается иерархическая система и появляется возможность создавать бесконечное кол-во вложенных папок.
+- **Область видимости** - у каждой роли есть своя настраиваемая область видимости, как и у папок. Если область видимости пользователя меньше, чем у папки, то папка будет скрыта от пользователя или заблокирована(зависит от настроек папки).
+- **Специальный класс** - особый класс, область применение которого не подходит для настроек обычного класса или рекурсионного(оплата товара).
+## Настройки папок:
+- Создание папки.
+- Изменение имени папки.
+- Изменение описания папки.
+- Изменение иконки папки.
+- Изменениие изображения папки.
+- Установка отложенного времени публикации папки.
+- Изменение области виидимости папок для пользователей с разным уровнем доступ.
+- Изменение порядка сортировки папок.
+- Удаление папки.
+- Сделать папку доступной только при покупке.
+- Создать специальный класс.
 
-## About Laravel
+  <img src="resources/preview/folder.png" alt="1" width="400"/>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Панель администратора:
+- Список пользователей с поиском по tg-id.
+    - Изменение роли пользователя.
+    - Добавление товара пользователю.
+    - Написать пользователю в чат.
+    - Заблокировать пользователя.
+- Создание, удаление, редактирование имени и области видимости роли.
+- Список обращений от пользователей(видны всем с должностью администратора).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+ <img src="resources/preview/admin_menu.png" alt="1" width="400"/>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Личный кабинет:
+- Список купленных товаров.
+- Обращение к администратору.
+- Ответы от администратора.
 
-## Learning Laravel
+<img src="resources/preview/personal_area.png" alt="1" width="400"/>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Installation:
+1. ```git clone https://github.com/LeorlikK/laravel-telegram-sdk_v2.git```
+2. ```composer install```
+3. Создать файл ```.env``` и скопировать в него ```.env.example```
+4. Настроить ```DB_CONNECTION``` и ```REDIS_HOST```
+5. Указать ```TELEGRAM_BOT_TOKEN``` и ```YOOKASSA_PROVIDER_TOKEN```
+6. Указать данные администратора ```ADMIN_TG_ID```
+7. ```php artisan migrate --seed```
+### long polling
+8. ```php artisan tg:hook_v2``` и ```php artisan queue:work```
+#### ***OR***
+### webhook
+8. ```https://api.telegram.org/botYOUR_BOT_TOKEN/setWebhook?url=YOUR_URL```
+9. telegram command```/start```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
