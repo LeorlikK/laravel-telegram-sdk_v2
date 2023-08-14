@@ -2,9 +2,6 @@
 
 namespace App\Http\TelegramBot;
 
-use App\Http\TelegramBot\Services\ArgumentsService;
-use Telegram\Bot\Objects\Update;
-
 interface DefaultInterface
 {
     public function main():array;

@@ -3,11 +3,8 @@
 namespace App\Http\TelegramBot;
 
 use App\Http\TelegramBot\Services\ArgumentsService;
-use App\Models\Tab;
 use App\Models\User;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;

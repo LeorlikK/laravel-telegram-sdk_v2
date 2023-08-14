@@ -35,8 +35,6 @@ class Authentication
                  * @var $user User
                  */
                 $user = User::firstOrCreate(['tg_id' => $user['tg_id']], $user);
-//                $user->load('role');
-
                 $user->updatePurchasedProducts();
 
                 return $user;
