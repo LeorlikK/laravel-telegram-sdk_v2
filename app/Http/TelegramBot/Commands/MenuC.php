@@ -3,7 +3,6 @@
 namespace App\Http\TelegramBot\Commands;
 
 use App\Http\TelegramBot\States\CreateTelegramAction;
-use App\Jobs\TelegramSendJob;
 use Telegram\Bot\Commands\Command;
 
 class MenuC extends Command
@@ -40,4 +39,3 @@ class MenuC extends Command
         (new CreateTelegramAction($this->update, 'cl:MenuR', 'send'))();
     }
 }
-//$gif = '❓❗️🔑🕹✏️📚✅☑️✔️📌🖼◀️▶️⬇️↕️🔄↩️↔️🔃↖️⤴️↘️↗️↪️⤵️↙️♾🛒📅📣👁👁‍🗨❌💳💰💵💷💴💶👥🆘➕🗑✉️⚪️🔵💎🔹♻️⏳🔒🔓📊🛍📝📋📨🚀💬';

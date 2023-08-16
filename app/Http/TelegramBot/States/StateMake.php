@@ -311,29 +311,6 @@ class StateMake
                 $this->argumentsService->fp = $this->parentId;
                 break;
 
-//            case $this->state->action === 'WritePersonalAreaC':
-//                $makeClass = new MakeDeletePayForUser($this);
-//                $error = $makeClass->make();
-//                $arguments = [
-//                    'callbackClassName' => $this->state->TabClass,
-//                    'update' => $this->reworkUpdate($this->chatId)
-//                ];
-//                $this->argumentsService->ac = 'N';
-//                $this->argumentsService->fp = $this->parentId;
-//                break;
-
-            // PAY
-//            case $this->state->action === 'PayProductC':
-//                $makeClass = new MakePayProduct($this);
-//                $error = $makeClass->make();
-//                $arguments = [
-//                    'callbackClassName' => $this->state->TabClass,
-//                    'update' => $this->reworkUpdate($this->chatId)
-//                ];
-//                $this->argumentsService->ac = 'N';
-//                $this->argumentsService->fp = $this->parentId;
-//                break;
-
             case $this->state->action === 'ChangePeriodPayF':
                 $makeClass = new MakeChangePeriodPay($this);
                 $error = $makeClass->make();

@@ -5,6 +5,7 @@ namespace App\Http\TelegramBot;
 use App\Http\TelegramBot\Services\ArgumentsService;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;
@@ -44,27 +45,27 @@ abstract class DefaultClass implements DefaultInterface
         return InputFile::create($photoPath, 'defaultImage');
     }
 
-    public function sendMessage(): void
+    public function sendMessage(): string
     {
         /**
          * @var $photo InputFile
          */
         [$text] = $this->main();
 
-        Telegram::sendMessage([
+        return Telegram::sendMessage([
             'chat_id' => $this->update->getChat()->get('id'),
             'text' => $text,
         ]);
     }
 
-    public function sendCreate(): void
+    public function sendCreate(): string
     {
         /**
          * @var $photo InputFile
          */
         [$photo, $caption, $reply_markup] = $this->main();
 
-        Telegram::sendPhoto([
+        return Telegram::sendPhoto([
             'chat_id' => $this->update->getChat()->get('id'),
             'photo' => str_starts_with($photo->getFile(), 'http') ? $photo : $photo->getFile(),
             'caption' => $caption,
@@ -72,14 +73,14 @@ abstract class DefaultClass implements DefaultInterface
         ]);
     }
 
-    public function callbackUpdate(): void
+    public function callbackUpdate(): string
     {
         /**
          * @var $photo InputFile
          */
         [$photo, $caption, $reply_markup] = $this->main();
 
-        Telegram::editMessageMedia([
+        return Telegram::editMessageMedia([
             'chat_id' => $this->argumentsService->chat ?? $this->update->getChat()->get('id'),
             'message_id' => $this->argumentsService->mi ?? $this->update->getMessage()->get('message_id'),
             'media' => json_encode(["type" => "photo", "media" => $photo->getFile(), "caption" => $caption, "parse_mode" => "Markdown"], JSON_UNESCAPED_UNICODE),
@@ -87,14 +88,14 @@ abstract class DefaultClass implements DefaultInterface
         ]);
     }
 
-    public function callbackAnswer(bool $show_alert): void
+    public function callbackAnswer(bool $show_alert): string
     {
         /**
          * @var $photo InputFile
          */
         [$text] = $this->main();
 
-        Telegram::answerCallbackQuery([
+        return Telegram::answerCallbackQuery([
             'callback_query_id' => $this->update->callbackQuery->get('id'),
             'text' => $text,
             'show_alert' => $show_alert,
@@ -102,7 +103,7 @@ abstract class DefaultClass implements DefaultInterface
         ]);
     }
 
-    public function sendInvoice(): void
+    public function sendInvoice(): string
     {
         /**
          * @var $photo InputFile
@@ -110,7 +111,7 @@ abstract class DefaultClass implements DefaultInterface
         [$chat_id, $title, $description, $start_parameter, $payload,
             $provider_token, $currency, $prices, $photo, $reply_markup] = $this->main();
 
-        Telegram::sendInvoice([
+        return Telegram::sendInvoice([
             "chat_id" => $chat_id,
             "title" => $title,
             "description" => $description,
@@ -124,14 +125,14 @@ abstract class DefaultClass implements DefaultInterface
         ]);
     }
 
-    public function answerPreCheckoutQuery()
+    public function answerPreCheckoutQuery(): string
     {
         /**
          * @var $photo InputFile
          */
         [$pre_checkout_query_id, $ok, $error_message]= $this->main();
 
-        Telegram::answerPreCheckoutQuery([
+        return Telegram::answerPreCheckoutQuery([
             "pre_checkout_query_id" => $pre_checkout_query_id,
             "ok" => $ok,
             "error_message" => $error_message,

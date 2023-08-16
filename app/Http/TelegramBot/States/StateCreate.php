@@ -10,8 +10,14 @@ use Telegram\Bot\Objects\Update;
 
 class StateCreate
 {
-    public static function createState(Update $update, User $user, ArgumentsService $argumentsService, string $action,
-        ?string $v1=null, ?string $v2=null, ?string $v3=null,
+    public static function createState(
+        Update $update,
+        User $user,
+        ArgumentsService $argumentsService,
+        string $action,
+        ?string $v1=null,
+        ?string $v2=null,
+        ?string $v3=null,
     ):User
     {
         if ($user->state) $user->state()->delete();

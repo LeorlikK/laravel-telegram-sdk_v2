@@ -17,12 +17,10 @@ class CreateTelegramAction
 
     public function __construct(Update $update, string $arguments, string $action)
     {
-//        Log::channel('test')->info($arguments);
         $this->update = $update;
         $this->argumentsService = new ArgumentsService($arguments);
         $this->action = $action;
     }
-
 
     public function __invoke(): void
     {

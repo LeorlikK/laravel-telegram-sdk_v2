@@ -31,7 +31,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'user',
             'visibility' => 0,
         ]);
-//        User::factory(30)->create();
         User::create([
             'tg_id' => env('ADMIN_TG_ID'),
             'username' => env('ADMIN_USERNAME'),
@@ -43,6 +42,13 @@ class DatabaseSeeder extends Seeder
             'number' => env('ADMIN_NUMBER'),
             'is_blocked' => $from->is_blocked ?? false,
         ]);
-        Tab::factory(1)->create();
+        $tab = Tab::factory(1)->create();
+        Folder::create([
+            'tab_id' => $tab->first()->id,
+            'parentId' => 0,
+            'name' => '📚 ' . 'Product Test',
+            'sorted_id' => 1,
+            'action' => 'MenuR'
+        ]);
     }
 }

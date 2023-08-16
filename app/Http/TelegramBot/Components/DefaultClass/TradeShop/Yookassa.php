@@ -43,7 +43,6 @@ class Yookassa extends DefaultClass
                     'label' => 'Label',
                     'amount' => $price * 100
                 ]);
-//                $buttons = YookassaButtons::defaultButtons($buttons, $this->argumentsService);
                 $this->argumentsService->setArgument('cl', class_basename($this));
 
                 break;
